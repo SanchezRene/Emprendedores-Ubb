@@ -1,5 +1,5 @@
 {
-    "Usuarios": {
+    "user": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true
@@ -19,7 +19,7 @@
             "ref": "Role"
         }
     },
-    "Role": {
+    "role": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true
@@ -33,7 +33,7 @@
             ]
         }
     },
-    "Emprendedor": {
+    "emprendedor": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true
@@ -64,13 +64,6 @@
             "required": true,
             "maxLength": 100
         },
-        "idInscripcion": {
-            "type": [
-                "Schema.ObjectId"
-            ],
-            "required": true,
-            "ref": "Inscripcion"
-        },
         "idProductos": {
             "type": [
                 "Schema.ObjectId"
@@ -89,7 +82,7 @@
             "ref": "Ayudantes"
         }
     },
-    "Carrera": {
+    "carrera": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true
@@ -100,10 +93,24 @@
             "maxLength": 100
         }
     },
-    "Inscripcion": {
+    "inscripcion": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true
+        },
+        "userId": {
+            "type": [
+                "Schema.ObjectId"
+            ],
+            "required": true,
+            "ref": "user"
+        },
+        "emprendedorId": {
+            "type": [
+                "Schema.ObjectId"
+            ],
+            "required": true,
+            "ref": "emprendedor"
         },
         "estado": {
             "type": "String",
@@ -115,12 +122,12 @@
                 "Arobado"
             ]
         },
-        "fecha": {
+        "fechaInscripcion": {
             "type": "Date",
             "default": "Date.now()"
         }
     },
-    "Productos": {
+    "productos": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true
@@ -146,7 +153,7 @@
             "max": 300
         }
     },
-    "Ayudantes": {
+    "ayudantes": {
         "id_": {
             "type": "Schema.ObjectId",
             "required": true

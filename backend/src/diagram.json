@@ -1,0 +1,69 @@
+{
+    "inscripcion": {
+        "id_": {},
+        "userId": {
+            "ref": "user",
+            "user": {
+                "id_": {},
+                "username": {},
+                "email": {},
+                "roles": {
+                    "ref": "role",
+                    "enum": [
+                        "user",
+                        "admin"
+                    ]
+                }
+            }
+        },
+        "emprendedorId": {
+            "ref": "emprendedor",
+            "emprendedor": {
+                "id_": {},
+                "nombre": {},
+                "rut": {},
+                "idCarrera": {
+                    "ref": "carrera",
+                    "carrera": {
+                        "id_": {},
+                        "titulo": {}
+                    }
+                },
+                "celular": {},
+                "nombre_puesto": {},
+                "idProductos": {
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "ref": "productos",
+                    "productos": {
+                        "id_": {},
+                        "nombre": {},
+                        "fotografia": {},
+                        "descripcion": {},
+                        "stock": {}
+                    }
+                },
+                "idAyudantes": {
+                    "minItems": 0,
+                    "maxItems": 3,
+                    "ref": "ayudantes",
+                    "ayudantes": {
+                        "id_": {},
+                        "nombre": {},
+                        "rut": {}
+                    }
+                }
+            }
+        },
+        "estado": {
+            "enum": [
+                "Sin inscribir",
+                "Pendiente",
+                "Rechazado",
+                "Arobado"
+            ]
+        },
+        "fechaInscripcion": {}
+    }
+    
+}
