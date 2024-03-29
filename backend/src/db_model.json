@@ -1,4 +1,38 @@
 {
+    "Usuarios": {
+        "id_": {
+            "type": "Schema.ObjectId",
+            "required": true
+        },
+        "username": {
+            "type": "String",
+            "required": true
+        },
+        "email": {
+            "type": "String",
+            "required": true
+        },
+        "roles": {
+            "type": [
+                "Schema.ObjectId"
+            ],
+            "ref": "Role"
+        }
+    },
+    "Role": {
+        "id_": {
+            "type": "Schema.ObjectId",
+            "required": true
+        },
+        "name": {
+            "type": "String",
+            "required": true,
+            "enum": [
+                "user",
+                "admin"
+            ]
+        }
+    },
     "Emprendedor": {
         "id_": {
             "type": "Schema.ObjectId",
