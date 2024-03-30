@@ -3,24 +3,30 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const carreraSchema = new mongoose.Schema({
-    nombre: {
-        type: String,
-        required: true
-    },
-    duracion: {
-        type: Number,
-        required: true
-    },
-    facultad: {
-        type: String,
-        required: true
-    },
-    fechaCreacion: {
-        type: Date,
-        default: Date.now
-    }
+  titulo: {
+    type: String,
+    required: true,
+  },
+  facultad: {
+    type: String,
+    required: true,
+    num: [
+      "Arquitectura, Construccion y Diseño",
+      "Ingeniería",
+      "Ciencias Empresariales",
+      "Educación y Humanidades",
+      "Ciencias de la Salud y de los Alimentos",
+      "Ciencias",
+    ],
+    default: "pendiente",
+  },
+  sede: {
+    type: String,
+    enum: ["Concepcion", "Chillan"],
+    default: "Concepcion",
+  },
 });
 
-const Carrera = mongoose.model('Carrera', carreraSchema);
+const Carrera = mongoose.model("Carrera", carreraSchema);
 
 module.exports = Carrera;
