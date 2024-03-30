@@ -91,6 +91,26 @@
             "type": "String",
             "required": true,
             "maxLength": 100
+        },
+        "facultad": {
+            "type": "String",
+            "required": true,
+            "enum": [
+                "Arquitectura, Construccion y Diseño",
+                "Ingeniería",
+                "Ciencias Empresariales",
+                "Educación y Humanidades",
+                "Ciencias de la Salud y de los Alimentos",
+                "Ciencias"
+            ]
+        },
+        "sede": {
+            "type": "String",
+            "required": true,
+            "enum": [
+                "Concepcion",
+                "Chillan"
+            ]
         }
     },
     "Inscripcion": {
