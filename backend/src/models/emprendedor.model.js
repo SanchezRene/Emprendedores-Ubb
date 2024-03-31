@@ -2,9 +2,15 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+
 //modelo de datos para emprendedores. Se crea un registro en la colección emprendedores.
 
 const emprendedorSchema = new mongoose.Schema({
+  userId : {
+    type: Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
   nombre: {
     type: String,
     required: true,
@@ -38,7 +44,8 @@ const emprendedorSchema = new mongoose.Schema({
         ref: "Productos",
       },
     ],
-    required: false,
+    required: true,
+    default: [],
     maxItems: 10,
   },
   //arreglo de ayudantes que trabajan con el emprendedor
@@ -49,7 +56,8 @@ const emprendedorSchema = new mongoose.Schema({
         ref: "Ayudantes",
       },
     ],
-    required: false,
+    required: true,
+    default: [],
     maxItems: 3,
   },
 });

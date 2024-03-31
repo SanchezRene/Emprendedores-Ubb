@@ -3,6 +3,7 @@ const Carrera = require("../models/carrera.model");
 const Ayudantes = require("../models/ayudantes.model");
 const Productos = require("../models/productos.model");
 const Emprendedor = require("../models/emprendedor.model");
+const User = require("../models/user.model");
 const { handleError } = require("../utils/errorHandler");
 
 async function getEmprendedores() {
@@ -28,10 +29,29 @@ async function getEmprendedorById(id) {
   }
 }
 
+async function getEmprendedorByUserId(userId) {
+  try {
+    const emprendedor = await Emprendedor.findOne({ userId });
+    if (!emprendedor) return [null, "Emprendedor no encontrado"];
+
+    return [emprendedor, null];
+  } catch (error) {
+    handleError(error, "emprendedores.service -> getEmprendedorByUserId");
+  }
+}
+
 async function createEmprendedor(emprendedor) {
   try {
-    const { nombre, rut, celular, carreraId, nombre_puesto } = emprendedor;
+    const { userId, nombre, rut, celular, carreraId, nombre_puesto } = emprendedor;
 
+   //Verificar que el usuario exista
+    const user = await User.findById(userId);
+    if (!user) return [null, "El usuario no existe"];
+
+    //verificar que el user no tenga un emprendedor asociado
+    const EmprendedorUser = await Emprendedor.findOne({ userId });
+    if (EmprendedorUser) return [null, "El usuario ya tiene un emprendedor asociado"];
+   
     //Verificar que no exista un emprendedor con el mismo rut
     const EmprendedorFound = await Emprendedor.findOne({ rut });
     if (EmprendedorFound) return [null, "El emprendedor ya existe"];
@@ -58,15 +78,23 @@ async function createEmprendedor(emprendedor) {
 
 async function updateEmprendedor(id, emprendedor) {
   try {
-    const { nombre, rut, celular, carreraId, nombre_puesto,  } = emprendedor;
+    const {userId ,nombre, rut, celular, carreraId, nombre_puesto,  } = emprendedor;
+
+    //verificar que el usuario exista
+    const user = await User.findById(userId);
+    if (!user) return [null, "El usuario no existe"];
 
     //Verificar el emprendedor exista   
     const EmprendedorFound = await Emprendedor.findById(id);
     if (!EmprendedorFound) return [null, "El emprendedor no existe"];
 
+    // Asegurarnos de que se se actualiza el emprendedor del mismo usuario
+    if (userId !== EmprendedorFound.userId) {
+      return [null, "No se puede actualizar el emprendedor a un usuario distinto"];
+    }
     //verificar que no exista un emprendedor con el mismo rut
     const EmprendedorDuplicate = await Emprendedor.findOne({ rut });
-    if (EmprendedorDuplicate) return [null, "El emprendedor ya existe"];
+    if (EmprendedorDuplicate) return [null, "Error, el rut ya existe en otro emprendedor"];
 
     //Verificar que la carrera exista
     const carrera = await Carrera.findById(carreraId);
@@ -121,6 +149,7 @@ async function deleteFullEmprendedorById(id) {
 module.exports = {
   getEmprendedores,
   getEmprendedorById,
+  getEmprendedorByUserId,
   createEmprendedor,
   updateEmprendedor,
   deleteEmprendedorById,

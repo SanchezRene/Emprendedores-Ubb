@@ -1,6 +1,6 @@
 {
     "user": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
         },
@@ -20,7 +20,7 @@
         }
     },
     "role": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
         },
@@ -34,9 +34,16 @@
         }
     },
     "Emprendedor": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
+        },
+        "userId": {
+            "type": [
+                "Schema.ObjectId"
+            ],
+            "required": true,
+            "ref": "user"
         },
         "nombre": {
             "type": "String",
@@ -83,7 +90,7 @@
         }
     },
     "Carrera": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
         },
@@ -114,7 +121,7 @@
         }
     },
     "Inscripcion": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
         },
@@ -132,6 +139,23 @@
             "required": true,
             "ref": "Emprendedor"
         },
+        "productosId": {
+            "type": [
+                "Schema.ObjectId"
+            ],
+            "required": true,
+            "minItems": 1,
+            "maxItems": 10,
+            "ref": "Productos"
+        },
+        "ayudantesId": {
+            "type": [
+                "Schema.ObjectId"
+            ],
+            "minItems": 0,
+            "maxItems": 3,
+            "ref": "Ayudantes"
+        },
         "estado": {
             "type": "String",
             "required": true,
@@ -148,7 +172,7 @@
         }
     },
     "Productos": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
         },
@@ -181,7 +205,7 @@
         }
     },
     "Ayudantes": {
-        "id_": {
+        "_id": {
             "type": "Schema.ObjectId",
             "required": true
         },

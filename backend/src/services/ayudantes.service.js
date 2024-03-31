@@ -47,12 +47,15 @@ async function createAyudante(ayudante) {
   try {
     const { nombre, rut, emprendedorId } = ayudante;
 
+    //encontrar emprendedor por id
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
 
+    //verificar si el ayudante ya existe  
     const ayudanteFound = await Ayudantes.findOne({ rut: ayudante.rut });
     if (ayudanteFound) return [null, "El ayudante ya existe"];
 
+    //verificar si el emprendedor excede el máximo de ayudantes permitidos
     const countAyudantes = await Ayudantes.countDocuments({ emprendedorId });
     if (countAyudantes >= 3)
       return [null, "El emprendedor excede el máximo de ayudantes permitidos"];
@@ -63,6 +66,9 @@ async function createAyudante(ayudante) {
       emprendedorId,
     });
     await newAyudante.save();
+
+    //agregar el id del ayudante al array de ayudantesId del emprendedor
+    emprendedor.ayudantesId.push(newAyudante._id);
 
     return [newAyudante, null];
   } catch (error) {

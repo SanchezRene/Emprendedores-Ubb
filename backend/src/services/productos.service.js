@@ -73,13 +73,17 @@ async function createProducto(producto) {
     });
 
     const productoCreated = await newProducto.save();
+
+    //agregar producto al array de productosId del emprendedor
+    emprendedor.productosId.push(productoCreated._id);
+
     return [productoCreated, null];
   } catch (error) {
     handleError(error, "productos.service -> createProducto");
   }
 }
 
-async function updateProductoById(id, updatedProducto) {
+async function updateProducto(id, updatedProducto) {
   try {
     const { nombre, fotografia, descripcion, stock, emprendedorId } =
       updatedProducto;
@@ -135,6 +139,6 @@ module.exports = {
   getProductoById,
   getProductosByEmprendedorId,
   createProducto,
-  updateProductoById,
+  updateProducto,
   deleteProductoById,
 };

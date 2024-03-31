@@ -1,4 +1,5 @@
 "use strict";
+const { verify } = require("jsonwebtoken");
 // Importa el modelo de datos 'carerra'
 const Carrera = require("../models/carrera.model");
 const Emprendedor = require("../models/emprendedor.model");
@@ -94,6 +95,10 @@ async function deleteCarreraById(id) {
   try {
     const carreraFound = await Carrera.findById(id);
     if (!carreraFound) return [null, "Carrera no encontrada"];
+
+    //verificar que no haya emprendedores asociados a la carrera
+    const emprendedor = await Emprendedor.findOne({ carreraId: id });
+    if (emprendedor) return [null, "Carrera tiene emprendedores asociados"];
 
     const carrera = await Carrera.findByIdAndDelete(id);
     if (!carrera) return [null, "Carrera no eliminada"];
