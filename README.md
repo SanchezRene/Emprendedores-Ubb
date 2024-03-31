@@ -6,7 +6,7 @@ A continuación, se presentan las asignaciones de requisitos funcionales a cada 
 
 | Integrante    | Requisito     |
 | ------------- | ------------- |
-| René          | **Req 1**.    |
+| René          | **Formulario de inscripcion de emprendedores**.    |
 | Pablo         | **Req 2**.    |
 | María Paz     | **Req 3**.    |
 | Sebastián     | **Req 4**.    | 
