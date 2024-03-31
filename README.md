@@ -11,7 +11,5 @@ A continuación, se presentan las asignaciones de requisitos funcionales a cada 
 | María Paz     | **Req 3**.    |
 | Sebastián     | **Req 4**.    | 
 
-hola
-
 ## [Ver el backend](./backend/Backend.md)
 ## [Ver el frontend](./frontend/Frontend.md)

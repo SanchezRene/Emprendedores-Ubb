@@ -28,9 +28,9 @@ async function getAyudanteById(id) {
 }
 
 // 3.- Ver ayudantes por emprendedor
-async function getAyudantesByEmprendedorId(idEmprendedor) {
+async function getAyudantesByEmprendedorId(emprendedorId) {
   try {
-    const ayudantes = await Ayudantes.find({ idEmprendedor });
+    const ayudantes = await Ayudantes.find({ emprendedorId });
     if (ayudantes.length === 0) return [null, "No se encontraron ayudantes para este emprendedor"];
 
     return [ayudantes, null];
@@ -42,14 +42,18 @@ async function getAyudantesByEmprendedorId(idEmprendedor) {
 
 async function createAyudante(ayudante) {
   try {
-    const { nombre, rut } = ayudante;
+    const { nombre, rut, emprendedorId } = ayudante;
 
     const ayudanteFound = await Ayudantes.findOne({ rut: ayudante.rut });
     if (ayudanteFound) return [null, "El ayudante ya existe"];
 
+    const countAyudantes = await Ayudantes.countDocuments({ emprendedorId });
+    if (countAyudantes >= 3) return [null, "El emprendedor ya tiene el máximo de ayudantes permitidos"];
+
     const newAyudante = new Ayudantes({
       nombre,
       rut,
+      emprendedorId
     });
     await newAyudante.save();
 
@@ -60,17 +64,13 @@ async function createAyudante(ayudante) {
 }
 
 
-
-
-
-
-async function updateAyudante(id, ayudante) {
+async function updateAyudanteById(id, ayudante) {
   try {
-    const { nombre, rut, idEmprendedor } = ayudante;
+    const { nombre, rut, emprendedorId } = ayudante;
 
     const updatedAyudante = await Ayudantes.findByIdAndUpdate(
       id,
-      { nombre, rut, idEmprendedor },
+      { nombre, rut, emprendedorId },
       { new: true }
     );
 
@@ -94,3 +94,11 @@ async function deleteAyudante(id) {
   }
 }
 
+module.exports = {
+  getAyudantes,
+  getAyudanteById,
+  getAyudantesByEmprendedorId,
+  createAyudante,
+  updateAyudanteById,
+  deleteAyudante
+};
