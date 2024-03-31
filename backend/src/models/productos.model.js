@@ -23,7 +23,12 @@ const productosSchema = new mongoose.Schema({
     required: true,
     min: 1,
     max: 300,
-  }
+  },
+  emprendedorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Emprendedor",
+    required: true,
+  },
 });
 
 const Productos = mongoose.model("Productos", productosSchema);

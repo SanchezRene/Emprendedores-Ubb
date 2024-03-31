@@ -1,6 +1,7 @@
 "use strict";
 // Importa el modelo de datos 'carerra'
 const Carrera = require("../models/carrera.model");
+const Emprendedor = require("../models/emprendedor.model");
 const { handleError } = require("../utils/errorHandler");
 
 // Funciones con lógica de interacción con la base de datos en MongoDB
@@ -38,8 +39,12 @@ async function getCarreraById(id) {
 
 async function getCarreraByEmprendedorId(emprendedorId) {
   try {
-    const carrera = await Carrera.findOne({ emprendedorId });
-    if (!carrera) return [null, "Carrera no encontrada"];
+
+    const emprendedor = await Emprendedor.findById(emprendedorId);
+    if (!emprendedor) return [null, "Emprendedor no encontrado"];
+
+    const carrera = await Carrera.findOne({emprendedorId: emprendedorId });
+    if (!carrera) return [null, "Emprendedor sin carrera"];
 
     return [carrera, null];
   } catch (error) {

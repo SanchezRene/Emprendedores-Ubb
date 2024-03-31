@@ -38,8 +38,7 @@ const emprendedorSchema = new mongoose.Schema({
         ref: "Productos",
       },
     ],
-    required: true,
-    minItems: 1,
+    required: false,
     maxItems: 10,
   },
   //arreglo de ayudantes que trabajan con el emprendedor
