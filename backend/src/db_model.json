@@ -53,7 +53,7 @@
             "minLength": 9,
             "maxLength": 15
         },
-        "idCarrera": {
+        "carreraId": {
             "type": [
                 "Schema.ObjectId"
             ],
@@ -64,7 +64,7 @@
             "required": true,
             "maxLength": 100
         },
-        "idProductos": {
+        "productosId": {
             "type": [
                 "Schema.ObjectId"
             ],
@@ -73,7 +73,7 @@
             "maxItems": 10,
             "ref": "Productos"
         },
-        "idAyudantes": {
+        "ayudantesId": {
             "type": [
                 "Schema.ObjectId"
             ],
@@ -125,7 +125,7 @@
             "required": true,
             "ref": "user"
         },
-        "idEmprendedor": {
+        "EmprendedorId": {
             "type": [
                 "Schema.ObjectId"
             ],
@@ -172,7 +172,7 @@
             "min": 1,
             "max": 300
         },
-        "idEmprendedor": {
+        "emprendedorId": {
             "type": [
                 "Schema.ObjectId"
             ],
@@ -194,7 +194,7 @@
             "type": "String",
             "required": true
         },
-        "idEmprendedor": {
+        "emprendedorId": {
             "type": [
                 "Schema.ObjectId"
             ],

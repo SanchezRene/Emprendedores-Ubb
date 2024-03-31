@@ -5,9 +5,11 @@ const { handleError } = require("../utils/errorHandler");
 
 // Funciones con lógica de interacción con la base de datos en MongoDB
 
-/*  Async: operaciones que tardan tiempo en completarse sin bloquear el hilo de ejecución principal.
-    await: Esperar a que la promesa se resuelva y devuelva el resultado.
-    promesas: objetos que representan el resultado eventual (éxito o fracaso)*/
+/*  
+    - Async: operaciones que tardan tiempo en completarse sin bloquear el hilo de ejecución principal.
+    - Await: Esperar a que la promesa se resuelva y devuelva el resultado.
+    - Promesas: objetos que representan el resultado eventual (éxito o fracaso)
+*/
 
 async function getCarreras() {
   try {
@@ -19,6 +21,29 @@ async function getCarreras() {
     return [carreras, null];
   } catch (error) {
     handleError(error, "carreras.service -> getCarreras");
+  }
+}
+
+async function getCarreraById(id) {
+  try {
+    //se realiza una búsqueda por el identificador único, pasando el valor del identificador directamente como argumento.
+    const carrera = await Carrera.findById(id);
+    if (!carrera) return [null, "Carrera no encontrada"];
+
+    return [carrera, null];
+  } catch (error) {
+    handleError(error, "carreras.service -> getCarreraById");
+  }
+}
+
+async function getCarreraByEmprendedorId(emprendedorId) {
+  try {
+    const carrera = await Carrera.findOne({ emprendedorId });
+    if (!carrera) return [null, "Carrera no encontrada"];
+
+    return [carrera, null];
+  } catch (error) {
+    handleError(error, "carreras.service -> getCarreraByEmprendedorId");
   }
 }
 
@@ -40,18 +65,6 @@ async function createCarrera(carrera) {
     return [newCarrera, null];
   } catch (error) {
     handleError(error, "carreras.service -> createCarrera");
-  }
-}
-
-async function getCarreraById(id) {
-  try {
-    //se realiza una búsqueda por el identificador único, pasando el valor del identificador directamente como argumento.
-    const carrera = await Carrera.findById(id);
-    if (!carrera) return [null, "Carrera no encontrada"];
-
-    return [carrera, null];
-  } catch (error) {
-    handleError(error, "carreras.service -> getCarreraById");
   }
 }
 
@@ -88,7 +101,9 @@ async function deleteCarreraById(id) {
 
 module.exports = {
   getCarreras,
-  createCarrera,
   getCarreraById,
+  getCarreraByEmprendedorId,
+  createCarrera,
   updateCarreraById,
+  deleteCarreraById,
 };

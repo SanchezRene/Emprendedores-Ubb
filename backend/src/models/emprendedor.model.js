@@ -20,7 +20,7 @@ const emprendedorSchema = new mongoose.Schema({
     minLenght: 9,
     maxLenght: 15,
   },
-  idCarrera: {
+  carreraId: {
     type: Schema.ObjectId,
     ref: "Carrera",
     required: true,
@@ -31,7 +31,7 @@ const emprendedorSchema = new mongoose.Schema({
     maxLenght: 100,
   },
   //arreglo de productos que vende el emprendedor
-  idProductos: {
+  productosId: {
     type: [
       {
         type: Schema.ObjectId,
@@ -43,7 +43,7 @@ const emprendedorSchema = new mongoose.Schema({
     maxItems: 10,
   },
   //arreglo de ayudantes que trabajan con el emprendedor
-  idAyudantes: {
+  ayudantesId: {
     type: [
       {
         type: Schema.ObjectId,

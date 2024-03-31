@@ -15,6 +15,10 @@ const ayudantesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  emprendedorId: {
+    type: Schema.Types.ObjectId,
+    ref: "Emprendedor",
+  },
 });
 
 const Ayudantes = mongoose.model("Ayudantes", ayudantesSchema);
