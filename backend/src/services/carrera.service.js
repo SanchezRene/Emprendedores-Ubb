@@ -58,7 +58,7 @@ async function createCarrera(carrera) {
     //se pasa un objeto "carrera" como argumento, luego se desestructura para obtener los campos "titulo", "facultad" y "sede"
     const { titulo, facultad, sede } = carrera;
 
-    const carreraFound = await Carrera.findOne({ nombre: carrera.nombre });
+    const carreraFound = await Carrera.findOne({ nombre: carrera.titulo });
     if (carreraFound) return [null, "La carrera ya existe"];
 
     const newCarrera = new Carrera({

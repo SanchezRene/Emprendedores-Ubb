@@ -43,7 +43,7 @@ async function createCarrera(req, res) {
     const { body } = req;
     const { error: bodyError } = CarreraSchema.carreraBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
-
+    console.log("está valido");
     const [newCarrera, carreraError] = await CarreraService.createCarrera(body);
 
     if (carreraError) return respondError(req, res, 400, carreraError);
@@ -88,7 +88,7 @@ async function deleteCarrera(req, res) {
       CarreraSchema.carreraIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
-    const [carrera, errorCarrera] = await CarreraService.deleteCarrera(
+    const [carrera, errorCarrera] = await CarreraService.deleteCarreraById(
       params.id,
     );
     if (errorCarrera) return respondError(req, res, 404, errorCarrera);

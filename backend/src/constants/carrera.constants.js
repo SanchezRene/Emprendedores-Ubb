@@ -1,6 +1,6 @@
 /** Facultades y sedes permitidas en la base de datos */
 const Facultades = [
-  "Arquitectura, Construccion y Diseño",
+  "Arquitectura, Construcción y Diseño",
   "Ingeniería",
   "Ciencias Empresariales",
   "Educación y Humanidades",
