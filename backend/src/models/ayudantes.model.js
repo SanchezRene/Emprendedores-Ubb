@@ -18,6 +18,7 @@ const ayudantesSchema = new mongoose.Schema({
   emprendedorId: {
     type: Schema.Types.ObjectId,
     ref: "Emprendedor",
+    required: true,
   },
 });
 

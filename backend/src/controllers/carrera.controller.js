@@ -43,7 +43,6 @@ async function createCarrera(req, res) {
     const { body } = req;
     const { error: bodyError } = CarreraSchema.carreraBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
-    console.log("está valido");
     const [newCarrera, carreraError] = await CarreraService.createCarrera(body);
 
     if (carreraError) return respondError(req, res, 400, carreraError);
