@@ -56,7 +56,7 @@ const emprendedorSchema = new mongoose.Schema({
         ref: "Ayudantes",
       },
     ],
-    required: true,
+    required: false,
     default: [],
     maxItems: 3,
   },
