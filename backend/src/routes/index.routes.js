@@ -17,7 +17,8 @@ router.use("/auth", authRoutes);
 
 // Define las rutas para las carreras /api/carrera
 router.use("/carrera", authenticationMiddleware, carreraRoutes);
-
+// Define las rutas para los ayudantes /api/ayudantes
+router.use("/ayudantes", authenticationMiddleware, ayudanteRoutes);
 
 // Exporta el enrutador
 module.exports = router;
