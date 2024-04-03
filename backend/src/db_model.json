@@ -225,5 +225,53 @@
             "required": true,
             "ref": "Emprendedor"
         }
-    }
+    },
+    "Actividad": {
+        "_id": {
+          "type": "Schema.ObjectId",
+          "required": true
+        },
+        "emprendedorId": {
+          "type": "Schema.ObjectId",
+          "required": true,
+          "ref": "Emprendedor"
+        },
+        "productosId": {
+          "type": "Schema.ObjectId",
+          "required": true,
+          "ref": "Productos"
+        },
+        "categoria": {
+          "type": "String",
+          "required": true,
+          "enum": [
+            "Reunión",
+            "Taller",
+            "Evento",
+            "Otro"
+          ]
+        },
+        "nombre": {
+          "type": "String",
+          "required": true,
+          "maxLength": 100
+        },
+        "descripcion": {
+          "type": "String",
+          "required": true,
+          "maxLength": 255
+        },
+        "fechaInicio": {
+          "type": "Date",
+          "required": true
+        },
+        "fechaFin": {
+          "type": "Date",
+          "required": true
+        }
+      }
+      
+      
 }
+
+
