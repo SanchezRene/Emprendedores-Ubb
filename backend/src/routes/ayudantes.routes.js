@@ -1,6 +1,6 @@
 "use strict";
 
-const ayudanteController = require("../controllers/ayudante.controller.js");
+const ayudantesController = require("../controllers/ayudantes.controller.js");
 
 const express = require("express");
 const router = express.Router();
@@ -11,11 +11,11 @@ const authenticationMw = require("../middlewares/authentication.middleware.js");
 router.use(authenticationMw);
 
 // Define las rutas para los ayudantes
-router.get("/",authorizationMw.isAdmin, ayudanteController.getAyudantes);
-router.get("/:id", ayudanteController.getAyudanteById);
-router.post("/",authorizationMw.isAdmin, ayudanteController.createAyudante);
-router.put("/:id",authorizationMw.isAdmin, ayudanteController.updateAyudante);
-router.delete("/:id",authorizationMw.isAdmin, ayudanteController.deleteAyudante);
+router.get("/",authorizationMw.isAdmin, ayudantesController.getAyudantes);
+router.get("/:id", ayudantesController.getAyudanteById);
+router.post("/",authorizationMw.isAdmin, ayudantesController.createAyudante);
+router.put("/:id",authorizationMw.isAdmin, ayudantesController.updateAyudante);
+router.delete("/:id",authorizationMw.isAdmin, ayudantesController.deleteAyudante);
 
 // Exporta el enrutador
 module.exports = router;
