@@ -11,7 +11,10 @@ const authenticationMw = require("../middlewares/authentication.middleware.js");
 router.use(authenticationMw);
 
 // Define las rutas para las carreras
-router.get("/",authorizationMw.isAdmin, carreraController.getCarreras);
+/**
+ * Sólo los administradores pueden crear, actualizar y eliminar carreras.
+ */
+router.get("/", carreraController.getCarreras);
 router.get("/:id", carreraController.getCarreraById);
 router.post("/",authorizationMw.isAdmin, carreraController.createCarrera);
 router.put("/:id",authorizationMw.isAdmin, carreraController.updateCarrera);

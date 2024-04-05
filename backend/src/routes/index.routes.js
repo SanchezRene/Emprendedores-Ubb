@@ -9,6 +9,7 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 const userRoutes = require("./user.routes.js");
 const authRoutes = require("./auth.routes.js");
 const carreraRoutes = require("./carrera.routes.js");
+const ayudantesRoutes = require("./ayudantes.routes.js");
 
 // Define las rutas para los usuarios /api/usuarios
 router.use("/users", authenticationMiddleware, userRoutes);
@@ -17,7 +18,8 @@ router.use("/auth", authRoutes);
 
 // Define las rutas para las carreras /api/carrera
 router.use("/carrera", authenticationMiddleware, carreraRoutes);
-
+// Define las rutas para los ayudantes /api/ayudantes
+router.use("/ayudantes", authenticationMiddleware, ayudantesRoutes);
 
 // Exporta el enrutador
 module.exports = router;

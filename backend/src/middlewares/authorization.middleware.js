@@ -32,6 +32,56 @@ async function isAdmin(req, res, next) {
   }
 }
 
+/**
+ * Comprueba si el usuario no es el propietario de los datos
+   1.- A través del token JWT se obtiene el email del usuario
+   2.- Si el id del usuario es igual al id del usuario que se quiere modificar, se permite la acción
+ */
+async function isOwner(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+
+    if (user._id === req.params.userId) {
+      next();
+      return;
+    }
+    return respondError(
+      req,
+      res,
+      401,
+      "El usuario NO es el propietario de los datos",
+    );
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isOwner");
+  }
+}
+
+/**
+ * Comprueba si el usuario es un administrador o si es el propietario de los datos, y permitiría el acceso a la ruta en cualquiera de esos casos.
+ */
+async function isOwnerOrAdmin(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+
+    //array.includes(valueToFind[, fromIndex]) devuelve true si el valor es encontrado en el array.
+    if (user._id === req.params.userId || user.roles.includes("admin")) {
+      next();
+      return;
+    }
+    return respondError(
+      req,
+      res,
+      401,
+      "El usuario NO es el propietario de los datos o no tiene rol de administrador",
+    );
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isOwnerOrAdmin");
+  }
+}
+
+
 module.exports = {
   isAdmin,
+  isOwner,
+  isOwnerOrAdmin
 };
