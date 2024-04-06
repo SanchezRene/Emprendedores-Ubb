@@ -17,15 +17,16 @@ const ayudantesBodySchema = Joi.object({
       "string.base": "El rut debe ser de tipo string.",
       "string.pattern.base": "El rut proporcionado no es válido.",
     }),
-    emprendedorId: Joi.string()
-        .required()
-        .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
-        .messages({
-          "string.empty": "El emprendedorId no puede estar vacío.",
-          "any.required": "El emprendedorId es obligatorio.",
-          "string.base": "El emprendedorId debe ser de tipo string.",
-          "string.pattern.base": "El emprendedorId proporcionado no es un ObjectId válido.",
-        }),
+  emprendedorId: Joi.string()
+    .required()
+    .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
+    .messages({
+      "string.empty": "El emprendedorId no puede estar vacío.",
+      "any.required": "El emprendedorId es obligatorio.",
+      "string.base": "El emprendedorId debe ser de tipo string.",
+      "string.pattern.base":
+        "El emprendedorId proporcionado no es un ObjectId válido.",
+    }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",
 });
@@ -41,6 +42,5 @@ const ayudantesIdSchema = Joi.object({
       "string.pattern.base": "El id proporcionado no es un ObjectId válido.",
     }),
 });
-
 
 module.exports = { ayudantesBodySchema, ayudantesIdSchema };

@@ -11,7 +11,7 @@
     "backend",
     "http"
   ],
-  "author": "Camilo saez",
+  "author": "René Sánchez",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "2.4.3",
@@ -23,7 +23,8 @@
     "jsonwebtoken": "9.0.2",
     "mongodb": "^6.5.0",
     "mongoose": "^7.5.2",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "multer": "1.4.5-lts.1"
   },
   "devDependencies": {
     "eslint": "8.50.0",

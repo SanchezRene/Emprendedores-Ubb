@@ -13,8 +13,8 @@ router.use(authenticationMw);
 // Define las rutas para los ayudantes
 router.get("/",authorizationMw.isAdmin, ayudantesController.getAyudantes);
 router.get("/:id", ayudantesController.getAyudanteById);
-router.post("/",authorizationMw.isAdmin, ayudantesController.createAyudante);
-router.put("/:id",authorizationMw.isAdmin, ayudantesController.updateAyudante);
+router.post("/",authorizationMw.isOwnerOrAdmin, ayudantesController.createAyudante);
+router.put("/:id",authorizationMw.isOwnerOrAdmin, ayudantesController.updateAyudante);
 router.delete("/:id",authorizationMw.isAdmin, ayudantesController.deleteAyudante);
 
 // Exporta el enrutador
