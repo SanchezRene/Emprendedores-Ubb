@@ -1,3 +1,6 @@
+// importa el módulo 'multer' para el manejo de archivos
+const multer = require("multer");
+
 // Importa el archivo 'configEnv.js' para cargar las variables de entorno
 const { PORT, HOST } = require("./config/configEnv.js");
 // Importa el módulo 'cors' para agregar los cors
