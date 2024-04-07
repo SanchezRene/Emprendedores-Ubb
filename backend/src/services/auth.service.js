@@ -43,7 +43,7 @@ async function login(user) {
       { email: userFound.email, roles: userFound.roles },
       ACCESS_JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "3d", // 3 días
       },
     );
 
@@ -51,7 +51,7 @@ async function login(user) {
       { email: userFound.email },
       REFRESH_JWT_SECRET,
       {
-        expiresIn: "7d", // 7 días
+        expiresIn: "10d", // 10 días
       },
     );
 
