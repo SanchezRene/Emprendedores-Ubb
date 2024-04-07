@@ -8,7 +8,7 @@ const { handleError } = require("../utils/errorHandler");
 
 async function getEmprendedores() {
   try {
-    const emprendedores = await Emprendedores.find();
+    const emprendedores = await Emprendedor.find();
     if (emprendedores == 0)
       return [null, "La colección de emprendedores está vacía"];
 

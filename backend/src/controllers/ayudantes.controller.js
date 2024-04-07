@@ -8,7 +8,7 @@ const { handleError } = require("../utils/errorHandler");
 async function getAyudantes(req, res) {
     try {
       const [ayudantes, errorAyudantes] = await ayudantesService.getAyudantes();
-      if (errorAyudantes) return respondError(req, res, 404, errorCarreras);
+      if (errorAyudantes) return respondError(req, res, 404, errorAyudantes);
   
       ayudantes.length === 0
         ? respondSuccess(req, res, 204)

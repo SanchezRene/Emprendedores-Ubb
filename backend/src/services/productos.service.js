@@ -6,7 +6,7 @@ const { handleError } = require("../utils/errorHandler");
 async function getProductos() {
   try {
     const productos = await Productos.find();
-    if (!productos) return [null, "No hay productos"];
+    if (productos.length == 0) return [null, "La colección de productos está vacía"];
 
     return [productos, null];
   } catch (error) {
