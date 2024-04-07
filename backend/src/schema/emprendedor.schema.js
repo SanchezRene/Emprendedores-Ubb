@@ -12,7 +12,7 @@ const emprendedorBodySchema = Joi.object({
       "string.pattern.base":
         "El userId proporcionado no es un ObjectId válido.",
     }),
-  nombre: Joi.string().required.max(100).messages({
+  nombre: Joi.string().required().max(100).messages({
     "string.empty": "El nombre no puede estar vacío.",
     "any.required": "El nombre es obligatorio.",
     "string.base": "nombre debe ser de tipo string.",

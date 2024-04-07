@@ -11,7 +11,7 @@ const authRoutes = require("./auth.routes.js");
 const carreraRoutes = require("./carrera.routes.js");
 const ayudantesRoutes = require("./ayudantes.routes.js");
 const productosRoutes = require("./productos.routes.js");
-const emprendedoresRoutes = require("./emprendedores.routes.js");
+const emprendedorRoutes = require("./emprendedor.routes.js");
 const inscripcionRoutes = require("./inscripcion.routes.js");
 
 // Define las rutas para los usuarios /api/usuarios
@@ -25,8 +25,8 @@ router.use("/carrera", authenticationMiddleware, carreraRoutes);
 router.use("/ayudantes", authenticationMiddleware, ayudantesRoutes);
 // Define las rutas para los productos /api/productos
 router.use("/productos", authenticationMiddleware, productosRoutes);
-// Define las rutas para los emprendedores /api/emprendedores
-router.use("/emprendedores", authenticationMiddleware, emprendedoresRoutes);
+// Define las rutas para el emprendedor /api/emprendedores
+router.use("/emprendedor", authenticationMiddleware, emprendedorRoutes);
 // Define las rutas para las inscripciones /api/inscripcion
 router.use("/inscripcion", authenticationMiddleware, inscripcionRoutes);
 
