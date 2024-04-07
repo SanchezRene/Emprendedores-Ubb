@@ -8,10 +8,11 @@ const productosBodySchema = Joi.object({
         "string.base": "nombre debe ser de tipo string.",
         "string.max": "El nombre debe tener un máximo de 100 caracteres.",
     }), 
-    fotografia: Joi.string().required().messages({
+    fotografia: Joi.string().required().uri().messages({
         "string.empty": "La fotografia no puede estar vacía.",
         "any.required": "La fotografia es obligatoria.",
         "string.base": "fotografia debe ser de tipo string.",
+        "string.uri": "La fotografia debe tener una URL válida.",
     }),
     descripcion: Joi.string().required().max(255).messages({
         "string.empty": "La descripcion no puede estar vacía.",
@@ -24,7 +25,7 @@ const productosBodySchema = Joi.object({
         "any.required": "El stock es obligatorio.",
         "number.base": "stock debe ser de tipo number.",
         "number.min": "El stock debe ser mayor a 0.",
-        "number.max": "El stock debe ser menor a 300.",
+        "number.max": "El stock no puede ser más de 300.",
     }),
     emprendedorId: Joi.string().required().pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/).messages({
         "string.empty": "El emprendedorId no puede estar vacío.",
