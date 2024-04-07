@@ -79,9 +79,29 @@ async function updateInscripcion(req, res) {
     }
 }
 
+async function deleteInscripcion(req, res) {
+    try {
+        const { params } = req;
+        const { error: paramsError } =
+            InscripcionSchema.inscripcionIdSchema.validate(params);
+        if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+        const [inscripcion, errorInscripcion] = await InscripcionService.deleteInscripcion(
+            params.id,
+        );
+        if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
+
+        respondSuccess(req, res, 200, inscripcion);
+    } catch (error) {
+        handleError(error, "inscripcion.controller -> deleteInscripcion");
+        respondError(req, res, 400, error.message);
+    }
+}
+
 module.exports = {
     getInscripciones,
     getInscripcionById,
     createInscripcion,
     updateInscripcion,
+    deleteInscripcion,
 };
