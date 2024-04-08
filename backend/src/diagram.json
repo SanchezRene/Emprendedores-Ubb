@@ -20,7 +20,7 @@
             "ref": "emprendedor",
             "emprendedor": {
                 "id_": {},
-                "nombre": {},
+                "nombre_completo": {},
                 "rut": {},
                 "idCarrera": {
                     "ref": "carrera",

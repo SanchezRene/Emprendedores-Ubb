@@ -12,7 +12,7 @@ const emprendedorBodySchema = Joi.object({
       "string.pattern.base":
         "El userId proporcionado no es un ObjectId válido.",
     }),
-  nombre: Joi.string().required().max(100).messages({
+  nombre_completo: Joi.string().required().max(100).messages({
     "string.empty": "El nombre no puede estar vacío.",
     "any.required": "El nombre es obligatorio.",
     "string.base": "nombre debe ser de tipo string.",
@@ -27,12 +27,12 @@ const emprendedorBodySchema = Joi.object({
       "string.base": "El rut debe ser de tipo string.",
       "string.pattern.base": "El rut proporcionado no es válido.",
     }),
-  celular: Joi.number().required().min(9).max(15).messages({
-    "number.empty": "El celular no puede estar vacío.",
+  celular: Joi.string().required().min(9).max(15).pattern(/^\d+$/).messages({
+    "string.empty": "El celular no puede estar vacío.",
     "any.required": "El celular es obligatorio.",
-    "number.base": "celular debe ser de tipo number.",
-    "number.min": "El celular debe tener un mínimo de 9 dígitos.",
-    "number.max": "El celular debe tener un máximo de 15 dígitos.",
+    "string.base": "celular debe ser de tipo string.",
+    "string.min": "El celular debe tener un mínimo de 9 dígitos.",
+    "string.max": "El celular debe tener un máximo de 15 dígitos.",
   }),
   carreraId: Joi.string()
     .required()
