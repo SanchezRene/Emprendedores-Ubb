@@ -64,6 +64,36 @@
             ]
         },
         "fechaInscripcion": {}
+    },
+    "actividad": {
+        "id_": {},
+        "emprendedorId": {
+            "ref": "emprendedor",
+            "emprendedor": {
+                "id_": {},
+                "nombre": {},
+                "rut": {},
+                "idCarrera": {
+                    "ref": "carrera",
+                    "carrera": {
+                        "id_": {},
+                        "titulo": {}
+                    }
+                }
+            }
+        },
+        "categoria": {
+            "type": "String",
+            "required": true,
+            "enum": [
+                "Reunión",
+                "Taller",
+                "Evento",
+                "Otro"
+            ]
+        }
     }
     
 }
+
+
