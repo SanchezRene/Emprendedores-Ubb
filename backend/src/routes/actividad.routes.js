@@ -19,3 +19,4 @@ router.delete("/:id", actividadController.deleteActividad);
 
 // Exporta el enrutador
 module.exports = router;
+
