@@ -80,8 +80,17 @@ async function updateAyudanteById(id, ayudante) {
   try {
     const { nombre, rut, emprendedorId } = ayudante;
 
+    //verificar si el emprendedor existe
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
+  
+    //verificar si el ayudante existe
+    const ayudanteFound = await Ayudantes.findById(id);
+    if (!ayudanteFound) return [null, "Ayudante no encontrado"];
+
+    /*Asegurarnos de que los ayudantes sigan siendo propiedad de los mismos emprendedores y no se transfieran a otros.*/
+    if (ayudanteFound.emprendedorId !== emprendedorId)
+    return [null, "No se puede cambiar el 'emprendedorId' del ayudante"];
 
     const updatedAyudante = await Ayudantes.findByIdAndUpdate(
       id,

@@ -7,9 +7,9 @@ A continuación, se presentan las asignaciones de requisitos funcionales a cada 
 | Integrante    | Requisito     |
 | ------------- | ------------- |
 | René          | **Formulario de inscripcion de emprendedores**.    |
-| Pablo         | **Gestión de actividades (DDE)**.    |
-| María Paz     | **Req 3**.    |
-| Sebastián     | **Req 4**.    | 
+| Pablo         | **Gestión de actividades**.    |
+| María Paz     | **Participación de actividades**.    |
+| Sebastián     | **Gestión de emprendedores**.    | 
 
 ## [Ver el backend](./backend/Backend.md)
 ## [Ver el frontend](./frontend/Frontend.md)
