@@ -8,6 +8,12 @@ const productosBodySchema = Joi.object({
         "string.base": "nombre debe ser de tipo string.",
         "string.max": "El nombre debe tener un máximo de 100 caracteres.",
     }), 
+    categoría: Joi.string().required().max(255).messages({
+        "string.empty": "La categoría no puede estar vacía.",
+        "any.required": "La categoría es obligatoria.",
+        "string.base": "categoría debe ser de tipo string.",
+        "string.max": "La categoría debe tener un máximo de 255 caracteres.",
+    }),
     fotografia: Joi.string().required().uri().messages({
         "string.empty": "La fotografia no puede estar vacía.",
         "any.required": "La fotografia es obligatoria.",
