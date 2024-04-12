@@ -42,19 +42,20 @@ async function getEmprendedorByUserId(userId) {
 
 async function createEmprendedor(emprendedor) {
   try {
-    const { userId, nombre, rut, celular, carreraId, nombre_puesto } = emprendedor;
+    
+    const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto } = emprendedor;
 
    //Verificar que el usuario exista
     const user = await User.findById(userId);
     if (!user) return [null, "El usuario no existe"];
 
     //verificar que el user no tenga un emprendedor asociado
-    const EmprendedorUser = await Emprendedor.findOne({ userId });
+    const EmprendedorUser = await Emprendedor.findOne({ userId: userId });
     if (EmprendedorUser) return [null, "El usuario ya tiene un emprendedor asociado"];
    
     //Verificar que no exista un emprendedor con el mismo rut
     const EmprendedorFound = await Emprendedor.findOne({ rut });
-    if (EmprendedorFound) return [null, "El emprendedor ya existe"];
+    if (EmprendedorFound) return [null, "Ya existe un emprendedor con el mismo rut"];
 
     //Verificar que la carrera exista
     const carrera = await Carrera.findById(carreraId);
@@ -62,7 +63,8 @@ async function createEmprendedor(emprendedor) {
 
     // Crear un nuevo emprendedor
     const newEmprendedor = new Emprendedor({
-      nombre,
+      userId,
+      nombre_completo,
       rut,
       celular,
       carreraId,
@@ -78,7 +80,7 @@ async function createEmprendedor(emprendedor) {
 
 async function updateEmprendedor(id, emprendedor) {
   try {
-    const {userId ,nombre, rut, celular, carreraId, nombre_puesto,  } = emprendedor;
+    const {userId ,nombre_completo, rut, celular, carreraId, nombre_puesto,  } = emprendedor;
 
     //verificar que el usuario exista
     const user = await User.findById(userId);
@@ -89,12 +91,12 @@ async function updateEmprendedor(id, emprendedor) {
     if (!EmprendedorFound) return [null, "El emprendedor no existe"];
 
     // Asegurarnos de que se se actualiza el emprendedor del mismo usuario
-    if (userId !== EmprendedorFound.userId) {
+    if (userId !== EmprendedorFound.userId.toString()) {
       return [null, "No se puede actualizar el emprendedor a un usuario distinto"];
     }
     //verificar que no exista un emprendedor con el mismo rut
     const EmprendedorDuplicate = await Emprendedor.findOne({ rut });
-    if (EmprendedorDuplicate) return [null, "Error, el rut ya existe en otro emprendedor"];
+    if (EmprendedorDuplicate && EmprendedorDuplicate.id.toString() !== id) return [null, "Error, el rut ya existe en otro emprendedor"];
 
     //Verificar que la carrera exista
     const carrera = await Carrera.findById(carreraId);
@@ -103,7 +105,7 @@ async function updateEmprendedor(id, emprendedor) {
     const updatedEmprendedor = await Emprendedor.findByIdAndUpdate(
       id,
       {
-        nombre,
+        nombre_completo,
         rut,
         celular,
         carreraId,

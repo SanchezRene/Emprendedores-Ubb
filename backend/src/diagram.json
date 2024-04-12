@@ -1,99 +1,87 @@
 {
-    "inscripcion": {
+  "inscripción": {
+    "id_": {},
+    "userId": {
+      "user": {
         "id_": {},
-        "userId": {
-            "ref": "user",
-            "user": {
-                "id_": {},
-                "username": {},
-                "email": {},
-                "roles": {
-                    "ref": "role",
-                    "enum": [
-                        "user",
-                        "admin"
-                    ]
-                }
-            }
-        },
-        "emprendedorId": {
-            "ref": "emprendedor",
-            "emprendedor": {
-                "id_": {},
-                "nombre": {},
-                "rut": {},
-                "idCarrera": {
-                    "ref": "carrera",
-                    "carrera": {
-                        "id_": {},
-                        "titulo": {}
-                    }
-                },
-                "celular": {},
-                "nombre_puesto": {},
-                "idProductos": {
-                    "minItems": 1,
-                    "maxItems": 10,
-                    "ref": "productos",
-                    "productos": {
-                        "id_": {},
-                        "nombre": {},
-                        "fotografia": {},
-                        "descripcion": {},
-                        "stock": {}
-                    }
-                },
-                "idAyudantes": {
-                    "minItems": 0,
-                    "maxItems": 3,
-                    "ref": "ayudantes",
-                    "ayudantes": {
-                        "id_": {},
-                        "nombre": {},
-                        "rut": {}
-                    }
-                }
-            }
-        },
-        "estado": {
-            "enum": [
-                "Sin inscribir",
-                "Pendiente",
-                "Rechazado",
-                "Arobado"
-            ]
-        },
-        "fechaInscripcion": {}
-    },
-    "actividad": {
-        "id_": {},
-        "emprendedorId": {
-            "ref": "emprendedor",
-            "emprendedor": {
-                "id_": {},
-                "nombre": {},
-                "rut": {},
-                "idCarrera": {
-                    "ref": "carrera",
-                    "carrera": {
-                        "id_": {},
-                        "titulo": {}
-                    }
-                }
-            }
-        },
-        "categoria": {
-            "type": "String",
-            "required": true,
-            "enum": [
-                "Reunión",
-                "Taller",
-                "Evento",
-                "Otro"
-            ]
+        "username": {},
+        "email": {},
+        "roles": {
+          "role": [
+            "user",
+            "admin",
+            "emprendedor",
+            "encargado"
+          ]
         }
-    }
-    
+      }
+    },
+    "emprendedorId": {
+      "emprendedor": {
+        "id_": {},
+        "nombre_completo": {},
+        "rut": {},
+        "idCarrera": {
+          "carrera": {
+            "id_": {},
+            "titulo": {},
+            "facultad": {},
+            "sede": {}
+          }
+        },
+        "celular": {},
+        "nombre_puesto": {},
+        "idProductos": {
+          "productos": {
+            "id_": {},
+            "nombre": {},
+            "categoría": {},
+            "fotografía": {},
+            "descripción": {},
+            "stock": {}
+          },
+          "minItems": 1,
+          "maxItems": 10
+        },
+        "idAyudantes": {
+          "ayudantes": {
+            "id_": {},
+            "nombre": {},
+            "rut": {}
+          },
+          "minItems": 0,
+          "maxItems": 3
+        }
+      }
+    },
+    "estado": [
+      "Sin inscribir",
+      "Pendiente",
+      "Rechazado",
+      "Arobado"
+    ],
+    "fecha Inscripción": {}
+  },
+  "actividad": {
+    "id_": {},
+    "emprendedorId": {
+      "emprendedor": {
+        "id_": {},
+        "nombre": {},
+        "rut": {},
+        "idCarrera": {
+          "carrera": {
+            "id_": {},
+            "titulo": {}
+          }
+        }
+      }
+    },
+    "categoría": [
+      "Reunión",
+      "Taller",
+      "Evento",
+      "Otro"
+    ]
+  }
 }
-
-

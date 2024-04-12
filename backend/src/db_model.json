@@ -45,7 +45,7 @@
             "required": true,
             "ref": "user"
         },
-        "nombre": {
+        "nombre_completo": {
             "type": "String",
             "required": true,
             "maxLength": 100
@@ -55,7 +55,7 @@
             "required": true
         },
         "celular": {
-            "type": "Number",
+            "type": "String",
             "required": true,
             "minLength": 9,
             "maxLength": 15
@@ -180,6 +180,11 @@
             "type": "String",
             "required": true,
             "maxLength": 100
+        },
+        "categoria": {
+            "type": "String",
+            "required": true,
+           "maxLength": 255
         },
         "fotografia": {
             "type": "String",
