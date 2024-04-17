@@ -91,7 +91,7 @@ async function deleteInscripcion(req, res) {
         );
         if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
 
-        respondSuccess(req, res, 200, inscripcion);
+        respondSuccess(req, res, 200,"Inscripción eliminada satisfactoriamente", inscripcion);
     } catch (error) {
         handleError(error, "inscripcion.controller -> deleteInscripcion");
         respondError(req, res, 400, error.message);

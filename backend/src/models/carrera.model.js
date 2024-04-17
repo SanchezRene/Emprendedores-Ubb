@@ -14,13 +14,12 @@ const carreraSchema = new mongoose.Schema({
       "Ingeniería",
       "Ciencias Empresariales",
       "Educación y Humanidades",
-      "Ciencias de la Salud y de los Alimentos",
       "Ciencias",
     ],
   },
   sede: {
     type: String,
-    enum: ["Concepción", "Chillan"],
+    enum: ["Concepción"],
     default: "Concepción",
   },
 });

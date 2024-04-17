@@ -1,5 +1,4 @@
 "use strict";
-const { verify } = require("jsonwebtoken");
 // Importa el modelo de datos 'carerra'
 const Carrera = require("../models/carrera.model");
 const Emprendedor = require("../models/emprendedor.model");
