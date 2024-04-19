@@ -11,6 +11,9 @@ const cookieParser = require("cookie-parser");
 /** El enrutador principal */
 const indexRoutes = require("./routes/index.routes.js");
 // Importa el archivo 'configDB.js' para crear la conexión a la base de datos
+// Importa el módulo 'body-parser' para manejar los datos en formato JSON
+const bodyParser = require('body-parser');
+
 const { setupDB } = require("./config/configDB.js");
 // Importa el handler de errores
 const { handleFatalError, handleError } = require("./utils/errorHandler.js");
@@ -34,6 +37,8 @@ async function setupServer() {
     server.use(cookieParser());
     // Agregamos morgan para ver las peticiones que se hacen al servidor
     server.use(morgan("dev"));
+    // Agregamos el body-parser
+    server.use(bodyParser.json());
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
 
