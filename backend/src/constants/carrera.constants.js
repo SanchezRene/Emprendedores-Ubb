@@ -4,10 +4,9 @@ const Facultades = [
   "Ingeniería",
   "Ciencias Empresariales",
   "Educación y Humanidades",
-  "Ciencias de la Salud y de los Alimentos",
   "Ciencias",
 ];
 
-const Sedes = ["Concepción", "Chillán"];
+const Sedes = ["Concepción"];
 
 module.exports = { Facultades, Sedes };
