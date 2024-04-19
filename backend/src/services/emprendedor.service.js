@@ -42,20 +42,37 @@ async function getEmprendedorByUserId(userId) {
 
 async function createEmprendedor(emprendedor) {
   try {
-    
-    const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto } = emprendedor;
+    const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto } =
+      emprendedor;
 
-   //Verificar que el usuario exista
+    //Verificar que el usuario exista
     const user = await User.findById(userId);
     if (!user) return [null, "El usuario no existe"];
 
     //verificar que el user no tenga un emprendedor asociado
     const EmprendedorUser = await Emprendedor.findOne({ userId: userId });
-    if (EmprendedorUser) return [null, "El usuario ya tiene un emprendedor asociado"];
-   
-    //Verificar que no exista un emprendedor con el mismo rut
-    const EmprendedorFound = await Emprendedor.findOne({ rut });
-    if (EmprendedorFound) return [null, "Ya existe un emprendedor con el mismo rut"];
+    if (EmprendedorUser)
+      return [null, "El usuario ya tiene un emprendedor asociado"];
+
+    //Verificar que no exista un emprendedor con el mismo rut, número de celular o nombre de puesto. '$or' es un operador de consulta en mongoDB que permite buscar documentos que cumplan con al menos una de las condiciones especificadas.
+    const EmprendedorFound = await Emprendedor.findOne({
+      $or: [
+        { rut: rut },
+        { celular: celular },
+        { nombre_puesto: nombre_puesto },
+      ],
+    });
+
+    if (EmprendedorFound) {
+      let errorMessage = "Ya existe un emprendedor con ";
+      if (EmprendedorFound.rut === rut) errorMessage += "el mismo rut";
+      if (EmprendedorFound.celular === celular)
+        errorMessage += ", el mismo número de celular";
+      if (EmprendedorFound.nombre_puesto === nombre_puesto)
+        errorMessage += ", el mismo nombre de puesto";
+
+      return [null, errorMessage];
+    }
 
     //Verificar que la carrera exista
     const carrera = await Carrera.findById(carreraId);
@@ -80,24 +97,44 @@ async function createEmprendedor(emprendedor) {
 
 async function updateEmprendedor(id, emprendedor) {
   try {
-    const {userId ,nombre_completo, rut, celular, carreraId, nombre_puesto,  } = emprendedor;
+    const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto } =
+      emprendedor;
 
     //verificar que el usuario exista
     const user = await User.findById(userId);
     if (!user) return [null, "El usuario no existe"];
 
-    //Verificar el emprendedor exista   
+    //Verificar el emprendedor exista
     const EmprendedorFound = await Emprendedor.findById(id);
     if (!EmprendedorFound) return [null, "El emprendedor no existe"];
 
     // Asegurarnos de que se se actualiza el emprendedor del mismo usuario
     if (userId !== EmprendedorFound.userId.toString()) {
-      return [null, "No se puede actualizar el emprendedor a un usuario distinto"];
+      return [
+        null,
+        "No se puede actualizar el emprendedor a un usuario distinto",
+      ];
     }
-    //verificar que no exista un emprendedor con el mismo rut
-    const EmprendedorDuplicate = await Emprendedor.findOne({ rut });
-    if (EmprendedorDuplicate && EmprendedorDuplicate.id.toString() !== id) return [null, "Error, el rut ya existe en otro emprendedor"];
 
+    //verificar que no exista un emprendedor con el mismo rut, celular o número de puesto, o que se intente duplicar la información de otro emprendedor.
+    const EmprendedorDuplicate = await Emprendedor.findOne({
+      $or: [
+        { rut: rut },
+        { celular: celular },
+        { nombre_puesto: nombre_puesto },
+      ],
+    });
+    if (EmprendedorDuplicate && EmprendedorDuplicate.id.toString() !== id){
+      let errorMessage = "Ya existe un emprendedor con ";
+      if (EmprendedorDuplicate.rut === rut) errorMessage += "el mismo rut";
+      if (EmprendedorDuplicate.celular === celular)
+        errorMessage += ", el mismo número de celular";
+      if (EmprendedorDuplicate.nombre_puesto === nombre_puesto)
+        errorMessage += ", el mismo nombre de puesto";
+
+      return [null, errorMessage];
+    }
+    
     //Verificar que la carrera exista
     const carrera = await Carrera.findById(carreraId);
     if (!carrera) return [null, "La carrera no existe"];
@@ -111,7 +148,7 @@ async function updateEmprendedor(id, emprendedor) {
         carreraId,
         nombre_puesto,
       },
-      { new: true }
+      { new: true },
     );
 
     return [updatedEmprendedor, null];
@@ -121,31 +158,31 @@ async function updateEmprendedor(id, emprendedor) {
 }
 
 async function deleteEmprendedorById(id) {
-    try {
-        const deletedEmprendedor = await Emprendedor.findByIdAndDelete(id);
-        if (!deletedEmprendedor) return [null, "Emprendedor no encontrado"];
+  try {
+    const deletedEmprendedor = await Emprendedor.findByIdAndDelete(id);
+    if (!deletedEmprendedor) return [null, "Emprendedor no encontrado"];
 
-        return [deletedEmprendedor, null];
-    } catch (error) {
-        handleError(error, "emprendedor.service -> deleteEmprendedorById");
-    }
+    return [deletedEmprendedor, null];
+  } catch (error) {
+    handleError(error, "emprendedor.service -> deleteEmprendedorById");
+  }
 }
 
 async function deleteFullEmprendedorById(id) {
-    try {
-        const deletedEmprendedor = await Emprendedor.findByIdAndDelete(id);
-        if (!deletedEmprendedor) return [null, "Emprendedor no encontrado"];
+  try {
+    const deletedEmprendedor = await Emprendedor.findByIdAndDelete(id);
+    if (!deletedEmprendedor) return [null, "Emprendedor no encontrado"];
 
-        // Borrar ayudantes
-        await Ayudantes.deleteMany({ emprendedorId: id });
+    // Borrar ayudantes
+    await Ayudantes.deleteMany({ emprendedorId: id });
 
-        // Borrar productos
-        await Productos.deleteMany({ emprendedorId: id });
+    // Borrar productos
+    await Productos.deleteMany({ emprendedorId: id });
 
-        return [deletedEmprendedor, null];
-    } catch (error) {
-        handleError(error, "emprendedor.service -> deleteFullEmprendedorById");
-    }
+    return [deletedEmprendedor, null];
+  } catch (error) {
+    handleError(error, "emprendedor.service -> deleteFullEmprendedorById");
+  }
 }
 
 module.exports = {

@@ -33,6 +33,7 @@ const emprendedorBodySchema = Joi.object({
     "string.base": "celular debe ser de tipo string.",
     "string.min": "El celular debe tener un mínimo de 9 dígitos.",
     "string.max": "El celular debe tener un máximo de 15 dígitos.",
+    "string.pattern.base": "El celular debe contener solo números.",
   }),
   carreraId: Joi.string()
     .required()
@@ -44,13 +45,19 @@ const emprendedorBodySchema = Joi.object({
       "string.pattern.base":
         "El carreraId proporcionado no es un ObjectId válido.",
     }),
-  nombre_puesto: Joi.string().required().max(100).messages({
-    "string.empty": "El nombre del puesto no puede estar vacío.",
-    "any.required": "El nombre del puesto es obligatorio.",
-    "string.base": "nombre_puesto debe ser de tipo string.",
-    "string.max":
-      "El nombre del puesto debe tener un máximo de 100 caracteres.",
-  }),
+  nombre_puesto: Joi.string()
+    .required()
+    .max(100)
+    .pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)
+    .messages({
+      "string.empty": "El nombre del puesto no puede estar vacío.",
+      "any.required": "El nombre del puesto es obligatorio.",
+      "string.base": "nombre_puesto debe ser de tipo string.",
+      "string.max":
+        "El nombre del puesto debe tener un máximo de 100 caracteres.",
+      "string.pattern.base":
+        "El nombre del puesto debe tener debe tener las primeras letras en mayúscula y las palabras separadas por un espacio.",
+    }),
   productosId: Joi.array()
     .items(Joi.string().pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/))
     .max(10)
