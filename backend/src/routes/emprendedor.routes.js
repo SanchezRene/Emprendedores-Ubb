@@ -8,6 +8,7 @@ const router = express.Router();
 // Middlewares de autorización y autenticación
 const authorizationMw = require("../middlewares/authorization.middleware.js");
 const authenticationMw = require("../middlewares/authentication.middleware.js");
+router.use(authenticationMw);
 
 // Define las rutas para los emprendedores
 router.get("/", emprendedorController.getEmprendedores);
