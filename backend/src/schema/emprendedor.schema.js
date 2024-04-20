@@ -60,12 +60,13 @@ const emprendedorBodySchema = Joi.object({
     }),
   productosId: Joi.array()
     .items(Joi.string().pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/))
-    .max(10)
+    .max(100)
     .default([])
     .messages({
       "array.items":
         "productosId debe ser un array de strings que representen ObjectIds válidos.",
-      "array.max": "arreglo de productosId no puede tener más de 10 elementos.",
+      "array.max":
+        "arreglo de productosId no puede tener más de 100 elementos.",
     }),
   ayudantesId: Joi.array()
     .items(Joi.string().pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/))

@@ -46,7 +46,7 @@ const emprendedorSchema = new mongoose.Schema({
     ],
     required: true,
     default: [],
-    maxItems: 10,
+    maxItems: 100,
   },
   //arreglo de ayudantes que trabajan con el emprendedor
   ayudantesId: {
