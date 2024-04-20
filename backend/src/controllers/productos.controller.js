@@ -68,9 +68,16 @@ async function createProducto(req, res) {
 async function updateProducto(req, res) {
   try {
     const { body, params } = req;
+    const file = req.file.filename;
+    
     const { error: bodyError } =
       ProductosSchema.productosBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const { error: fileError } = ProductosSchema.productosFileSchema.validate({
+      file,
+    });
+    if (fileError) return respondError(req, res, 400, fileError.message);
 
     const { error: paramsError } =
       ProductosSchema.productosIdSchema.validate(params);
@@ -79,6 +86,7 @@ async function updateProducto(req, res) {
     const [producto, errorProducto] = await ProductosService.updateProducto(
       params.id,
       body,
+      file,
     );
     if (errorProducto) return respondError(req, res, 404, errorProducto);
 

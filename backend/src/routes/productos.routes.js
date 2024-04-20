@@ -25,6 +25,7 @@ router.post(
 
 router.put(
   "/:id",
+  uploadFile.single("fotografia"),
   authorizationMw.isOwnerOrAdmin,
   productosController.updateProducto,
 );

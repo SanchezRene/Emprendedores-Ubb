@@ -2,6 +2,7 @@
 const Productos = require("../models/productos.model.js");
 const Emprendedor = require("../models/emprendedor.model.js");
 const { handleError } = require("../utils/errorHandler");
+const { PORT, HOST } = require("../config/configEnv.js");
 const fs = require("fs");
 const path = require("path");
 
@@ -67,7 +68,7 @@ async function createProducto(producto, fotografia) {
         "El emprendedor ya tiene 10 productos, no se puede crear más",
       ];
 
-    const url = `http://localhost:5000/uploads/${fotografia}`;
+    const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;
 
     const newProducto = new Productos({
       nombre: nombre,
@@ -90,10 +91,9 @@ async function createProducto(producto, fotografia) {
   }
 }
 
-async function updateProducto(id, updatedProducto) {
+async function updateProducto(id, producto, fotografia) {
   try {
-    const { nombre, fotografia, descripcion, stock, emprendedorId } =
-      updatedProducto;
+    const { nombre, categoria, descripcion, stock, emprendedorId } = producto;
 
     //Verificar que el emprendedor exista
     const emprendedor = await Emprendedor.findById(emprendedorId);
@@ -104,18 +104,38 @@ async function updateProducto(id, updatedProducto) {
     if (!productoFound) return [null, "Producto no encontrado"];
 
     /*Asegurarnos de que los productos sigan siendo propiedad de los mismos emprendedores y no se transfieran a otros.*/
-    if (productoFound.emprendedorId !== emprendedorId)
+    if (productoFound.emprendedorId.toString() !== emprendedorId)
       return [null, "No se puede cambiar el 'emprendedorId' del producto"];
 
-    const newProducto = await Productos.findByIdAndUpdate(
+    //reemplazar fotografia del servidor
+    const filename = productoFound.fotografia.split("/").pop();
+    const pathFile = path.join(__dirname, `../../public/uploads/${filename}`);
+    fs.unlink(pathFile, (err) => {
+      if (err) {
+        console.error("Error al actualizar el archivo:", err);
+      } else {
+        console.log("Archivo actualizado exitosamente");
+      }
+    });
+
+    const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;
+
+    const updatedProducto = await Productos.findByIdAndUpdate(
       id,
-      { nombre, categoria, fotografia, descripcion, stock, emprendedorId },
+      {
+        nombre: nombre,
+        categoria: categoria,
+        fotografia: url,
+        descripcion: descripcion,
+        stock: stock,
+        emprendedorId: emprendedorId,
+      },
       { new: true },
     );
 
-    if (!newProducto) return [null, "Producto no se actualizó"];
+    if (!updatedProducto) return [null, "Producto no se actualizó"];
 
-    return [newProducto, null];
+    return [updatedProducto, null];
   } catch (error) {
     handleError(error, "productos.service -> updateProductoById");
   }

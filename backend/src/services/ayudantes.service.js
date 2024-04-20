@@ -51,7 +51,7 @@ async function createAyudante(ayudante) {
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
 
-    //verificar si el ayudante ya existe  
+    //verificar si el ayudante ya existe
     const ayudanteFound = await Ayudantes.findOne({ rut: ayudante.rut });
     if (ayudanteFound) return [null, "El ayudante ya existe"];
 
@@ -83,18 +83,18 @@ async function updateAyudanteById(id, ayudante) {
     //verificar si el emprendedor existe
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
-  
+
     //verificar si el ayudante existe
     const ayudanteFound = await Ayudantes.findById(id);
     if (!ayudanteFound) return [null, "Ayudante no encontrado"];
 
     /*Asegurarnos de que los ayudantes sigan siendo propiedad de los mismos emprendedores y no se transfieran a otros.*/
     if (ayudanteFound.emprendedorId !== emprendedorId)
-    return [null, "No se puede cambiar el 'emprendedorId' del ayudante"];
+      return [null, "No se puede cambiar el 'emprendedorId' del ayudante"];
 
     const updatedAyudante = await Ayudantes.findByIdAndUpdate(
       id,
-      { nombre, rut, emprendedorId },
+      { nombre: nombre, rut: rut, emprendedorId: emprendedorId },
       { new: true },
     );
 

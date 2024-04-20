@@ -8,12 +8,18 @@ const productosBodySchema = Joi.object({
     "string.base": "nombre debe ser de tipo string.",
     "string.max": "El nombre debe tener un máximo de 100 caracteres.",
   }),
-  categoria: Joi.string().required().max(255).messages({
-    "string.empty": "La categoría no puede estar vacía.",
-    "any.required": "La categoría es obligatoria.",
-    "string.base": "categoría debe ser de tipo string.",
-    "string.max": "La categoría debe tener un máximo de 255 caracteres.",
-  }),
+  categoria: Joi.string()
+    .required()
+    .max(100)
+    .pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)
+    .messages({
+      "string.empty": "La categoría no puede estar vacía.",
+      "any.required": "La categoría es obligatoria.",
+      "string.base": "categoría debe ser de tipo string.",
+      "string.max": "La categoría debe tener un máximo de 100 caracteres.",
+      "string.pattern.base":
+        "La categoría debe tener debe tener las primeras letras en mayúscula y las palabras separadas por un espacio.",
+    }),
   descripcion: Joi.string().required().max(255).messages({
     "string.empty": "La descripcion no puede estar vacía.",
     "any.required": "La descripcion es obligatoria.",
@@ -60,4 +66,8 @@ const productosFileSchema = Joi.object({
   }),
 });
 
-module.exports = { productosBodySchema, productosIdSchema, productosFileSchema };
+module.exports = {
+  productosBodySchema,
+  productosIdSchema,
+  productosFileSchema,
+};
