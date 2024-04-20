@@ -2,11 +2,14 @@
 const Productos = require("../models/productos.model.js");
 const Emprendedor = require("../models/emprendedor.model.js");
 const { handleError } = require("../utils/errorHandler");
+const fs = require("fs");
+const path = require("path");
 
 async function getProductos() {
   try {
     const productos = await Productos.find();
-    if (productos.length == 0) return [null, "La colección de productos está vacía"];
+    if (productos.length == 0)
+      return [null, "La colección de productos está vacía"];
 
     return [productos, null];
   } catch (error) {
@@ -40,9 +43,9 @@ async function getProductosByEmprendedorId(emprendedorId) {
   }
 }
 
-async function createProducto(producto) {
+async function createProducto(producto, fotografia) {
   try {
-    const { nombre, fotografia, descripcion, stock, emprendedorId } = producto;
+    const { nombre, categoria, descripcion, stock, emprendedorId } = producto;
 
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
@@ -64,9 +67,12 @@ async function createProducto(producto) {
         "El emprendedor ya tiene 10 productos, no se puede crear más",
       ];
 
+    const url = `http://localhost:5000/uploads/${fotografia}`;
+
     const newProducto = new Productos({
       nombre: nombre,
-      fotografia: fotografia,
+      categoria: categoria,
+      fotografia: url,
       descripcion: descripcion,
       stock: stock,
       emprendedorId: emprendedorId,
@@ -76,6 +82,7 @@ async function createProducto(producto) {
 
     //agregar producto al array de productosId del emprendedor
     emprendedor.productosId.push(productoCreated._id);
+    await emprendedor.save();
 
     return [productoCreated, null];
   } catch (error) {
@@ -102,7 +109,7 @@ async function updateProducto(id, updatedProducto) {
 
     const newProducto = await Productos.findByIdAndUpdate(
       id,
-      { nombre, fotografia, descripcion, stock, emprendedorId },
+      { nombre, categoria, fotografia, descripcion, stock, emprendedorId },
       { new: true },
     );
 
@@ -114,9 +121,9 @@ async function updateProducto(id, updatedProducto) {
   }
 }
 
-async function deleteProductoById(id) {
+async function deleteProducto(id) {
   try {
-    const deletedProducto = await Ayudantes.findByIdAndDelete(id);
+    const deletedProducto = await Productos.findByIdAndDelete(id);
     if (!deletedProducto) return [null, "Producto no eliminado"];
 
     const emprendedor = await Emprendedor.findById(
@@ -128,7 +135,18 @@ async function deleteProductoById(id) {
     emprendedor.productosId.pull(deletedProducto._id);
     await emprendedor.save();
 
-    return [deletedProducto, null];
+    //borrar fotografia del servidor
+    const filename = deletedProducto.fotografia.split("/").pop();
+    const pathFile = path.join(__dirname, `../../public/uploads/${filename}`);
+    fs.unlink(pathFile, (err) => {
+      if (err) {
+        console.error("Error al eliminar el archivo:", err);
+      } else {
+        console.log("Archivo eliminado exitosamente");
+      }
+    });
+
+    return [deletedProducto, filename, null];
   } catch (error) {
     handleError(error, "productos.service -> deleteProductoById");
   }
@@ -140,5 +158,5 @@ module.exports = {
   getProductosByEmprendedorId,
   createProducto,
   updateProducto,
-  deleteProductoById,
+  deleteProducto,
 };

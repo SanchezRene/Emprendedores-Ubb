@@ -9,7 +9,7 @@ const productosSchema = new mongoose.Schema({
     required: true,
     maxLenght: 100,
   },
-  categoría: {
+  categoria: {
     type: String,
     required: true,
     maxLenght: 255,
