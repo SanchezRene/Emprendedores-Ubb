@@ -2,6 +2,7 @@
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const InscripcionService = require("../services/inscripcion.service");
+const EmprendedorService = require("../services/emprendedor.service");
 const InscripcionSchema = require("../schema/inscripcion.schema");
 const { handleError } = require("../utils/errorHandler");
 
@@ -41,11 +42,22 @@ async function getInscripcionById(req, res) {
 async function createInscripcion(req, res) {
     try {
         const { body } = req;
+
+        const [productos, errorProductos] = await EmprendedorService.getProductosByEmprendedor(body.emprendedorId);
+        if (errorProductos) return respondError(req, res, 404, errorProductos);
+
+        const productosId = productos.map((productos) => productos._id.toString());
+
+        const RequestBody = {
+            ...body,
+            productosId: productosId
+        };
+
         const { error: bodyError } =
-            InscripcionSchema.inscripcionBodySchema.validate(body);
+            InscripcionSchema.inscripcionBodySchema.validate(RequestBody );
         if (bodyError) return respondError(req, res, 400, bodyError.message);
 
-        const [inscripcion, errorInscripcion] = await InscripcionService.createInscripcion(body);
+        const [inscripcion, errorInscripcion] = await InscripcionService.createInscripcion(RequestBody);
         if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
 
         respondSuccess(req, res, 201, inscripcion);

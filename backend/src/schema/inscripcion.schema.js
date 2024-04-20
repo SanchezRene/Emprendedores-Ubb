@@ -17,7 +17,7 @@ const inscripcionBodySchema = Joi.object({
     productosId: Joi.array().items(Joi.string().pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)).min(1).max(10).default([]).required().messages({
         "array.items": "productosId debe ser un array de strings que representen ObjectIds válidos.",
         "array.min": "productosId debe tener al menos un elemento.",
-        "array.max": "arreglo de productosId no puede tener más de 10 elementos.",
+        "array.max": "arreglo de productosId no puede tener más de 100 elementos.",
     }),
     ayudantesId: Joi.array().items(Joi.string().pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)).max(3).default([]).messages({
         "array.items": "ayudantesId debe ser un array de strings que representen ObjectIds válidos.",
@@ -41,3 +41,8 @@ const inscripcionIdSchema = Joi.object({
         "string.pattern.base": "El id proporcionado no es un ObjectId válido.",
     }),
 });
+
+module.exports = {
+    inscripcionBodySchema,
+    inscripcionIdSchema,
+};

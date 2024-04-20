@@ -40,6 +40,19 @@ async function getEmprendedorByUserId(userId) {
   }
 }
 
+//ver productos de un emprendedor
+async function getProductosByEmprendedor(id) {
+  try {
+    const productos = await Productos.find({ emprendedorId: id });
+    if (productos.length === 0)
+      return [null, "Este emprendedor no tiene productos"];
+
+    return [productos, null];
+  } catch (error) {
+    handleError(error, "emprendedor.service -> getProductosByEmprendedor");
+  }
+}
+
 async function createEmprendedor(emprendedor) {
   try {
     const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto } =
@@ -124,7 +137,7 @@ async function updateEmprendedor(id, emprendedor) {
         { nombre_puesto: nombre_puesto },
       ],
     });
-    if (EmprendedorDuplicate && EmprendedorDuplicate.id.toString() !== id){
+    if (EmprendedorDuplicate && EmprendedorDuplicate.id.toString() !== id) {
       let errorMessage = "Ya existe un emprendedor con ";
       if (EmprendedorDuplicate.rut === rut) errorMessage += "el mismo rut";
       if (EmprendedorDuplicate.celular === celular)
@@ -134,7 +147,7 @@ async function updateEmprendedor(id, emprendedor) {
 
       return [null, errorMessage];
     }
-    
+
     //Verificar que la carrera exista
     const carrera = await Carrera.findById(carreraId);
     if (!carrera) return [null, "La carrera no existe"];
@@ -189,6 +202,7 @@ module.exports = {
   getEmprendedores,
   getEmprendedorById,
   getEmprendedorByUserId,
+  getProductosByEmprendedor,
   createEmprendedor,
   updateEmprendedor,
   deleteEmprendedorById,
