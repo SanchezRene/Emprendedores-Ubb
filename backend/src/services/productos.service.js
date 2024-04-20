@@ -29,21 +29,6 @@ async function getProductoById(id) {
   }
 }
 
-async function getProductosByEmprendedorId(emprendedorId) {
-  try {
-    const emprendedor = await Emprendedor.findById(emprendedorId);
-    if (!emprendedor) return [null, "No se encontró el emprendedor"];
-
-    const productos = await Productos.find({ emprendedorId: emprendedorId });
-    if (productos.length == 0)
-      return [null, "No hay productos para este emprendedor"];
-
-    return [productos, null];
-  } catch (error) {
-    handleError(error, "productos.service -> getProductosByEmprendedorId");
-  }
-}
-
 async function createProducto(producto, fotografia) {
   try {
     const { nombre, categoria, descripcion, stock, emprendedorId } = producto;
@@ -175,7 +160,6 @@ async function deleteProducto(id) {
 module.exports = {
   getProductos,
   getProductoById,
-  getProductosByEmprendedorId,
   createProducto,
   updateProducto,
   deleteProducto,

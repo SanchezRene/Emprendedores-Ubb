@@ -77,22 +77,21 @@ async function createInscripcion(inscripcion) {
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "El emprendedor no existe"];
 
-    //Verificar que los productos existan
-    const productos = await Productos.find({ _id: { $in: productosId } });
-    if (productos.length !== productosId.length)
-      return [null, "Uno o más productos no existen"];
-
-    //Verificar que los ayudantes existan
-    const ayudantes = await Ayudantes.find({ _id: { $in: ayudantesId } });
-    if (ayudantes.length !== ayudantesId.length)
-      return [null, "Uno o más ayudantes no existen"];
+    // verificar que no exista una inscripción para el mismo emprendedor y usuario
+    const inscripciones = await Inscripcion.find({
+      userId: userId,
+      emprendedorId: emprendedorId,
+    });
+    if (inscripciones.length > 0) {
+      return [null, "Ya existe una inscripción para este emprendedor"];
+    }
 
     // Crear una nueva inscripción
     const newInscripcion = new Inscripcion({
-      userId,
-      emprendedorId,
-      productosId,
-      ayudantesId,
+      userId: userId,
+      emprendedorId: emprendedorId,
+      productosId: productosId,
+      ayudantesId: ayudantesId,
       estado: "pendiente",
     });
     await newInscripcion.save();
