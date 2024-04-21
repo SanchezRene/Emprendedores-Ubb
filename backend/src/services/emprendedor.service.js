@@ -43,6 +43,10 @@ async function getEmprendedorByUserId(userId) {
 //ver productos de un emprendedor
 async function getProductosByEmprendedor(id) {
   try {
+
+    const emprendedor = await Emprendedor.findById(id);
+    if (!emprendedor) return [null, "Emprendedor no encontrado"];
+
     const productos = await Productos.find({ emprendedorId: id });
     if (productos.length === 0)
       return [null, "Este emprendedor no tiene productos"];
