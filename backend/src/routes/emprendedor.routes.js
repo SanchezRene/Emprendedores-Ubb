@@ -13,6 +13,7 @@ router.use(authenticationMw);
 // Define las rutas para los emprendedores
 router.get("/", emprendedorController.getEmprendedores);
 router.get("/:id", emprendedorController.getEmprendedorById);
+router.get("/:id/productos",authorizationMw.isBusinessOwnerOrAdmin, emprendedorController.getProductosByEmprendedor);
 router.post("/",authorizationMw.isOwnerOrAdmin, emprendedorController.createEmprendedor);
 router.put("/:id",authorizationMw.isOwnerOrAdmin, emprendedorController.updateEmprendedor);
 router.delete("/:id",authorizationMw.isOwnerOrAdmin, emprendedorController.deleteEmprendedor);
