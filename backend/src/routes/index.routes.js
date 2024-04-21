@@ -7,6 +7,7 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 
 // Importa los enrutadores
 const userRoutes = require("./user.routes.js");
+const rolesRoutes = require("./roles.routes.js");
 const authRoutes = require("./auth.routes.js");
 const carreraRoutes = require("./carrera.routes.js");
 const ayudantesRoutes = require("./ayudantes.routes.js");
@@ -16,6 +17,7 @@ const inscripcionRoutes = require("./inscripcion.routes.js");
 
 // Define las rutas para los usuarios /api/usuarios
 router.use("/users", authenticationMiddleware, userRoutes);
+router.use("/roles", authenticationMiddleware, rolesRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
 

@@ -11,7 +11,7 @@ const emprendedorSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  nombre: {
+  nombre_completo: {
     type: String,
     required: true,
     maxLenght: 100,
@@ -21,7 +21,7 @@ const emprendedorSchema = new mongoose.Schema({
     required: true,
   },
   celular: {
-    type: Number,
+    type: String,
     required: true,
     minLenght: 9,
     maxLenght: 15,
@@ -46,7 +46,7 @@ const emprendedorSchema = new mongoose.Schema({
     ],
     required: true,
     default: [],
-    maxItems: 10,
+    maxItems: 100,
   },
   //arreglo de ayudantes que trabajan con el emprendedor
   ayudantesId: {

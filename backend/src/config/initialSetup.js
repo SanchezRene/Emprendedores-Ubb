@@ -26,6 +26,22 @@ async function createRoles() {
   }
 }
 
+async function newRoles(){
+  try {
+    const count = await Role.estimatedDocumentCount();
+    if (count >= 4) return;
+
+    await Promise.all([
+      new Role({ name: "encargado" }).save(),
+      new Role({ name: "emprendedor" }).save(),
+    ]);
+    console.log("* => Nuevos roles creados exitosamente");
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
 /**
  * Crea los usuarios por defecto en la base de datos.
  * @async
@@ -63,4 +79,5 @@ async function createUsers() {
 module.exports = {
   createRoles,
   createUsers,
+  newRoles
 };

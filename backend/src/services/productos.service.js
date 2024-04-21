@@ -2,11 +2,15 @@
 const Productos = require("../models/productos.model.js");
 const Emprendedor = require("../models/emprendedor.model.js");
 const { handleError } = require("../utils/errorHandler");
+const { PORT, HOST } = require("../config/configEnv.js");
+const fs = require("fs");
+const path = require("path");
 
 async function getProductos() {
   try {
     const productos = await Productos.find();
-    if (productos.length == 0) return [null, "La colección de productos está vacía"];
+    if (productos.length == 0)
+      return [null, "La colección de productos está vacía"];
 
     return [productos, null];
   } catch (error) {
@@ -25,24 +29,9 @@ async function getProductoById(id) {
   }
 }
 
-async function getProductosByEmprendedorId(emprendedorId) {
+async function createProducto(producto, fotografia) {
   try {
-    const emprendedor = await Emprendedor.findById(emprendedorId);
-    if (!emprendedor) return [null, "No se encontró el emprendedor"];
-
-    const productos = await Productos.find({ emprendedorId: emprendedorId });
-    if (productos.length == 0)
-      return [null, "No hay productos para este emprendedor"];
-
-    return [productos, null];
-  } catch (error) {
-    handleError(error, "productos.service -> getProductosByEmprendedorId");
-  }
-}
-
-async function createProducto(producto) {
-  try {
-    const { nombre, fotografia, descripcion, stock, emprendedorId } = producto;
+    const { nombre, categoria, descripcion, stock, emprendedorId } = producto;
 
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
@@ -64,9 +53,12 @@ async function createProducto(producto) {
         "El emprendedor ya tiene 10 productos, no se puede crear más",
       ];
 
+    const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;
+
     const newProducto = new Productos({
       nombre: nombre,
-      fotografia: fotografia,
+      categoria: categoria,
+      fotografia: url,
       descripcion: descripcion,
       stock: stock,
       emprendedorId: emprendedorId,
@@ -76,6 +68,7 @@ async function createProducto(producto) {
 
     //agregar producto al array de productosId del emprendedor
     emprendedor.productosId.push(productoCreated._id);
+    await emprendedor.save();
 
     return [productoCreated, null];
   } catch (error) {
@@ -83,10 +76,9 @@ async function createProducto(producto) {
   }
 }
 
-async function updateProducto(id, updatedProducto) {
+async function updateProducto(id, producto, fotografia) {
   try {
-    const { nombre, fotografia, descripcion, stock, emprendedorId } =
-      updatedProducto;
+    const { nombre, categoria, descripcion, stock, emprendedorId } = producto;
 
     //Verificar que el emprendedor exista
     const emprendedor = await Emprendedor.findById(emprendedorId);
@@ -97,26 +89,46 @@ async function updateProducto(id, updatedProducto) {
     if (!productoFound) return [null, "Producto no encontrado"];
 
     /*Asegurarnos de que los productos sigan siendo propiedad de los mismos emprendedores y no se transfieran a otros.*/
-    if (productoFound.emprendedorId !== emprendedorId)
+    if (productoFound.emprendedorId.toString() !== emprendedorId)
       return [null, "No se puede cambiar el 'emprendedorId' del producto"];
 
-    const newProducto = await Productos.findByIdAndUpdate(
+    //reemplazar fotografia del servidor
+    const filename = productoFound.fotografia.split("/").pop();
+    const pathFile = path.join(__dirname, `../../public/uploads/${filename}`);
+    fs.unlink(pathFile, (err) => {
+      if (err) {
+        console.error("Error al actualizar el archivo:", err);
+      } else {
+        console.log("Archivo actualizado exitosamente");
+      }
+    });
+
+    const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;
+
+    const updatedProducto = await Productos.findByIdAndUpdate(
       id,
-      { nombre, fotografia, descripcion, stock, emprendedorId },
+      {
+        nombre: nombre,
+        categoria: categoria,
+        fotografia: url,
+        descripcion: descripcion,
+        stock: stock,
+        emprendedorId: emprendedorId,
+      },
       { new: true },
     );
 
-    if (!newProducto) return [null, "Producto no se actualizó"];
+    if (!updatedProducto) return [null, "Producto no se actualizó"];
 
-    return [newProducto, null];
+    return [updatedProducto, null];
   } catch (error) {
     handleError(error, "productos.service -> updateProductoById");
   }
 }
 
-async function deleteProductoById(id) {
+async function deleteProducto(id) {
   try {
-    const deletedProducto = await Ayudantes.findByIdAndDelete(id);
+    const deletedProducto = await Productos.findByIdAndDelete(id);
     if (!deletedProducto) return [null, "Producto no eliminado"];
 
     const emprendedor = await Emprendedor.findById(
@@ -128,7 +140,18 @@ async function deleteProductoById(id) {
     emprendedor.productosId.pull(deletedProducto._id);
     await emprendedor.save();
 
-    return [deletedProducto, null];
+    //borrar fotografia del servidor
+    const filename = deletedProducto.fotografia.split("/").pop();
+    const pathFile = path.join(__dirname, `../../public/uploads/${filename}`);
+    fs.unlink(pathFile, (err) => {
+      if (err) {
+        console.error("Error al eliminar el archivo:", err);
+      } else {
+        console.log("Archivo eliminado exitosamente");
+      }
+    });
+
+    return [deletedProducto, filename, null];
   } catch (error) {
     handleError(error, "productos.service -> deleteProductoById");
   }
@@ -137,8 +160,7 @@ async function deleteProductoById(id) {
 module.exports = {
   getProductos,
   getProductoById,
-  getProductosByEmprendedorId,
   createProducto,
   updateProducto,
-  deleteProductoById,
+  deleteProducto,
 };

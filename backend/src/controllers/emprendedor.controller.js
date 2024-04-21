@@ -40,6 +40,7 @@ async function getEmprendedorById(req, res) {
 
 async function createEmprendedor(req, res) {
     try {
+
         const { body } = req;
         const { error: bodyError } =
             EmprendedorSchema.emprendedorBodySchema.validate(body);
@@ -86,7 +87,7 @@ async function deleteEmprendedor(req, res) {
             EmprendedorSchema.emprendedorIdSchema.validate(params);
         if (paramsError) return respondError(req, res, 400, paramsError.message);
 
-        const [emprendedor, errorEmprendedor] = await EmprendedorService.deleteEmprendedor(
+        const [emprendedor, errorEmprendedor] = await EmprendedorService.deleteEmprendedorById(
             params.id,
         );
         if (errorEmprendedor) return respondError(req, res, 404, errorEmprendedor);
