@@ -29,7 +29,8 @@
             "required": true,
             "enum": [
                 "user",
-                "admin"
+                "admin",
+                "encargado"
             ]
         }
     },
@@ -110,15 +111,8 @@
                 "Ciencias de la Salud y de los Alimentos",
                 "Ciencias"
             ]
-        },
-        "sede": {
-            "type": "String",
-            "required": true,
-            "enum": [
-                "Concepcion",
-                "Chillan"
-            ]
         }
+  
     },
     "Inscripcion": {
         "_id": {
@@ -242,7 +236,7 @@
           "ref": "Emprendedor"
         },
         "productosId": {
-          "type": "Schema.ObjectId",
+          "type": "Schema.ObjectId", 
           "required": true,
           "ref": "Productos"
         },
@@ -251,7 +245,7 @@
           "required": true,
           "enum": [
             "Reunión",
-            "Taller",
+            "Taller", 
             "Evento",
             "Otro"
           ]
@@ -272,6 +266,22 @@
         },
         "fechaFin": {
           "type": "Date",
+          "required": true
+        },
+        "horaInicio": {
+          "type": "Date",
+          "required": true
+        },
+        "horaFin": {
+          "type": "Date",
+          "required": true
+        },
+        "lugar": {
+          "type": "String",
+          "required": true
+        },
+        "capacidadAsistentes": {
+          "type": "Number",
           "required": true
         }
       }
