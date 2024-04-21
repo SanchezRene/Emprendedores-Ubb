@@ -71,4 +71,5 @@ const actividadIdSchema = Joi.object({
 module.exports = { actividadBodySchema, actividadIdSchema };
 
 
-//fecha chilena actualizar
+//fecha chilena actualizar//  
+//redundantes
