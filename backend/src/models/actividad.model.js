@@ -1,12 +1,16 @@
 const mongoose = require("mongoose");
 
 const actividadSchema = new mongoose.Schema({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   emprendedorId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Emprendedor",
   },
-  productoId: {
+  productosId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Productos",
@@ -32,6 +36,22 @@ const actividadSchema = new mongoose.Schema({
   },
   fechaFin: {
     type: Date,
+    required: true,
+  },
+  horaInicio: {
+    type: Date,
+    required: true,
+  },
+  horaFin: {
+    type: Date,
+    required: true,
+  },
+  lugar: {
+    type: String,
+    required: true,
+  },
+  capacidadAsistentes: {
+    type: Number,
     required: true,
   },
 });
