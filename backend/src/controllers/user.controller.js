@@ -104,6 +104,7 @@ async function updateUser(req, res) {
 async function deleteUser(req, res) {
   try {
     const { params } = req;
+
     const { error: paramsError } = userIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 

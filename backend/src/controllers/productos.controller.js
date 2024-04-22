@@ -69,7 +69,7 @@ async function updateProducto(req, res) {
   try {
     const { body, params } = req;
     const file = req.file.filename;
-    
+
     const { error: bodyError } =
       ProductosSchema.productosBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);

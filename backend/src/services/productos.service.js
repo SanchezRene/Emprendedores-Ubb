@@ -43,14 +43,14 @@ async function createProducto(producto, fotografia) {
     });
     if (productoFound) return [null, "Producto ya existe"];
 
-    // Verificar que el emprendedor no tenga más de 10 productos
+    // Verificar que el emprendedor no tenga más de 100 productos
     const productosCount = await Productos.countDocuments({
       emprendedorId: emprendedorId,
     });
-    if (productosCount >= 10)
+    if (productosCount >= 100)
       return [
         null,
-        "El emprendedor ya tiene 10 productos, no se puede crear más",
+        "El emprendedor ya tiene 100 productos, no se puede crear más",
       ];
 
     const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;

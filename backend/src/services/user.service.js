@@ -123,7 +123,12 @@ async function updateUser(id, user) {
  */
 async function deleteUser(id) {
   try {
-    return await User.findByIdAndDelete(id);
+    const userFound = await User.findById(id);
+    if (!userFound) return [null, "El usuario no existe o no se encuentra"];
+
+    const userDeleted = await User.findByIdAndDelete(id);
+
+    return [userDeleted, null];
   } catch (error) {
     handleError(error, "user.service -> deleteUser");
   }
