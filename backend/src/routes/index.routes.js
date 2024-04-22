@@ -32,5 +32,6 @@ router.use("/emprendedor", authenticationMiddleware, emprendedorRoutes);
 // Define las rutas para las inscripciones /api/inscripcion
 router.use("/inscripcion", authenticationMiddleware, inscripcionRoutes);
 
+
 // Exporta el enrutador
 module.exports = router;

@@ -10,15 +10,19 @@ const authenticationMw = require("../middlewares/authentication.middleware.js");
 router.use(authenticationMw);
 
 //multer para subir archivos
-const uploadFile = require("../utils/fileUploadHandler.js");
+const {
+  uploadFile,
+  handleMulterError,
+} = require("../utils/fileUploadHandler.js");
 
 // Define las rutas para los productos
 router.get("/", productosController.getProductos);
 router.get("/:id", productosController.getProductoById);
 
 router.post(
-  "/", 
+  "/",
   uploadFile.single("fotografia"),
+  handleMulterError,
   authorizationMw.isOwnerOrAdmin,
   productosController.createProducto,
 );

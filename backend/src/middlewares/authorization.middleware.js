@@ -104,9 +104,7 @@ async function isBusinessOwnerOrAdmin(req, res, next) {
     }
 
     const emprendedor = await Emprendedor.findOne({ userId: user.id });
-
-    console.log("emprendedor._id: ",emprendedor._id.toString());
-    console.log("req.params.id: ",req.params.id);
+    
     if (req.params.id === emprendedor._id.toString()) {
       next();
       return;
@@ -119,7 +117,7 @@ async function isBusinessOwnerOrAdmin(req, res, next) {
       "El usuario NO es el propietario de los datos o no tiene rol de administrador",
     );
   } catch (error) {
-    handleError(error, "authorization.middleware -> isOwnerOrAdmin");
+    handleError(error, "authorization.middleware -> isBusinessOwnerOrAdmin");
   }
 }
 
