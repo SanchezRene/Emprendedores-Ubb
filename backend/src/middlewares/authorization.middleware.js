@@ -121,8 +121,67 @@ async function isBusinessOwnerOrAdmin(req, res, next) {
   }
 }
 
+// Middlewares para actividades
+
+async function isAdminOrManagement(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const roles = await Role.find({ _id: { $in: user.roles } });
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "admin" || roles[i].name === "encargado") {
+        next();
+        return;
+      }
+    }
+    return respondError(
+      req,
+      res,
+      401,
+      "Se requiere un rol de administrador o de gestión para realizar esta acción",
+    );
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isAdminOrManagement");
+  }
+}
+
+async function isAdminOrManagementOrBusinessOwner(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const roles = await Role.find({ _id: { $in: user.roles } });
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "admin" || roles[i].name === "encargado") {
+        next();
+        return;
+      }
+    }
+
+    const emprendedor = await Emprendedor.findOne({ userId: user.id });
+
+    console.log("emprendedor._id: ",emprendedor._id.toString());
+    console.log("req.params.id: ",req.params.id);
+    if (req.params.id === emprendedor._id.toString()) {
+      next();
+      return;
+    }
+
+    return respondError(
+      req,
+      res,
+      401,
+      "El usuario NO es el propietario de los datos o no tiene rol de administrador o de gestión",
+    );
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isAdminOrManagementOrBusinessOwner");
+  }
+}
+
+
+
+
 module.exports = {
   isAdmin,
   isOwnerOrAdmin,
   isBusinessOwnerOrAdmin,
+  isAdminOrManagement,
+  isAdminOrManagementOrBusinessOwner,
 };

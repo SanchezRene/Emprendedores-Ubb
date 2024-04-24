@@ -1,4 +1,4 @@
-const Actividad = require("../models/Actividad");
+const Actividad = require("../models/actividad.model");
 const { handleError } = require("../utils/errorHandler");
 
 async function getAllActividades() {
