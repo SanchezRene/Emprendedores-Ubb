@@ -1,28 +1,28 @@
 "use strict";
 const mongoose = require("mongoose");
+const Constants = require("../constants/carrera.constants");
 
-const carreraSchema = new mongoose.Schema({
-  titulo: {
-    type: String,
-    required: true,
+const carreraSchema = new mongoose.Schema(
+  {
+    titulo: {
+      type: String,
+      required: true,
+    },
+    facultad: {
+      type: String,
+      required: true,
+      enum: Constants.Facultades,
+    },
+    sede: {
+      type: String,
+      enum: Constants.Sedes,
+      default: "Concepción",
+    },
   },
-  facultad: {
-    type: String,
-    required: true,
-    num: [
-      "Arquitectura, Construcción y Diseño",
-      "Ingeniería",
-      "Ciencias Empresariales",
-      "Educación y Humanidades",
-      "Ciencias",
-    ],
+  {
+    versionKey: false,
   },
-  sede: {
-    type: String,
-    enum: ["Concepción"],
-    default: "Concepción",
-  },
-});
+);
 
 const Carrera = mongoose.model("Carrera", carreraSchema);
 
