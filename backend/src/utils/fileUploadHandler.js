@@ -27,7 +27,8 @@ const filter = (req, file, cb) => {
 // middleware para manejar errores de multer
 async function handleMulterError(req, res, next) {
   try {
-    if (!req.file?.filename) {
+
+    if (!req.file?.filename ) {
       return respondError(req, res, 401, "No se ha subido ningún archivo");
     }
 
