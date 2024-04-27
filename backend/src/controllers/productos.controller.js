@@ -40,6 +40,7 @@ async function getProductoById(req, res) {
 
 async function createProducto(req, res) {
   try {
+
     const { body } = req;
     const file = req.file.filename;
 

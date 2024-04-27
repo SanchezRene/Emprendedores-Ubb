@@ -2,6 +2,7 @@
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const EmprendedorService = require("../services/emprendedor.service");
+const ProductoService = require("../services/productos.service");
 const EmprendedorSchema = require("../schema/emprendedor.schema");
 const { handleError } = require("../utils/errorHandler");
 
@@ -47,7 +48,7 @@ async function getProductosByEmprendedor(req, res) {
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const [productos, errorProductos] =
-      await EmprendedorService.getProductosByEmprendedor(params.id);
+      await ProductoService.getProductosByEmprendedorId(params.id);
     if (errorProductos) return respondError(req, res, 404, errorProductos);
 
     productos.length === 0

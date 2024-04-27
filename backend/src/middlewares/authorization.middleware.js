@@ -66,7 +66,7 @@ async function isOwnerOrAdmin(req, res, next) {
   }
 }
 
-async function isOwnerOrAdmin(req, res, next) {
+async function isOwnerOrAdminParams(req, res, next) {
   try {
     const user = await User.findOne({ email: req.email });
     const roles = await Role.find({ _id: { $in: user.roles } });
@@ -106,6 +106,11 @@ async function isBusinessOwnerOrAdmin(req, res, next) {
     const emprendedor = await Emprendedor.findOne({ userId: user.id });
     
     if (req.params.id === emprendedor._id.toString()) {
+      next();
+      return;
+    }
+
+    if(req.body.emprendedorId === emprendedor._id.toString()){
       next();
       return;
     }
