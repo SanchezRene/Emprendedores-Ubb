@@ -103,7 +103,7 @@ async function getInscripcionesByUserId(userId) {
 
 async function createInscripcion(inscripcion) {
   try {
-    const { userId, emprendedorId, productosId, ayudantesId } = inscripcion;
+    const { userId, emprendedorId, estado } = inscripcion;
 
     //Verificar que el usuario exista
     const user = await User.findById(userId);
@@ -122,13 +122,16 @@ async function createInscripcion(inscripcion) {
       return [null, "Ya existe una inscripción para este emprendedor"];
     }
 
+    //verificar que el emprendedor tenga al menos 1 producto
+    if (emprendedor.productosId.length === 0) {
+      return [null, "El emprendedor no tiene productos registrados"];
+    }
+
     // Crear una nueva inscripción
     const newInscripcion = new Inscripcion({
       userId: userId,
       emprendedorId: emprendedorId,
-      productosId: productosId,
-      ayudantesId: ayudantesId,
-      estado: "pendiente",
+      estado: estado,
     });
     await newInscripcion.save();
 

@@ -16,28 +16,6 @@ const inscripcionSchema = new mongoose.Schema(
       ref: "Emprendedor",
       required: true,
     },
-    productosId: {
-      type: [
-        {
-          type: Schema.ObjectId,
-          ref: "Productos",
-        },
-      ],
-      required: true,
-      minItems: 1,
-      maxItems: 10,
-    },
-    ayudantesId: {
-      type: [
-        {
-          type: Schema.ObjectId,
-          ref: "Ayudantes",
-        },
-      ],
-      required: true,
-      default: [],
-      maxItems: 3,
-    },
     estado: {
       type: String,
       enum: ["pendiente", "aprobada", "rechazada", "sin inscripciones"],
