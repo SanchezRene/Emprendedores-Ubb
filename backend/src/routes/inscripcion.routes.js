@@ -11,7 +11,7 @@ const authenticationMw = require("../middlewares/authentication.middleware.js");
 router.use(authenticationMw);
 
 // Define las rutas para las inscripciones
-router.get("/", inscripcionController.getInscripciones);
+router.get("/summary", inscripcionController.getInscripcionesSummary);
 router.get("/:id", inscripcionController.getInscripcionById);
 router.post(
   "/",

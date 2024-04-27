@@ -27,8 +27,6 @@ async function getAyudanteById(id) {
   }
 }
 
-// 3.- Ver ayudantes por emprendedor
-/** la función find espera un objeto que especifica los criterios de búsqueda, donde cada clave representa un campo en la colección y cada valor representa el valor que se está buscando en ese campo.  */
 async function getAyudantesByEmprendedorId(emprendedorId) {
   try {
     const emprendedor = await Emprendedor.findById(emprendedorId);
@@ -37,7 +35,18 @@ async function getAyudantesByEmprendedorId(emprendedorId) {
     const ayudantes = await Ayudantes.find({ emprendedorId: emprendedorId });
     if (ayudantes.length === 0) return [null, "Emprendedor tiene 0 ayudantes"];
 
-    return [ayudantes, null];
+    const totalAyudantes = ayudantes.length;
+    const ArregloAyudantes = [
+      { totalAyudantes: totalAyudantes },
+      {
+        ayudantes: ayudantes.map((ayudante) => ({
+          nombre: ayudante.nombre,
+          rut: ayudante.rut,
+        })),
+      },
+    ];
+
+    return [ArregloAyudantes, null];
   } catch (error) {
     handleError(error, "ayudantes.service -> getAyudantesByEmprendedorId");
   }
@@ -69,6 +78,7 @@ async function createAyudante(ayudante) {
 
     //agregar el id del ayudante al array de ayudantesId del emprendedor
     emprendedor.ayudantesId.push(newAyudante._id);
+    await emprendedor.save();
 
     return [newAyudante, null];
   } catch (error) {

@@ -25,6 +25,7 @@ async function getCarreras() {
   }
 }
 
+/** la función find espera un objeto que especifica los criterios de búsqueda, donde cada clave representa un campo en la colección y cada valor representa el valor que se está buscando en ese campo.  */
 async function getCarreraById(id) {
   try {
     //se realiza una búsqueda por el identificador único, pasando el valor del identificador directamente como argumento.
@@ -39,11 +40,10 @@ async function getCarreraById(id) {
 
 async function getCarreraByEmprendedorId(emprendedorId) {
   try {
-
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "Emprendedor no encontrado"];
 
-    const carrera = await Carrera.findOne({emprendedorId: emprendedorId });
+    const carrera = await Carrera.findOne({ emprendedorId: emprendedorId });
     if (!carrera) return [null, "Emprendedor sin carrera"];
 
     return [carrera, null];

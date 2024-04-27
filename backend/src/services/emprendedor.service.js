@@ -97,7 +97,7 @@ async function createEmprendedor(emprendedor) {
 
 async function updateEmprendedor(id, emprendedor) {
   try {
-    const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto } =
+    const { userId, nombre_completo, rut, celular, carreraId, nombre_puesto, productosId, ayudantesId } =
       emprendedor;
 
     //verificar que el usuario exista
@@ -147,6 +147,8 @@ async function updateEmprendedor(id, emprendedor) {
         celular,
         carreraId,
         nombre_puesto,
+        productosId,
+        ayudantesId,
       },
       { new: true },
     );
