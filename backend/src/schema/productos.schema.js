@@ -11,7 +11,7 @@ const productosBodySchema = Joi.object({
   categoria: Joi.string()
     .required()
     .max(100)
-    .pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)
+    .pattern(/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+(\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+)*$/)
     .messages({
       "string.empty": "La categoría no puede estar vacía.",
       "any.required": "La categoría es obligatoria.",

@@ -11,11 +11,11 @@ const authenticationMw = require("../middlewares/authentication.middleware.js");
 router.use(authenticationMw);
 
 // Define las rutas para los ayudantes
-router.get("/", authorizationMw.isAdmin, ayudantesController.getAyudantes);
+router.get("/", ayudantesController.getAyudantes);
 router.get("/:id", ayudantesController.getAyudanteById);
 router.post(
   "/",
-  authorizationMw.isOwnerOrAdmin,
+  authorizationMw.isBusinessOwnerOrAdmin,
   ayudantesController.createAyudante,
 );
 router.put(

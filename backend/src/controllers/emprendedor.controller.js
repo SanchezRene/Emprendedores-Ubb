@@ -3,6 +3,7 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const EmprendedorService = require("../services/emprendedor.service");
 const ProductoService = require("../services/productos.service");
+const AyudantesService = require("../services/ayudantes.service");
 const EmprendedorSchema = require("../schema/emprendedor.schema");
 const { handleError } = require("../utils/errorHandler");
 
@@ -60,9 +61,31 @@ async function getProductosByEmprendedor(req, res) {
   }
 }
 
+async function getAyudantesByEmprendedor(req, res){
+  try {
+    const { params } = req;
+    const { error: paramsError } =
+      EmprendedorSchema.emprendedorIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const [ayudantes, errorAyudantes] =
+      await AyudantesService.getAyudantesByEmprendedorId(params.id);
+    if (errorAyudantes) return respondError(req, res, 404, errorAyudantes);
+
+    ayudantes.length === 0
+      ? respondSuccess(req, res, 204)
+      : respondSuccess(req, res, 200, ayudantes);
+  } catch (error) {
+    handleError(error, "emprendedor.controller -> getAyudantesByEmprendedor");
+    respondError(req, res, 400, error.message);
+  }
+}
+
 async function createEmprendedor(req, res) {
   try {
     const { body } = req;
+
+    console.log("body: ", body);
     const { error: bodyError } =
       EmprendedorSchema.emprendedorBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
@@ -122,6 +145,7 @@ module.exports = {
   getEmprendedores,
   getEmprendedorById,
   getProductosByEmprendedor,
+  getAyudantesByEmprendedor,
   createEmprendedor,
   updateEmprendedor,
   deleteEmprendedor,

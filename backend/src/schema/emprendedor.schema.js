@@ -48,7 +48,7 @@ const emprendedorBodySchema = Joi.object({
   nombre_puesto: Joi.string()
     .required()
     .max(100)
-    .pattern(/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/)
+    .pattern(/^[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+(\s[A-ZÁÉÍÓÚÜÑ][a-záéíóúüñ]+)*$/)
     .messages({
       "string.empty": "El nombre del puesto no puede estar vacío.",
       "any.required": "El nombre del puesto es obligatorio.",

@@ -22,6 +22,11 @@ router.get(
   authorizationMw.isBusinessOwnerOrAdmin,
   emprendedorController.getProductosByEmprendedor,
 );
+router.get(
+  "/:id/ayudantes",
+  authorizationMw.isBusinessOwnerOrAdmin,
+  emprendedorController.getAyudantesByEmprendedor,
+);
 router.post(
   "/",
   authorizationMw.isOwnerOrAdmin,
