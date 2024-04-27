@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const emprendedorController = require("../controllers/emprendedor.controller.js");
 
@@ -12,11 +12,31 @@ router.use(authenticationMw);
 
 // Define las rutas para los emprendedores
 router.get("/", emprendedorController.getEmprendedores);
-router.get("/:id", authorizationMw.isBusinessOwnerOrAdmin ,emprendedorController.getEmprendedorById);
-router.get("/:id/productos",authorizationMw.isBusinessOwnerOrAdmin, emprendedorController.getProductosByEmprendedor);
-router.post("/",authorizationMw.isOwnerOrAdmin, emprendedorController.createEmprendedor);
-router.put("/:id",authorizationMw.isOwnerOrAdmin, emprendedorController.updateEmprendedor);
-router.delete("/:id",authorizationMw.isOwnerOrAdmin, emprendedorController.deleteEmprendedor);
+router.get(
+  "/:id",
+  authorizationMw.isBusinessOwnerOrAdmin,
+  emprendedorController.getEmprendedorById,
+);
+router.get(
+  "/:id/productos",
+  authorizationMw.isBusinessOwnerOrAdmin,
+  emprendedorController.getProductosByEmprendedor,
+);
+router.post(
+  "/",
+  authorizationMw.isOwnerOrAdmin,
+  emprendedorController.createEmprendedor,
+);
+router.put(
+  "/:id",
+  authorizationMw.isOwnerOrAdmin,
+  emprendedorController.updateEmprendedor,
+);
+router.delete(
+  "/:id",
+  authorizationMw.isOwnerOrAdmin,
+  emprendedorController.deleteEmprendedor,
+);
 
 // Exporta el enrutador
 module.exports = router;

@@ -33,7 +33,6 @@ router.use("/productos", authenticationMiddleware, productosRoutes);
 router.use("/emprendedor", authenticationMiddleware, emprendedorRoutes);
 // Define las rutas para las inscripciones /api/inscripcion
 router.use("/inscripcion", authenticationMiddleware, inscripcionRoutes);
-
 // Define las rutas para las actividades /api/actividades
 router.use("/actividad", authenticationMiddleware, actividadRoutes);
 

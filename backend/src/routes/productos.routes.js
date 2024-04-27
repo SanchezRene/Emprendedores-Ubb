@@ -23,7 +23,7 @@ router.post(
   "/",
   uploadFile.single("fotografia"),
   handleMulterError,
-  authorizationMw.isOwnerOrAdmin,
+  authorizationMw.isBusinessOwnerOrAdmin,
   productosController.createProducto,
 );
 
