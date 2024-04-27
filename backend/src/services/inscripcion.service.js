@@ -1,11 +1,10 @@
 "use strict";
-const Carrera = require("../models/carrera.model");
-const Ayudantes = require("../models/ayudantes.model");
-const Productos = require("../models/productos.model");
+
 const Emprendedor = require("../models/emprendedor.model");
 const Inscripcion = require("../models/inscripcion.model");
 const User = require("../models/user.model");
 const { handleError } = require("../utils/errorHandler");
+const moment = require("moment");
 
 async function getInscripciones() {
   try {
@@ -14,6 +13,43 @@ async function getInscripciones() {
       return [null, "La colección de inscripciones está vacía"];
 
     return [inscripciones, null];
+  } catch (error) {
+    handleError(error, "inscripcion.service -> getInscripciones");
+  }
+}
+
+async function getInscripcionesSummary() {
+  try {
+    const inscripciones = await Inscripcion.find();
+    if (inscripciones == 0)
+      return [null, "La colección de inscripciones está vacía"];
+
+    const Data = await Promise.all(
+      inscripciones.map(async (inscripcion) => {
+        let emprendedor = await Emprendedor.findById(
+          inscripcion.emprendedorId.toString(),
+        );
+
+        let fechaChilena = moment(inscripcion.fechaInscripcion).format(
+          "HH:mm DD-MM-YYYY",
+        );
+
+        return {
+          nombre: emprendedor.nombre_completo,
+          estado: inscripcion.estado,
+          inscripcionId: inscripcion._id,
+          emprendedorId: inscripcion.emprendedorId,
+          fechaInscripcion: fechaChilena,
+        };
+      }),
+    );
+
+    const ArregloInscripciones = [
+      { totalInscripciones: Data.length },
+      { Data },
+    ];
+
+    return [ArregloInscripciones, null];
   } catch (error) {
     handleError(error, "inscripcion.service -> getInscripciones");
   }
@@ -108,20 +144,20 @@ async function createInscripcion(inscripcion) {
  * ) */
 /*==================================================================== */
 
-
 async function updateInscripcion(id, inscripcion) {
   try {
     const { userId, estado } = inscripcion;
 
     //Verificar que la inscripción exista y actualizarla
-    const updatedInscripcion = await Inscripcion.findByIdAndUpdate
-      (id, {
+    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(
+      id,
+      {
         userId,
         estado,
       },
-      { new: true }
-    );  
-    
+      { new: true },
+    );
+
     if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
 
     return [updatedInscripcion, null];
@@ -146,6 +182,7 @@ module.exports = {
   getInscripcionById,
   getInscripcionesByEmprendedorId,
   getInscripcionesByUserId,
+  getInscripcionesSummary,
   createInscripcion,
   updateInscripcion,
   deleteInscripcion,

@@ -6,16 +6,16 @@ const EmprendedorService = require("../services/emprendedor.service");
 const InscripcionSchema = require("../schema/inscripcion.schema");
 const { handleError } = require("../utils/errorHandler");
 
-async function getInscripciones(req, res) {
+async function getInscripcionesSummary(req, res) {
     try {
-        const [inscripciones, errorInscripciones] = await InscripcionService.getInscripciones();
+        const [inscripciones, errorInscripciones] = await InscripcionService.getInscripcionesSummary();
         if (errorInscripciones) return respondError(req, res, 404, errorInscripciones);
 
         inscripciones.length === 0
             ? respondSuccess(req, res, 204)
             : respondSuccess(req, res, 200, inscripciones);
     } catch (error) {
-        handleError(error, "inscripcion.controller -> getInscripciones");
+        handleError(error, "inscripcion.controller -> getInscripcionesSummary");
         respondError(req, res, 400, error.message);
     }
 }
@@ -111,7 +111,7 @@ async function deleteInscripcion(req, res) {
 }
 
 module.exports = {
-    getInscripciones,
+    getInscripcionesSummary,
     getInscripcionById,
     createInscripcion,
     updateInscripcion,
