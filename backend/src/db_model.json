@@ -78,7 +78,7 @@
             ],
             "required": true,
             "minItems": 1,
-            "maxItems": 10,
+            "maxItems": 100,
             "ref": "Productos"
         },
         "ayudantesId": {
@@ -111,8 +111,14 @@
                 "Ciencias de la Salud y de los Alimentos",
                 "Ciencias"
             ]
+        },
+        "sede": {
+            "type": "String",
+            "required": true,
+            "enum": [
+                "Concepción"
+            ]
         }
-  
     },
     "Inscripcion": {
         "_id": {
@@ -132,23 +138,6 @@
             ],
             "required": true,
             "ref": "Emprendedor"
-        },
-        "productosId": {
-            "type": [
-                "Schema.ObjectId"
-            ],
-            "required": true,
-            "minItems": 1,
-            "maxItems": 10,
-            "ref": "Productos"
-        },
-        "ayudantesId": {
-            "type": [
-                "Schema.ObjectId"
-            ],
-            "minItems": 0,
-            "maxItems": 3,
-            "ref": "Ayudantes"
         },
         "estado": {
             "type": "String",
@@ -178,7 +167,7 @@
         "categoria": {
             "type": "String",
             "required": true,
-           "maxLength": 255
+            "maxLength": 255
         },
         "fotografia": {
             "type": "String",
@@ -227,66 +216,62 @@
     },
     "Actividad": {
         "_id": {
-          "type": "Schema.ObjectId",
-          "required": true
+            "type": "Schema.ObjectId",
+            "required": true
         },
         "emprendedorId": {
-          "type": "Schema.ObjectId",
-          "required": true,
-          "ref": "Emprendedor"
+            "type": "Schema.ObjectId",
+            "required": true,
+            "ref": "Emprendedor"
         },
         "productosId": {
-          "type": "Schema.ObjectId", 
-          "required": true,
-          "ref": "Productos"
+            "type": "Schema.ObjectId",
+            "required": true,
+            "ref": "Productos"
         },
         "categoria": {
-          "type": "String",
-          "required": true,
-          "enum": [
-            "Reunión",
-            "Taller", 
-            "Evento",
-            "Otro"
-          ]
+            "type": "String",
+            "required": true,
+            "enum": [
+                "Reunión",
+                "Taller",
+                "Evento",
+                "Otro"
+            ]
         },
         "nombre": {
-          "type": "String",
-          "required": true,
-          "maxLength": 100
+            "type": "String",
+            "required": true,
+            "maxLength": 100
         },
         "descripcion": {
-          "type": "String",
-          "required": true,
-          "maxLength": 255
+            "type": "String",
+            "required": true,
+            "maxLength": 255
         },
         "fechaInicio": {
-          "type": "Date",
-          "required": true
+            "type": "Date",
+            "required": true
         },
         "fechaFin": {
-          "type": "Date",
-          "required": true
+            "type": "Date",
+            "required": true
         },
         "horaInicio": {
-          "type": "Date",
-          "required": true
+            "type": "Date",
+            "required": true
         },
         "horaFin": {
-          "type": "Date",
-          "required": true
+            "type": "Date",
+            "required": true
         },
         "lugar": {
-          "type": "String",
-          "required": true
+            "type": "String",
+            "required": true
         },
         "capacidadAsistentes": {
-          "type": "Number",
-          "required": true
+            "type": "Number",
+            "required": true
         }
-      }
-      
-      
+    }
 }
-
-

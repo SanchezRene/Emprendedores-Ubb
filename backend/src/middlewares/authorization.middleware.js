@@ -186,6 +186,7 @@ async function isAdminOrManagementOrBusinessOwner(req, res, next) {
 module.exports = {
   isAdmin,
   isOwnerOrAdmin,
+  isOwnerOrAdminParams,
   isBusinessOwnerOrAdmin,
   isAdminOrManagement,
   isAdminOrManagementOrBusinessOwner,

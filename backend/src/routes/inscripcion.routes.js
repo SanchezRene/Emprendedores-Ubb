@@ -25,7 +25,6 @@ router.put(
 );
 router.delete(
   "/:id",
-  authorizationMw.isOwnerOrAdmin,
   inscripcionController.deleteInscripcion,
 );
 
