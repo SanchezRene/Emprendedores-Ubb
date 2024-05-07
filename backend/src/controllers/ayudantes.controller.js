@@ -15,7 +15,7 @@ async function getAyudantes(req, res) {
         : respondSuccess(req, res, 200, ayudantes);
     } catch (error) {
       handleError(error, "ayudantes.controller -> getAyudantes");
-      respondError(req, res, 400, error.message);
+      respondError(req, res, 500, error.message);
     }
   }
 
@@ -34,7 +34,7 @@ async function getAyudantes(req, res) {
       respondSuccess(req, res, 200, ayudante);
     } catch (error) {
       handleError(error, "ayudantes.controller -> getAyudanteById");
-      respondError(req, res, 400, error.message);
+      respondError(req, res, 500, error.message);
     }
   }
 
@@ -54,7 +54,7 @@ async function getAyudantesByEmprendedorId(req, res) {
       respondSuccess(req, res, 200, ayudantes);
     } catch (error) {
       handleError(error, "ayudantes.controller -> getAyudantesByEmprendedorId");
-      respondError(req, res, 400, error.message);
+      respondError(req, res, 500, error.message);
     }
 }
 
@@ -97,7 +97,7 @@ async function createAyudante(req, res) {
         respondSuccess(req, res, 200, updatedAyudante);
         } catch (error) {
         handleError(error, "ayudantes.controller -> updateAyudante");
-        respondError(req, res, 400, error.message);
+        respondError(req, res, 500, error.message);
         }
     }
 
@@ -116,7 +116,7 @@ async function createAyudante(req, res) {
         respondSuccess(req, res, 200, deletedAyudante);
         } catch (error) {
         handleError(error, "ayudantes.controller -> deleteAyudante");
-        respondError(req, res, 400, error.message);
+        respondError(req, res, 500, error.message);
         }
     }
 

@@ -15,7 +15,7 @@ async function getCarreras(req, res) {
       : respondSuccess(req, res, 200, carrera);
   } catch (error) {
     handleError(error, "carrera.controller -> getCarreras");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -34,7 +34,7 @@ async function getCarreraById(req, res) {
     respondSuccess(req, res, 200, carrera);
   } catch (error) {
     handleError(error, "carrera.controller -> getCarreraById");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -76,7 +76,7 @@ async function updateCarrera(req, res) {
     respondSuccess(req, res, 200, updatedCarrera);
   } catch (error) {
     handleError(error, "carrera.controller -> updateCarrera");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -95,7 +95,7 @@ async function deleteCarrera(req, res) {
     respondSuccess(req, res, 200, carrera);
   } catch (error) {
     handleError(error, "carrera.controller -> deleteCarrera");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
