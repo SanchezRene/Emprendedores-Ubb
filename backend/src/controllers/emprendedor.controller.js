@@ -19,7 +19,7 @@ async function getEmprendedores(req, res) {
       : respondSuccess(req, res, 200, emprendedores);
   } catch (error) {
     handleError(error, "emprendedor.controller -> getEmprendedores");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -37,7 +37,7 @@ async function getEmprendedorById(req, res) {
     respondSuccess(req, res, 200, emprendedor);
   } catch (error) {
     handleError(error, "emprendedor.controller -> getEmprendedorById");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -57,7 +57,7 @@ async function getProductosByEmprendedor(req, res) {
       : respondSuccess(req, res, 200, productos);
   } catch (error) {
     handleError(error, "emprendedor.controller -> getProductosByEmprendedor");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -77,7 +77,7 @@ async function getAyudantesByEmprendedor(req, res){
       : respondSuccess(req, res, 200, ayudantes);
   } catch (error) {
     handleError(error, "emprendedor.controller -> getAyudantesByEmprendedor");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -97,7 +97,7 @@ async function createEmprendedor(req, res) {
     respondSuccess(req, res, 201, emprendedor);
   } catch (error) {
     handleError(error, "emprendedor.controller -> createEmprendedor");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -119,7 +119,7 @@ async function updateEmprendedor(req, res) {
     respondSuccess(req, res, 200, emprendedor);
   } catch (error) {
     handleError(error, "emprendedor.controller -> updateEmprendedor");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -137,7 +137,7 @@ async function deleteEmprendedor(req, res) {
     respondSuccess(req, res, 200, emprendedor);
   } catch (error) {
     handleError(error, "emprendedor.controller -> deleteEmprendedor");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 

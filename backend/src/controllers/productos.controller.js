@@ -15,7 +15,7 @@ async function getProductos(req, res) {
       : respondSuccess(req, res, 200, productos);
   } catch (error) {
     handleError(error, "productos.controller -> getProductos");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -34,7 +34,7 @@ async function getProductoById(req, res) {
     respondSuccess(req, res, 200, producto);
   } catch (error) {
     handleError(error, "productos.controller -> getProductoById");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -62,7 +62,7 @@ async function createProducto(req, res) {
     respondSuccess(req, res, 201, producto);
   } catch (error) {
     handleError(error, "productos.controller -> createProducto");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -94,7 +94,7 @@ async function updateProducto(req, res) {
     respondSuccess(req, res, 200, producto);
   } catch (error) {
     handleError(error, "productos.controller -> updateProducto");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -116,7 +116,7 @@ async function deleteProducto(req, res) {
       : respondSuccess(req, res, 200, deletedproducto);
   } catch (error) {
     handleError(error, "productos.controller -> deleteProducto");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 

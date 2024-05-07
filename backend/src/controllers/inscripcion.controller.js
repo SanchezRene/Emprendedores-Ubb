@@ -19,7 +19,7 @@ async function getInscripcionesSummary(req, res) {
       : respondSuccess(req, res, 200, inscripciones);
   } catch (error) {
     handleError(error, "inscripcion.controller -> getInscripcionesSummary");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -37,7 +37,7 @@ async function getInscripcionById(req, res) {
     respondSuccess(req, res, 200, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> getInscripcionById");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -59,7 +59,7 @@ async function createInscripcion(req, res) {
     respondSuccess(req, res, 201, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> createInscripcion");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -81,7 +81,7 @@ async function updateInscripcion(req, res) {
     respondSuccess(req, res, 200, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> updateInscripcion");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
@@ -105,7 +105,7 @@ async function deleteInscripcion(req, res) {
     );
   } catch (error) {
     handleError(error, "inscripcion.controller -> deleteInscripcion");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message);
   }
 }
 
