@@ -1,15 +1,29 @@
 "use client";
+import LoginForm from "../../components/loginForm";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-// app/auth/page.js
-import LoginForm from '../../components/loginForm';
+export default function AuthPage() {
 
-const AuthPage = () => {
+  const router = useRouter();
+
+  const handleLogged = () => {
+    router.push("/");
+  };
+
+  if (localStorage.getItem("user")) {
+    return (
+      <>
+        <h2>Ya estas logeado!</h2>
+        <button onClick={handleLogged}>Ir a home</button>
+      </>
+    );
+  }
+
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Inicia sesion!</h1>
       <LoginForm />
     </div>
   );
-};
-
-export default AuthPage;
+}
