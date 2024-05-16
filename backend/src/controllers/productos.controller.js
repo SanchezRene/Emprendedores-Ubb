@@ -40,7 +40,6 @@ async function getProductoById(req, res) {
 
 async function createProducto(req, res) {
   try {
-
     const { body } = req;
     const file = req.file.filename;
 
@@ -61,6 +60,9 @@ async function createProducto(req, res) {
 
     respondSuccess(req, res, 201, producto);
   } catch (error) {
+    if (!req.file?.filename) {
+      return respondError(req, res, 401, "No se ha subido ningún archivo");
+    }
     handleError(error, "productos.controller -> createProducto");
     respondError(req, res, 500, error.message);
   }
@@ -93,6 +95,9 @@ async function updateProducto(req, res) {
 
     respondSuccess(req, res, 200, producto);
   } catch (error) {
+    if (!req.file?.filename) {
+      return respondError(req, res, 401, "No se ha subido ningún archivo");
+    }
     handleError(error, "productos.controller -> updateProducto");
     respondError(req, res, 500, error.message);
   }

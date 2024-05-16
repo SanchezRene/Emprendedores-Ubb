@@ -1,13 +1,12 @@
 "use strict";
+
 const productosController = require("../controllers/productos.controller.js");
 
 const express = require("express");
 const router = express.Router();
-
-// Middlewares de autorización y autenticación
-const authorizationMw = require("../middlewares/authorization.middleware.js");
-const authenticationMw = require("../middlewares/authentication.middleware.js");
-router.use(authenticationMw);
+const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
+const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
+router.use(authenticationMiddleware);
 
 //multer para subir archivos
 const {
@@ -23,20 +22,20 @@ router.post(
   "/",
   uploadFile.single("fotografia"),
   handleMulterError,
-  authorizationMw.isBusinessOwnerOrAdmin,
+  authorizationMiddleware.isBusinessOwnerOrAdmin,
   productosController.createProducto,
 );
 
 router.put(
   "/:id",
   uploadFile.single("fotografia"),
-  authorizationMw.isOwnerOrAdmin,
+  authorizationMiddleware.isOwnerOrAdmin,
   productosController.updateProducto,
 );
 
 router.delete(
   "/:id",
-  authorizationMw.isOwnerOrAdmin,
+  authorizationMiddleware.isOwnerOrAdmin,
   productosController.deleteProducto,
 );
 
