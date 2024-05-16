@@ -22,6 +22,8 @@ const { handleError } = require("../utils/errorHandler");
 async function login(user) {
   try {
     const { email, password } = user;
+    console.log("email", email);
+    console.log("password: ", password);
 
     const userFound = await User.findOne({ email: email })
       .populate("roles")
