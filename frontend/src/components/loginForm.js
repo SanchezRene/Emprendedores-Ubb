@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { login } from "../services/auth.service";
+import { useAuthService } from "../services/auth.service";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const { loginUser } = useAuthService();
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,9 +18,11 @@ const LoginForm = () => {
     const data = { email, password };
 
     try {
-      const response = await login(data);
-      console.log("Login successful:", response);
-      // Aquí se puede  redirigir al usuario o guardar el token en el estado/contexto
+      const response = await loginUser(data);
+      if (response) {
+        console.log("Login successful:", response);
+        router.push("/"); // Redirigir al usuario después del inicio de sesión
+      }
     } catch (err) {
       setError(err.message || "An error occurred");
     }

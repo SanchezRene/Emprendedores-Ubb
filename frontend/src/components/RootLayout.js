@@ -1,21 +1,22 @@
 "use client";
-
-import { useRouter } from "next/navigation";
-
+import Sidebar from "./Sidebar";
+import { Flex, Box } from "@chakra-ui/react";
 import { AuthProvider } from "../context/AuthContext";
+import { Providers } from "../context/Providers";
 
 function RootLayout({ children }) {
   return (
-    <AuthProvider>
-      <PageRoot>{children}</PageRoot>
-    </AuthProvider>
+    <Providers>
+      <AuthProvider>
+        <Flex>
+          <Sidebar />
+          <Box flex="1" p="4">
+            {children}
+          </Box>
+        </Flex>
+      </AuthProvider>
+    </Providers>
   );
-}
-
-function PageRoot({ children }) {
-  const router = useRouter();
-
-  return <div>{children}</div>;
 }
 
 export default RootLayout;
