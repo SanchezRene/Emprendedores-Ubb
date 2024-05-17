@@ -1,49 +1,36 @@
 "use client";
-
+import { jwtDecode } from "jwt-decode";
 import axios from "../services/axios.service";
 import cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../context/AuthContext";
 
-export const login = async ({ email, password }) => {
-  try {
-    const response = await axios.post("auth/login", {
-      email,
-      password,
-    });
-    const { status, data } = response;
+export const useAuthService = () => {
+  const { login, logout } = useAuth();
 
-    if (status === 200) {
-      const decoded = jwtDecode(data.data.accessToken);
-      console.log(decoded);
-      const { email, roles } = decoded;
+  const loginUser = async ({ email, password }) => {
+    try {
+      const response = await axios.post("auth/login", { email, password });
+      const { status, data } = response;
 
-      localStorage.setItem("user", JSON.stringify({ email, roles }));
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${data.data.accessToken}`;
+      if (status === 200) {
+        const decoded = jwtDecode(data.data.accessToken);
+        const { email, roles } = decoded;
 
-      return { email, roles };
+        localStorage.setItem("user", JSON.stringify({ email, roles }));
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data.data.accessToken}`;
+        cookies.set("jwt", data.data.accessToken);
+
+        login({ email, roles });
+        return { email, roles };
+      }
+    } catch (error) {
+      console.error("Login error", error);
     }
-  } catch (error) {
-    console.log(error);
-    console.log("-> Login error");
-  }
-};
+  };
 
-export const logout = () => {
-  localStorage.removeItem("user");
-  delete axios.defaults.headers.common["Authorization"];
-  cookies.remove("jwt");
-};
+  const logoutUser = () => {
+    logout();
+  };
 
-export const test = async () => {
-  try {
-    const response = await axios.get("/users");
-    const { status, data } = response;
-    if (status === 200) {
-      console.log(data.data);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+  return { loginUser, logoutUser };
 };

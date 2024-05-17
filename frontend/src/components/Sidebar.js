@@ -13,9 +13,9 @@ const Sidebar = () => {
             Home
           </Link>
         </NextLink>
-        <NextLink href="/page1" passHref>
+        <NextLink href="/carrera" passHref>
           <Link as="li" mb="2">
-            Page 1
+            Carreras
           </Link>
         </NextLink>
         <NextLink href="/page2" passHref>

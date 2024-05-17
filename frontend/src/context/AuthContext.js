@@ -1,7 +1,8 @@
-"use client";
-
+// src/context/AuthContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "../services/axios.service";
+import cookies from "js-cookie";
 
 const AuthContext = createContext();
 
@@ -13,18 +14,31 @@ export function AuthProvider({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user")) || "";
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setUser(storedUser);
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
-      router.push("/auth");
     }
-  }, [router]);
+  }, []);
+
+  const login = (userData) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    delete axios.defaults.headers.common["Authorization"];
+    cookies.remove("jwt", { path: "/" });
+    setUser(null);
+    setIsAuthenticated(false);
+    router.push("/auth");
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
