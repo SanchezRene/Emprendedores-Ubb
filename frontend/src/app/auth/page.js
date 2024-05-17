@@ -1,10 +1,8 @@
 "use client";
 import LoginForm from "../../components/loginForm";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function AuthPage() {
-
   const router = useRouter();
 
   const handleLogged = () => {

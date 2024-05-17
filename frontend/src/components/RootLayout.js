@@ -3,12 +3,15 @@
 import { useRouter } from "next/navigation";
 
 import { AuthProvider } from "../context/AuthContext";
+import { Providers } from "../context/Providers";
 
 function RootLayout({ children }) {
   return (
-    <AuthProvider>
-      <PageRoot>{children}</PageRoot>
-    </AuthProvider>
+    <Providers>
+      <AuthProvider>
+        <PageRoot>{children}</PageRoot>
+      </AuthProvider>
+    </Providers>
   );
 }
 
