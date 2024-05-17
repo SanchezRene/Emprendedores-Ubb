@@ -85,7 +85,6 @@ async function createEmprendedor(req, res) {
   try {
     const { body } = req;
 
-    console.log("body: ", body);
     const { error: bodyError } =
       EmprendedorSchema.emprendedorBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);

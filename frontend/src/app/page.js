@@ -1,13 +1,15 @@
 "use client";
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
+import { useAuthService } from "../services/auth.service";
 
 export default function Home() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
+  const { logoutUser } = useAuthService();
 
   const handleLogout = () => {
-    logout();
+    logoutUser();
   };
 
   const handleLoginRedirect = () => {

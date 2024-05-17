@@ -1,8 +1,7 @@
 // src/context/AuthContext.js
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "../services/axios.service";
-import cookies from "js-cookie";
+
 
 const AuthContext = createContext();
 
@@ -29,9 +28,6 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    delete axios.defaults.headers.common["Authorization"];
-    cookies.remove("jwt", { path: "/" });
     setUser(null);
     setIsAuthenticated(false);
     router.push("/auth");
