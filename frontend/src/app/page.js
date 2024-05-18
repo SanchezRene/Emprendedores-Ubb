@@ -2,9 +2,10 @@
 import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useAuthService } from "../services/auth.service";
+import ButtonComponent from "@/components/Button";
 
 export default function Home() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const { logoutUser } = useAuthService();
 
@@ -22,12 +23,16 @@ export default function Home() {
       {isAuthenticated ? (
         <>
           <p>Estas logeado como: {user?.email}</p>
-          <button onClick={handleLogout}>Cerrar sesion</button>
+          <ButtonComponent onClick={handleLogout}>
+            Cerrar sesion
+          </ButtonComponent>
         </>
       ) : (
         <>
           <p>No estás logueado</p>
-          <button onClick={handleLoginRedirect}>Iniciar sesión</button>
+          <ButtonComponent onClick={handleLoginRedirect}>
+            Iniciar sesión
+          </ButtonComponent>
         </>
       )}
     </div>
