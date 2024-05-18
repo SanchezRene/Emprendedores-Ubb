@@ -6,7 +6,7 @@ const Sidebar = () => {
     <Box as="nav" bg="gray.800" color="white" minH="100vh" p="4">
       <Flex direction="column" as="ul">
         <Text fontSize="lg" mb="4">
-          Dashboard
+          Links
         </Text>
         <NextLink href="/" passHref>
           <Link as="li" mb="2">

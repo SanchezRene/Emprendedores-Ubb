@@ -1,21 +1,36 @@
-// src/pages/ExamplePage.js
-import React from 'react'
-import CustomTable from '../../components/Table'
+"use client";
+import React, { useEffect, useState } from 'react';
+import { getCarreras } from '../../services/carrera.service';
 
-const Page = () => {
-  const columns = ["Name", "Age", "Location"];
-  const data = [
-    ["John Doe", 28, "New York"],
-    ["Jane Smith", 34, "San Francisco"],
-    ["Sam Johnson", 23, "Los Angeles"],
-  ];
+const CarreraPage = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  return (
-    <div>
-      <h1>Example Page</h1>
-      <CustomTable columns={columns} data={data} caption="Carreras en la base de datos" />
-    </div>
-  )
-}
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await getCarreras();
+                setData(result);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-export default Page;
+        fetchData();
+    }, []);
+
+    if (loading) return <div>Cargando...</div>;
+    if (error) return <div>Error al cargar los datos: {error.message}</div>;
+
+    return (
+        <div>
+            <h1>Datos de Carrera</h1>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+    );
+};
+
+export default CarreraPage;

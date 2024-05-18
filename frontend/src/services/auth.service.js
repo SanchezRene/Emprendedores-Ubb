@@ -20,13 +20,13 @@ export const useAuthService = () => {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${data.data.accessToken}`;
-        cookies.set("jwt", data.data.accessToken);
+        cookies.set("jwt", data.data.accessToken, { domain: 'http://localhost:5000/api' });
 
         login({ email, roles });
         return { email, roles };
       }
     } catch (error) {
-      console.error("Login error", error);
+      console.error("LoginUser error", error);
     }
   };
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuthService } from "../services/auth.service";
 import { useRouter } from "next/navigation";
+import { Button } from "@chakra-ui/react";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const LoginForm = () => {
     try {
       const response = await loginUser(data);
       if (response) {
-        console.log("Login successful:", response);
+        console.log("Login successful");
         router.push("/"); // Redirigir al usuario después del inicio de sesión
       }
     } catch (err) {
@@ -51,7 +52,7 @@ const LoginForm = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <Button colorScheme='blue' type="submit">Login</Button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
