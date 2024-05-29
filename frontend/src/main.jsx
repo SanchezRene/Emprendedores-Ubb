@@ -3,8 +3,9 @@ import App from './routes/App.jsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
-import ErrorPage from './routes/ErrorPage.jsx';
-import Login from './routes/Login.jsx';
+import ErrorPage from './pages/ErrorPage.jsx';
+import Login from './pages/LoginPage.jsx';
+import Carrera from './pages/CarreraPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <App />,
+      },
+      {
+        path: '/carreras',
+        element: <Carrera />,
       },
     ],
   },
