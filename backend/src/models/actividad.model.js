@@ -5,11 +5,11 @@ const actividadSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  emprendedorId: {
+  emprendedoresId: [{ //  array de emprendedores
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "Emprendedor",
-  },
+    required: true,
+  }],
   productosId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -53,7 +53,7 @@ const actividadSchema = new mongoose.Schema({
   capacidadAsistentes: {
     type: Number,
     required: true,
-  },
+  }
 });
 
 const Actividad = mongoose.model("Actividad", actividadSchema);

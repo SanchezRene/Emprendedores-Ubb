@@ -17,5 +17,8 @@ router.post("/", authorizationMw.isAdminOrManagement, actividadController.create
 router.put("/:id", authorizationMw.isAdminOrManagement, actividadController.updateActividad);
 router.delete("/:id", authorizationMw.isAdminOrManagement, actividadController.deleteActividad);
 
+// Nueva ruta para inscribir emprendedores
+router.post("/inscribir", authorizationMw.isAdminOrManagement, actividadController.inscribirEmprendedor);
+
 // Exporta el enrutador
 module.exports = router;

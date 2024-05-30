@@ -61,10 +61,31 @@ async function deleteActividad(id) {
   }
 }
 
+//función para inscribir emprendedores
+async function inscribirEmprendedor(actividadId, userId) {
+  try {
+    const actividad = await Actividad.findById(actividadId);
+    if (!actividad) return [null, "Actividad no encontrada"];
+
+    if (!actividad.emprendedoresId.includes(userId)) {
+      actividad.emprendedoresId.push(userId);
+      await actividad.save();
+    } else {
+      return [null, "El usuario ya está inscrito en esta actividad"];
+    }
+
+    return [actividad, null];
+  } catch (error) {
+    handleError(error, "actividad.service -> inscribirEmprendedor");
+    return [null, error.message];
+  }
+}
+
 module.exports = {
   getAllActividades,
   getActividadById,
   createActividad,
   updateActividadById,
   deleteActividad,
+  inscribirEmprendedor, 
 };
