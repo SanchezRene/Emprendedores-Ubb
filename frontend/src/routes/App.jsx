@@ -4,7 +4,7 @@ import Header from "../components/Header.jsx";
 function App() {
   return (
     <>
-      <h1>Pagina principal APP-page</h1>
+      <h1>Inicio</h1>
     </>
   );
 }
