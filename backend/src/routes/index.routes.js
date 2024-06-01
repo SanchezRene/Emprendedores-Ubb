@@ -14,8 +14,8 @@ const ayudantesRoutes = require("./ayudantes.routes.js");
 const productosRoutes = require("./productos.routes.js");
 const emprendedorRoutes = require("./emprendedor.routes.js");
 const inscripcionRoutes = require("./inscripcion.routes.js");
-
 const actividadRoutes = require("./actividad.routes.js");
+const reportRoutes = require("./report.routes.js"); // Añadir importación de report.routes.js
 
 // Define las rutas para los usuarios /api/usuarios
 router.use("/users", authenticationMiddleware, userRoutes);
@@ -35,6 +35,8 @@ router.use("/emprendedor", authenticationMiddleware, emprendedorRoutes);
 router.use("/inscripcion", authenticationMiddleware, inscripcionRoutes);
 // Define las rutas para las actividades /api/actividades
 router.use("/actividad", authenticationMiddleware, actividadRoutes);
+// Define las rutas para los reportes /api/reports
+router.use("/reports", authenticationMiddleware, reportRoutes); // Añadir uso de rutas de reportes
 
 // Exporta el enrutador
 module.exports = router;

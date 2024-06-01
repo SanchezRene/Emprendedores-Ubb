@@ -3,7 +3,8 @@
 const ActividadService = require("../services/actividad.service");
 const { respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
-const { enviarCorreo } = require("../utils/email"); 
+const { enviarCorreo } = require("../utils/email");
+
 async function getAllActividades(req, res) {
   try {
     const [actividades, error] = await ActividadService.getAllActividades();
@@ -67,25 +68,25 @@ async function deleteActividad(req, res) {
     if (error) {
       return respondError(req, res, 404, error);
     }
-    res.json({ message: "Actividad eliminada correctamente" , actividad});
+    res.json({ message: "Actividad eliminada correctamente", actividad });
   } catch (error) {
     handleError(error, "actividades.controller -> deleteActividad");
     respondError(req, res, 500, "Error al eliminar la actividad");
   }
 }
 
-// función para inscribir emprendedores
+// Función para inscribir emprendedores
 async function inscribirEmprendedor(req, res) {
   try {
-    const { userId, activityId } = req.body; // Asumimos que los IDs se envían en el cuerpo de la solicitud
+    const { emprendedorId, _id } = req.body; // Asumimos que los IDs se envían en el cuerpo de la solicitud
 
-    const [actividad, error] = await ActividadService.inscribirEmprendedor(activityId, userId);
+    const [actividad, error] = await ActividadService.inscribirEmprendedor(_id, emprendedorId);
     if (error) {
       return respondError(req, res, 400, error);
     }
 
     // Enviar notificación
-    await sendNotification(userId, activityId);
+    await sendNotification(emprendedorId, _id);
 
     res.status(200).json(actividad);
   } catch (error) {
@@ -94,19 +95,19 @@ async function inscribirEmprendedor(req, res) {
   }
 }
 
-// función para enviar notificaciones
-async function sendNotification(userId, activityId) {
+// Función para enviar notificaciones
+async function sendNotification(emprendedorId, _id) {
   try {
-    const user = await User.findById(userId);
-    const activity = await Actividad.findById(activityId);
+    const emprendedor = await Emprendedor.findById(emprendedorId);
+    const actividad = await Actividad.findById(_id);
 
-    if (!user || !activity) {
+    if (!emprendedor || !actividad) {
       throw new Error('Usuario o actividad no encontrados');
     }
 
     const emailReport = {
-      email: user.email,
-      mensaje: `Usted está inscrito en la actividad: ${activity.nombre}. Esto es un recordatorio para que asista el ${activity.fechaInicio.toLocaleDateString()} a la hora ${activity.horaInicio.toLocaleTimeString()}.`,
+      email: emprendedor.email,
+      mensaje: `Usted está inscrito en la actividad: ${actividad.nombre}. Esto es un recordatorio para que asista el ${actividad.fechaInicio.toLocaleDateString()} a la hora ${actividad.horaInicio.toLocaleTimeString()}.`,
     };
     await enviarCorreo(emailReport);
   } catch (error) {
@@ -120,6 +121,6 @@ module.exports = {
   createActividad,
   updateActividad,
   deleteActividad,
-  inscribirEmprendedor, 
-  sendNotification, 
+  inscribirEmprendedor,
+  sendNotification,
 };
