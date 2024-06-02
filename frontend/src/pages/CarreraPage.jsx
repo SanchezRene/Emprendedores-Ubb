@@ -25,16 +25,32 @@ function Carrera() {
   }, []);
 
   if (loading) {
-    return <Text>Cargando...</Text>;
+    return (
+      <Box p={4}>
+        <Text fontSize="2xl" mb={4}>
+          Carreras
+        </Text>
+        <Text>Cargando...</Text>;
+      </Box>
+    );
   }
 
   if (error) {
-    return <Text>Error: {error.message}</Text>;
+    return (
+      <Box p={4}>
+        <Text fontSize="2xl" mb={4}>
+          Carreras
+        </Text>
+        <Text>Error: {error.message}</Text>;
+      </Box>
+    ); 
   }
 
   return (
     <Box p={4}>
-      <Text fontSize="2xl" mb={4}>Carreras</Text>
+      <Text fontSize="2xl" mb={4}>
+        Carreras
+      </Text>
       <CarreraTable careers={carreras} />
     </Box>
   );

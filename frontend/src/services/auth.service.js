@@ -15,7 +15,6 @@ export const login = async ({ email, password }) => {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data.data.accessToken}`;
-      
     }
   } catch (error) {
     console.log(error);
