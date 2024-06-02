@@ -1,4 +1,5 @@
-import { useRouteError } from 'react-router-dom';
+import { useRouteError } from "react-router-dom";
+import { Box, Heading, Text } from "@chakra-ui/react";
 
 const ErrorPage = () => {
   const error = useRouteError();
@@ -11,14 +12,16 @@ const ErrorPage = () => {
   console.error({
     status: error.status,
     statusText: error.statusText,
-    message: error.message ? error.message : 'No message',
+    message: error.message ? error.message : "No message",
   });
 
   return (
-    <div>
-      <h1>Oops!</h1>
-      <p>Sorry, un error inesperado a ocurrido.</p>
-    </div>
+    <Box textAlign="center" mt="10">
+      <Heading fontSize="2xl" color="red.500" mb="4">
+        ERROR
+      </Heading>
+      <Text fontSize="lg">Lo sentimos, ha ocurrido un error inesperado.</Text>
+    </Box>
   );
 };
 
