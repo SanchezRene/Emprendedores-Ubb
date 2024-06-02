@@ -5,11 +5,12 @@ const resend = new Resend(API_KEY);
 
 async function enviarCorreo(report) {
   try {
+    const toEmail = 'testemprendedoresubb@gmail.com';  
     const { data, error } = await resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
-      to: [`${report.email}`], // Persona a la que se le envía el reporte
-      subject: 'Notificación de Actividad',
-      html: `<strong>${report.mensaje}</strong>`, // Mensaje del reporte
+      to: [toEmail],
+      subject: 'Notificación de Actividad EMPRENDEDORES UBB',
+      html: `<strong>${report.mensaje}</strong>`,
     });
 
     if (error) {

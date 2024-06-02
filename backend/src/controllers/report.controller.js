@@ -16,13 +16,13 @@ async function createReport(req, res) {
     };
     const { error } = await enviarCorreo(emailReport);
     if (error) {
-      return respondError(req, res, 500, "Error al enviar el correo electrónico");
+      return respondError(req, res, 500, "Error al enviar el correo electrónico", error);
     }
 
     res.status(201).json(report);
   } catch (error) {
     handleError(error, "report.controller -> createReport");
-    respondError(req, res, 500, "Error al crear el reporte");
+    respondError(req, res, 500, "Error al crear el reporte", error.message);
   }
 }
 

@@ -1,4 +1,7 @@
 const Actividad = require("../models/actividad.model");
+const Emprendedor = require("../models/emprendedor.model");
+const User = require("../models/user.model");
+const { enviarCorreo } = require("../utils/email");
 const { handleError } = require("../utils/errorHandler");
 
 async function getAllActividades() {
@@ -68,6 +71,27 @@ async function inscribirEmprendedor(actividadId, emprendedorId) {
     if (!actividad.emprendedoresId.includes(emprendedorId)) {
       actividad.emprendedoresId.push(emprendedorId);
       await actividad.save();
+
+      // Obtener el correo del usuario asociado al emprendedor
+      const emprendedor = await Emprendedor.findById(emprendedorId).populate('userId');
+      if (!emprendedor) {
+        return [null, "Emprendedor no encontrado"];
+      }
+      const user = await User.findById(emprendedor.userId);
+      if (!user) {
+        return [null, "Usuario no encontrado"];
+      }
+      const userEmail = user.email;
+
+      // Enviar correo electrónico
+      const emailReport = {
+        email: userEmail,
+        mensaje: `Usted está inscrito en la actividad: ${actividad.nombre}. Esto es un recordatorio para que asista el ${actividad.fechaInicio.toLocaleDateString()} a la hora ${actividad.horaInicio.toLocaleTimeString()}.`,
+      };
+      const emailResponse = await enviarCorreo(emailReport);
+      if (emailResponse.error) {
+        console.error('Error al enviar correo:', emailResponse.error);
+      }
     } else {
       return [null, "El emprendedor ya está inscrito en esta actividad"];
     }

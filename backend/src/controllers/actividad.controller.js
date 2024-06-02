@@ -1,6 +1,8 @@
 "use strict";
 
 const ActividadService = require("../services/actividad.service");
+const Emprendedor = require("../models/emprendedor.model");
+const User = require("../models/user.model");
 const { respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const { enviarCorreo } = require("../utils/email");
@@ -76,9 +78,9 @@ async function deleteActividad(req, res) {
 }
 
 // Función para inscribir emprendedores
-async function inscribirEmprendedor(req, res) {
+async function inscribirYNotificarEmprendedor(req, res) {
   try {
-    const { emprendedorId, _id } = req.body; // Asumimos que los IDs se envían en el cuerpo de la solicitud
+    const { emprendedorId, _id } = req.body;
 
     const [actividad, error] = await ActividadService.inscribirEmprendedor(_id, emprendedorId);
     if (error) {
@@ -86,32 +88,40 @@ async function inscribirEmprendedor(req, res) {
     }
 
     // Enviar notificación
-    await sendNotification(emprendedorId, _id);
+    const notificacionError = await sendNotification(emprendedorId, actividad);
+    if (notificacionError) {
+      return respondError(req, res, 500, notificacionError);
+    }
 
     res.status(200).json(actividad);
   } catch (error) {
-    handleError(error, "actividades.controller -> inscribirEmprendedor");
+    handleError(error, "actividades.controller -> inscribirYNotificarEmprendedor");
     respondError(req, res, 500, "Error al inscribir emprendedor en la actividad");
   }
 }
 
 // Función para enviar notificaciones
-async function sendNotification(emprendedorId, _id) {
+async function sendNotification(emprendedorId, actividad) {
   try {
-    const emprendedor = await Emprendedor.findById(emprendedorId);
-    const actividad = await Actividad.findById(_id);
+    const emprendedor = await Emprendedor.findById(emprendedorId).populate('userId');
+    if (!emprendedor) {
+      throw new Error('Emprendedor no encontrado');
+    }
 
-    if (!emprendedor || !actividad) {
-      throw new Error('Usuario o actividad no encontrados');
+    const user = await User.findById(emprendedor.userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
     }
 
     const emailReport = {
-      email: emprendedor.email,
-      mensaje: `Usted está inscrito en la actividad: ${actividad.nombre}. Esto es un recordatorio para que asista el ${actividad.fechaInicio.toLocaleDateString()} a la hora ${actividad.horaInicio.toLocaleTimeString()}.`,
+      email: 'testemprendedoresubb@gmail.com', // Correo registrado en Resend para pruebas
+      mensaje: `Usted está inscrito en la actividad: ${actividad.nombre}. Esto es un recordatorio para que asista el ${new Date(actividad.fechaInicio).toLocaleDateString()} en el horario: ${new Date(actividad.horaInicio).toLocaleTimeString()}.`,
     };
     await enviarCorreo(emailReport);
+    return null;
   } catch (error) {
     console.error('Error al enviar notificación:', error);
+    return error.message;
   }
 }
 
@@ -121,6 +131,6 @@ module.exports = {
   createActividad,
   updateActividad,
   deleteActividad,
-  inscribirEmprendedor,
+  inscribirYNotificarEmprendedor,
   sendNotification,
 };
