@@ -15,3 +15,4 @@ router.delete("/:id", authorizationMw.isAdminOrManagement, actividadController.d
 router.post("/inscribir", authorizationMw.isAdminOrManagement, actividadController.inscribirYNotificarEmprendedor);
 
 module.exports = router;
+//
