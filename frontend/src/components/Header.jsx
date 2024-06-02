@@ -16,7 +16,7 @@ function Header() {
   return (
     <Box bg="blue.500" color="white" p={4}>
       <Flex justify="space-between" align="center">
-        <Text fontSize="lg" fontWeight="bold">Dashboard</Text>
+        <Text fontSize="lg" fontWeight="bold">Emprendedores UBB</Text>
         {user && (
           <Flex align="center">
             <Text mr={4}>Estás logeado como: {user.email}</Text>
