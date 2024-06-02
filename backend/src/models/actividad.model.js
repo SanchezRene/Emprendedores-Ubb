@@ -1,20 +1,14 @@
 const mongoose = require("mongoose");
 
 const actividadSchema = new mongoose.Schema({
-  _id: {
+  emprendedoresId: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  emprendedorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "Emprendedor",
-  },
-  productosId: {
+  }],
+  productosId: [{ 
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "Productos",
-  },
+  }],
   categoria: {
     type: String,
     required: true,
@@ -53,9 +47,11 @@ const actividadSchema = new mongoose.Schema({
   capacidadAsistentes: {
     type: Number,
     required: true,
-  },
+  }
 });
 
 const Actividad = mongoose.model("Actividad", actividadSchema);
 
 module.exports = Actividad;
+
+//
