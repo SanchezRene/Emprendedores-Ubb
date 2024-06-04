@@ -33,6 +33,26 @@ async function isAdmin(req, res, next) {
   }
 }
 
+//Comprueba si el usuario es Emprendedor
+async function isEmprendedor(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const emprendedor = await Emprendedor.find({ userId: user.id });
+      if (emprendedor) {
+        next();
+      } else {
+    return respondError(
+      req,
+      res,
+      401,
+      "Se requiere un rol de emprendedor para realizar esta acción",
+    );
+  }
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isEmprendedor");
+  }
+}
+
 /**
  * Comprueba si el usuario es un administrador o si es el propietario de los datos, y permitiría el acceso a la ruta en cualquiera de esos casos.
    1.- A través del token JWT se obtiene el email del usuario

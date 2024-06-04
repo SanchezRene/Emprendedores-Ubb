@@ -48,6 +48,15 @@ const actividadSchema = new mongoose.Schema({
     type: Number,
     required: true,
   }
+  asistentes: [{
+    emprendedorId: {
+       type: Schema.Typer.ObjectId,
+       ref:  'Emprendedor'
+      },
+    confirmado: {
+       type: Boolean,
+       default: false}
+  }]
 });
 
 const Actividad = mongoose.model("Actividad", actividadSchema);
