@@ -6,6 +6,7 @@ import App from "./pages/App.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import Login from "./pages/LoginPage.jsx";
 import Carrera from "./pages/CarreraPage.jsx";
+import FormularioPage from "./pages/FormularioPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/carreras",
         element: <Carrera />,
+      },
+      {
+        path: "/formulario-inscripcion",
+        element: <FormularioPage />,
       },
     ],
   },
