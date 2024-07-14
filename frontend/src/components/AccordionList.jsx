@@ -29,7 +29,14 @@ const accordionData = [
       { label: 'Otra opción 1', path: '/otra-opcion-1' },
       { label: 'Otra opción 2', path: '/otra-opcion-2' },
     ],
-  }
+  },
+  {
+    title: 'Gestión usuarios',
+    icon: '🛠️', 
+    links: [
+      { label: 'Gestión Usuarios', path: '/gestion-usuarios' },
+    ],
+  },
   /**Otos acordeones pueden ser agregados de la siguiente forma:
    * {
     title: 'Otro acordeón',
