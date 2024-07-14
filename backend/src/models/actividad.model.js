@@ -1,14 +1,18 @@
 const mongoose = require("mongoose");
 
 const actividadSchema = new mongoose.Schema({
-  emprendedoresId: [{ 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Emprendedor",
-  }],
-  productosId: [{ 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Productos",
-  }],
+  emprendedoresId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Emprendedor",
+    },
+  ],
+  productosId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Productos",
+    },
+  ],
   categoria: {
     type: String,
     required: true,
@@ -47,7 +51,7 @@ const actividadSchema = new mongoose.Schema({
   capacidadAsistentes: {
     type: Number,
     required: true,
-  }
+  },
 });
 
 const Actividad = mongoose.model("Actividad", actividadSchema);
