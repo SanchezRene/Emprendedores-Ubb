@@ -1,27 +1,50 @@
-import { createContext, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from '../services/axios.service';
+import { login as authLogin, logout as authLogout } from '../services/auth.service';
 
 const AuthContext = createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => useContext(AuthContext);
-
-// eslint-disable-next-line react/prop-types
-export function AuthProvider({ children }) {
-  const navigate = useNavigate();
-
-  const user = JSON.parse(localStorage.getItem('user')) || '';
-  const isAuthenticated = user ? true : false;
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/auth');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+    if (user && token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(user);
     }
-  }, [isAuthenticated, navigate]);
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      await authLogin({ email, password });
+      const user = JSON.parse(localStorage.getItem('user'));
+      const token = localStorage.getItem('token');
+      if (user && token) {
+        setUser(user);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+  };
+
+  const logout = () => {
+    authLogout();
+    setUser(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+export const useAuth = () => useContext(AuthContext);
+
+export default AuthContext;
