@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { login } from '../services/auth.service';
+import { useAuth } from '../context/AuthContext';
 import {
   FormControl,
   FormLabel,
@@ -9,8 +8,10 @@ import {
   Button,
   Box,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -19,10 +20,13 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    login(data).then(() => {
+  const onSubmit = async (data) => {
+    try {
+      await login(data.email, data.password);
       navigate('/');
-    });
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
   };
 
   return (

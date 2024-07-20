@@ -1,11 +1,19 @@
-import LoginForm from '../components/LoginForm';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container, Text, Button } from '@chakra-ui/react';
+import { useAuth } from '../context/AuthContext';
+import LoginForm from '../components/LoginForm';
 
-function Login() {
+function LoginPage() {
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  if (localStorage.getItem('user')) {
+  const handleLogout = () => {
+    logout();
+    navigate('/auth');
+  };
+
+  if (user) {
     return (
       <Container centerContent>
         <Text fontSize="2xl" fontWeight="semibold" mb={4}>Ya estás logueado!</Text>
@@ -24,4 +32,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;
