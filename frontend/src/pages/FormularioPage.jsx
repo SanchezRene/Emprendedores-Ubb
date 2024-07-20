@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Select, VStack, HStack, Table, Tbody, Tr, Td, Thead, Th, useToast, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-import { getCarreras } from '../services/carrera.service';
-import { createEmprendedor } from '../services/emprendedor.service';
+import React, { useState } from 'react';
+import { Box, FormControl, FormLabel, Input, Button, VStack, HStack, Table, Thead, Tbody, Tr, Th, Td, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import ProductoModal from '../components/formulario/ProductoModal';
 import AyudanteModal from '../components/formulario/AyudanteModal';
+import { toast } from 'react-hot-toast';
 
-function FormularioPage() {
-  const [carreras, setCarreras] = useState([]);
+const FormularioPage = () => {
   const [formData, setFormData] = useState({
-    nombre_completo: '',
-    rut: '',
+    nombre: '',
+    email: '',
     celular: '',
-    carreraId: '',
-    nombre_puesto: ''
+    nombre_puesto: '',
   });
   const [productos, setProductos] = useState([]);
   const [ayudantes, setAyudantes] = useState([]);
+  const [selectedProducto, setSelectedProducto] = useState(null);
+  const [selectedAyudante, setSelectedAyudante] = useState(null);
   const [isProductoModalOpen, setProductoModalOpen] = useState(false);
   const [isAyudanteModalOpen, setAyudanteModalOpen] = useState(false);
-  const [selectedProducto, setSelectedProducto] = useState(null);
+  const [isDeletingProducto, setDeletingProducto] = useState(false);
+  const [isDeletingAyudante, setDeletingAyudante] = useState(false);
+  const [productoToDelete, setProductoToDelete] = useState(null);
+  const [ayudanteToDelete, setAyudanteToDelete] = useState(null);
   const [errors, setErrors] = useState({});
-  const [isDeleting, setIsDeleting] = useState(false);
-  const toast = useToast();
-
-  useEffect(() => {
-    const fetchCarreras = async () => {
-      const carrerasData = await getCarreras();
-      setCarreras(carrerasData);
-    };
-
-    fetchCarreras();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,17 +31,6 @@ function FormularioPage() {
     });
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.nombre_completo) newErrors.nombre_completo = 'El nombre es obligatorio';
-    if (!formData.rut) newErrors.rut = 'El rut es obligatorio';
-    if (!formData.celular) newErrors.celular = 'El celular es obligatorio';
-    if (!formData.carreraId) newErrors.carreraId = 'La carrera es obligatoria';
-    if (!formData.nombre_puesto) newErrors.nombre_puesto = 'El nombre del puesto es obligatorio';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleAddProducto = () => {
     setSelectedProducto(null);
     setProductoModalOpen(true);
@@ -58,16 +38,11 @@ function FormularioPage() {
 
   const handleSaveProducto = (producto) => {
     if (selectedProducto) {
-      const updatedProductos = productos.map((p) => (p === selectedProducto ? producto : p));
-      setProductos(updatedProductos);
-      toast({
-        title: "Producto actualizado",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
+      setProductos(productos.map((p) => (p === selectedProducto ? producto : p)));
+      toast.success('Producto modificado exitosamente');
     } else {
       setProductos([...productos, producto]);
+      toast.success('Producto añadido exitosamente');
     }
     setProductoModalOpen(false);
   };
@@ -78,128 +53,92 @@ function FormularioPage() {
   };
 
   const handleDeleteProducto = (producto) => {
-    setSelectedProducto(producto);
-    setIsDeleting(true);
+    setProductoToDelete(producto);
+    setDeletingProducto(true);
   };
 
   const confirmDeleteProducto = () => {
-    const updatedProductos = productos.filter((p) => p !== selectedProducto);
-    setProductos(updatedProductos);
-    setIsDeleting(false);
-    setSelectedProducto(null);
-    toast({
-      title: "Producto eliminado",
-      status: "error",
-      duration: 2000,
-      isClosable: true,
-    });
+    setProductos(productos.filter((p) => p !== productoToDelete));
+    setDeletingProducto(false);
+    toast.success('Producto eliminado exitosamente');
   };
 
   const cancelDeleteProducto = () => {
-    setIsDeleting(false);
-    setSelectedProducto(null);
+    setDeletingProducto(false);
   };
 
   const handleAddAyudante = () => {
+    setSelectedAyudante(null);
     setAyudanteModalOpen(true);
   };
 
   const handleSaveAyudante = (ayudante) => {
-    setAyudantes([...ayudantes, ayudante]);
+    if (selectedAyudante) {
+      setAyudantes(ayudantes.map((a) => (a === selectedAyudante ? ayudante : a)));
+      toast.success('Ayudante modificado exitosamente');
+    } else {
+      setAyudantes([...ayudantes, ayudante]);
+      toast.success('Ayudante añadido exitosamente');
+    }
     setAyudanteModalOpen(false);
   };
 
-  const handleSubmit = async () => {
-    if (!validateForm()) {
-      toast({
-        title: "Por favor, complete todos los campos obligatorios.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-    try {
-      const response = await createEmprendedor(formData);
-      if (response.status === 200 || response.status === 201) {
-        toast({
-          title: "Emprendedor creado exitosamente.",
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: response.data.message || "Ocurrió un error al crear el emprendedor.",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      toast({
-        title: error.response?.data?.message || "Ocurrió un error al crear el emprendedor.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      });
-      console.error("Error al crear emprendedor:", error.response?.data);
-    }
+  const handleEditAyudante = (ayudante) => {
+    setSelectedAyudante(ayudante);
+    setAyudanteModalOpen(true);
+  };
+
+  const handleDeleteAyudante = (ayudante) => {
+    setAyudanteToDelete(ayudante);
+    setDeletingAyudante(true);
+  };
+
+  const confirmDeleteAyudante = () => {
+    setAyudantes(ayudantes.filter((a) => a !== ayudanteToDelete));
+    setDeletingAyudante(false);
+    toast.success('Ayudante eliminado exitosamente');
+  };
+
+  const cancelDeleteAyudante = () => {
+    setDeletingAyudante(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Validar y enviar el formulario
   };
 
   return (
-    <Box p={5}>
-      <VStack spacing={5} align="stretch">
-        <FormControl isInvalid={errors.nombre_completo}>
+    <Box p={4}>
+      <VStack spacing={4} align="flex-start">
+        <FormControl isInvalid={errors.nombre}>
           <FormLabel>Nombre</FormLabel>
           <Input
-            name="nombre_completo"
-            value={formData.nombre_completo}
+            name="nombre"
+            value={formData.nombre}
             onChange={handleChange}
             placeholder="Nombre del emprendedor"
-            borderColor={errors.nombre_completo ? 'red.500' : 'gray.200'}
+            borderColor={errors.nombre ? 'red.500' : 'gray.200'}
           />
-          {errors.nombre_completo && (
+          {errors.nombre && (
             <Box color="red.500" fontSize="sm">
-              {errors.nombre_completo}
+              {errors.nombre}
             </Box>
           )}
         </FormControl>
 
-        <FormControl isInvalid={errors.rut}>
-          <FormLabel>Rut</FormLabel>
+        <FormControl isInvalid={errors.email}>
+          <FormLabel>Email</FormLabel>
           <Input
-            name="rut"
-            value={formData.rut}
+            name="email"
+            value={formData.email}
             onChange={handleChange}
-            placeholder="Rut del emprendedor"
-            borderColor={errors.rut ? 'red.500' : 'gray.200'}
+            placeholder="Email del emprendedor"
+            borderColor={errors.email ? 'red.500' : 'gray.200'}
           />
-          {errors.rut && (
+          {errors.email && (
             <Box color="red.500" fontSize="sm">
-              {errors.rut}
-            </Box>
-          )}
-        </FormControl>
-
-        <FormControl isInvalid={errors.carreraId}>
-          <FormLabel>Carrera</FormLabel>
-          <Select
-            name="carreraId"
-            value={formData.carreraId}
-            onChange={handleChange}
-            placeholder="Seleccionar"
-            borderColor={errors.carreraId ? 'red.500' : 'gray.200'}
-          >
-            {carreras.map((carrera) => (
-              <option key={carrera._id} value={carrera._id}>
-                {carrera.titulo}
-              </option>
-            ))}
-          </Select>
-          {errors.carreraId && (
-            <Box color="red.500" fontSize="sm">
-              {errors.carreraId}
+              {errors.email}
             </Box>
           )}
         </FormControl>
@@ -210,7 +149,7 @@ function FormularioPage() {
             name="celular"
             value={formData.celular}
             onChange={handleChange}
-            placeholder="Número de contacto"
+            placeholder="Celular del emprendedor"
             borderColor={errors.celular ? 'red.500' : 'gray.200'}
           />
           {errors.celular && (
@@ -221,7 +160,7 @@ function FormularioPage() {
         </FormControl>
 
         <FormControl isInvalid={errors.nombre_puesto}>
-          <FormLabel>Nombre del puesto</FormLabel>
+          <FormLabel>Nombre del Puesto</FormLabel>
           <Input
             name="nombre_puesto"
             value={formData.nombre_puesto}
@@ -236,52 +175,77 @@ function FormularioPage() {
           )}
         </FormControl>
 
-        <Button onClick={handleAddProducto}>Añadir artículo</Button>
-
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Nombre</Th>
-              <Th>Categoría</Th>
-              <Th>Acciones</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {productos.map((producto, index) => (
-              <Tr key={index}>
-                <Td>{producto.nombre}</Td>
-                <Td>{producto.tipo}</Td>
-                <Td>
-                  <HStack spacing={2}>
-                    <Button size="sm" onClick={() => handleEditProducto(producto)}>Modificar</Button>
-                    <Button size="sm" onClick={() => handleDeleteProducto(producto)}>Eliminar</Button>
-                  </HStack>
-                </Td>
+        <HStack justify="space-between" width="100%">
+          <FormLabel>Productos</FormLabel>
+          <Button onClick={handleAddProducto} colorScheme="blue">
+            Añadir Producto
+          </Button>
+        </HStack>
+        {productos.length > 0 && (
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Nombre</Th>
+                <Th>Tipo</Th>
+                <Th>Stock</Th>
+                <Th>Acciones</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {productos.map((producto, index) => (
+                <Tr key={index}>
+                  <Td>{producto.nombre}</Td>
+                  <Td>{producto.tipo}</Td>
+                  <Td>{producto.stock}</Td>
+                  <Td>
+                    <Button onClick={() => handleEditProducto(producto)} colorScheme="blue" mr={2}>
+                      Modificar
+                    </Button>
+                    <Button onClick={() => handleDeleteProducto(producto)} colorScheme="blue">
+                      Eliminar
+                    </Button>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
 
-        <Button onClick={handleAddAyudante}>Añadir ayudante</Button>
-
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Nombre</Th>
-              <Th>Carrera</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {ayudantes.map((ayudante, index) => (
-              <Tr key={index}>
-                <Td>{ayudante.nombre}</Td>
-                <Td>{ayudante.carrera}</Td>
+        <HStack justify="space-between" width="100%">
+          <FormLabel>Ayudantes</FormLabel>
+          <Button onClick={handleAddAyudante} colorScheme="blue">
+            Añadir Ayudante
+          </Button>
+        </HStack>
+        {ayudantes.length > 0 && (
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Nombre</Th>
+                <Th>RUT</Th>
+                <Th>Acciones</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {ayudantes.map((ayudante, index) => (
+                <Tr key={index}>
+                  <Td>{ayudante.nombre}</Td>
+                  <Td>{ayudante.rut}</Td>
+                  <Td>
+                    <Button onClick={() => handleEditAyudante(ayudante)} colorScheme="blue" mr={2}>
+                      Modificar
+                    </Button>
+                    <Button onClick={() => handleDeleteAyudante(ayudante)} colorScheme="blue">
+                      Eliminar
+                    </Button>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
 
-        <Button colorScheme="blue" onClick={handleSubmit}>
+        <Button onClick={handleSubmit} colorScheme="green">
           Enviar
         </Button>
       </VStack>
@@ -293,30 +257,48 @@ function FormularioPage() {
         producto={selectedProducto}
       />
 
+      <Modal isOpen={isDeletingProducto} onClose={cancelDeleteProducto}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmar Eliminación</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>¿Estás seguro de que deseas eliminar este producto?</ModalBody>
+          <ModalFooter>
+            <Button colorScheme="red" onClick={confirmDeleteProducto}>
+              Eliminar
+            </Button>
+            <Button ml={3} onClick={cancelDeleteProducto}>
+              Cancelar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <AyudanteModal
         isOpen={isAyudanteModalOpen}
         onClose={() => setAyudanteModalOpen(false)}
         onSave={handleSaveAyudante}
+        ayudante={selectedAyudante}
       />
 
-      {isDeleting && (
-        <Modal isOpen={isDeleting} onClose={cancelDeleteProducto}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Eliminar Producto</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              ¿Está seguro de que desea eliminar este producto?
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="red" onClick={confirmDeleteProducto}>Eliminar</Button>
-              <Button variant="ghost" onClick={cancelDeleteProducto}>Cancelar</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      )}
+      <Modal isOpen={isDeletingAyudante} onClose={cancelDeleteAyudante}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmar Eliminación</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>¿Estás seguro de que deseas eliminar este ayudante?</ModalBody>
+          <ModalFooter>
+            <Button colorScheme="red" onClick={confirmDeleteAyudante}>
+              Eliminar
+            </Button>
+            <Button ml={3} onClick={cancelDeleteAyudante}>
+              Cancelar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
-}
+};
 
 export default FormularioPage;

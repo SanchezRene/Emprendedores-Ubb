@@ -1,62 +1,105 @@
-// src/components/AyudanteModal.jsx
+import React, { useState } from "react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  useToast,
+  FormErrorMessage,
+} from "@chakra-ui/react";
 
-import React, { useState } from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
-
-function AyudanteModal({ isOpen, onClose, onSave }) {
-  const [ayudante, setAyudante] = useState({
-    nombre_completo: '',
-    rut: ''
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAyudante({ ...ayudante, [name]: value });
-  };
+const AyudanteModal = ({ isOpen, onClose, onSave, ayudante }) => {
+  const [nombre, setNombre] = useState(ayudante ? ayudante.nombre : "");
+  const [rut, setRut] = useState(ayudante ? ayudante.rut : "");
+  const [errorNombre, setErrorNombre] = useState(false);
+  const [errorRut, setErrorRut] = useState(false);
+  const toast = useToast();
 
   const handleSave = () => {
-    onSave(ayudante);
-    setAyudante({
-      nombre_completo: '',
-      rut: ''
-    });
+    if (!nombre || !rut) {
+      setErrorNombre(!nombre);
+      setErrorRut(!rut);
+      return;
+    }
+
+    onSave({ nombre, rut });
+    onClose();
+    setNombre("");
+    setRut("");
+    setErrorNombre(false);
+    setErrorRut(false);
+  };
+
+  const handleCancel = () => {
+    setNombre("");
+    setRut("");
+    setErrorNombre(false);
+    setErrorRut(false);
+    onClose();
+  };
+
+  const handleBlur = () => {
+    if (!nombre && !rut) {
+      toast({
+        title: "Error",
+        description: "Debe llenar todos los campos.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleCancel}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Añadir Ayudante</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl>
+          <FormControl isInvalid={errorNombre}>
             <FormLabel>Nombre completo</FormLabel>
             <Input
-              name="nombre_completo"
-              value={ayudante.nombre_completo}
-              onChange={handleChange}
-              placeholder="Nombre completo"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              onBlur={handleBlur}
             />
+            {errorNombre && (
+              <FormErrorMessage>
+                El nombre no puede estar vacío.
+              </FormErrorMessage>
+            )}
           </FormControl>
-
-          <FormControl mt={4}>
-            <FormLabel>RUT</FormLabel>
+          <FormControl mt={4} isInvalid={errorRut}>
+            <FormLabel>Rut</FormLabel>
             <Input
-              name="rut"
-              value={ayudante.rut}
-              onChange={handleChange}
-              placeholder="RUT"
+              value={rut}
+              onChange={(e) => setRut(e.target.value)}
+              onBlur={handleBlur}
             />
+            {errorRut && (
+              <FormErrorMessage>El Rut no puede estar vacío.</FormErrorMessage>
+            )}
           </FormControl>
         </ModalBody>
-
         <ModalFooter>
-          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
-          <Button colorScheme="blue" onClick={handleSave} ml={3}>Añadir</Button>
+          <Button variant="ghost" colorScheme="blue" onClick={handleCancel}>
+            Cancelar
+          </Button>
+          <Button colorScheme="blue" onClick={handleSave} ml={3}>
+            Añadir
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
-}
+};
 
 export default AyudanteModal;
