@@ -5,7 +5,7 @@ export const getCarreras = async () => {
     const response = await axios.get("/carrera");
     console.log("response:", response);
     const { status, data } = response;
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       return data.data;
     }
   } catch (error) {

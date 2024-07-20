@@ -10,7 +10,7 @@ const accordionData = [
       { label: "Aprobación de registro", path: "/aprobacion-registro" },
       {
         label: "Listado de emprendedores inscritos",
-        path: "/listado-emprendedores-inscritos",
+        path: "/emprendedores-inscritos",
       },
     ],
   },

@@ -82,7 +82,7 @@ async function createProducto(producto, fotografia) {
         "El emprendedor ya tiene 100 productos, no se puede crear más",
       ];
 
-    const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;
+    const url = `/public/${fotografia}`;
 
     const newProducto = new Productos({
       nombre: nombre,
