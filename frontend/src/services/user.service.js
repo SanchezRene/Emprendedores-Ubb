@@ -7,7 +7,7 @@ export const getUsers = async () => {
   try {
     const response = await instance.get("/users");
     const { status, data } = response;
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       return data.data;
     } else {
       console.error("Error fetching users:", response);
@@ -24,7 +24,7 @@ export const getUserById = async (id) => {
   try {
     const response = await instance.get(`/users/${id}`);
     const { status, data } = response;
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       return data.data;
     } else {
       console.error(`Error fetching user with ID ${id}:`, response);
@@ -36,6 +36,24 @@ export const getUserById = async (id) => {
   }
 };
 
+// Obtener un usuario por correo electrónico
+export const getUserByEmail = async (email) => {
+  try {
+    const response = await instance.get(`/users/email/${email}`);
+    const { status, data } = response;
+    if (status === 200 || status === 201) {
+      console.log("data.data:",data.data);
+      return data.data;
+    } else {
+      console.error(`Error fetching user with email ${email}:`, response);
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error fetching user with email ${email}:`, error);
+    return null;
+  }
+};
+
 // Crear un nuevo usuario
 export const createUser = async (user) => {
   try {
@@ -43,7 +61,7 @@ export const createUser = async (user) => {
     return response; // devuelve la respuesta completa
   } catch (error) {
     console.error("Error creating user:", error.response?.data);
-    return error.response; // Devuelve la respuesta del error
+    return error.response;
   }
 };
 
@@ -52,7 +70,7 @@ export const updateUser = async (id, user) => {
   try {
     const response = await instance.put(`/users/${id}`, user);
     const { status, data } = response;
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       return data.data;
     } else {
       console.error(`Error updating user with ID: ${id}`, response);
@@ -60,7 +78,7 @@ export const updateUser = async (id, user) => {
     }
   } catch (error) {
     console.error(`Error updating user with ID: ${id}`, error);
-    throw error; // Para permitir que el componente capture el error
+    throw error;
   }
 };
 
@@ -69,7 +87,7 @@ export const deleteUser = async (id) => {
   try {
     const response = await instance.delete(`/users/${id}`);
     const { status, data } = response;
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       return data.data;
     }
   } catch (error) {
@@ -80,6 +98,7 @@ export const deleteUser = async (id) => {
 export default {
   getUsers,
   getUserById,
+  getUserByEmail,
   createUser,
   updateUser,
   deleteUser,

@@ -10,6 +10,7 @@ import Login from "./pages/LoginPage.jsx";
 import Carrera from "./pages/CarreraPage.jsx";
 import FormularioPage from "./pages/FormularioPage.jsx";
 import UserPage from "./pages/UserPage.jsx";
+import EmprendedoresPage from "./pages/EmprendedoresPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/gestion-usuarios",
         element: <UserPage />,
+      },
+      {
+        path: "/emprendedores-inscritos",
+        element: <EmprendedoresPage />,
       },
     ],
   },
