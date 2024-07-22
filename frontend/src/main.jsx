@@ -1,3 +1,5 @@
+// src/main.jsx
+
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -11,12 +13,11 @@ import UserPage from "./pages/UserPage.jsx";
 import EmprendedoresPage from "./pages/EmprendedoresPage.jsx";
 import ActivityListPage from "./pages/ActivityListPage.jsx";
 import ActivityManagementPage from "./pages/ActivityManagementPage.jsx";
-
-import PrivateRoute from "./routes/PrivateRoute";
-
 import EstadoInscripcionPage from "./pages/EstadoInscripcionPage.jsx";
 import AprobarRechazarInscripcion from "./pages/AprobarRechazarInscripcionPage.jsx";
 import InscripcionManual from "./pages/InscripcionManualPage.jsx";
+
+import PrivateRoute from "./routes/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -30,40 +31,72 @@ const router = createBrowserRouter([
       },
       {
         path: "/carreras",
-        element: <CarreraPage />,
+        element: (
+          <PrivateRoute allowedRoles={["admin"]}>
+            <CarreraPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/formulario-inscripcion",
-        element: <FormularioPage />,
+        element: (
+          <PrivateRoute allowedRoles={["admin","user", "emprendedor"]}>
+            <FormularioPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/estado-inscripcion",
-        element: <EstadoInscripcionPage />,
+        element: (
+          <PrivateRoute allowedRoles={["admin","user", "emprendedor"]}>
+            <EstadoInscripcionPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/gestion-usuarios",
-        element: <UserPage />,
+        element: (
+          <PrivateRoute allowedRoles={["admin", "encargado"]}>
+            <UserPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/aprobar-rechazar-inscripcion",
-        element: <AprobarRechazarInscripcion />,
+        element: (
+          <PrivateRoute allowedRoles={["admin","encargado"]}>
+            <AprobarRechazarInscripcion />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/emprendedores-inscritos",
-        element: <EmprendedoresPage />,
+        element: (
+          <PrivateRoute allowedRoles={["admin","encargado"]}>
+            <EmprendedoresPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/actividades",
-        element: <ActivityListPage />,
+        element: (
+          <PrivateRoute allowedRoles={["admin","encargado"]}>
+            <ActivityListPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/inscripcion-manual",
-        element: <InscripcionManual />,
+        element: (
+          <PrivateRoute allowedRoles={["admin","encargado"]}>
+            <InscripcionManual />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/gestion-actividades",
         element: (
-          <PrivateRoute allowedRoles={["encargado", "admin"]}>
+          <PrivateRoute allowedRoles={["admin", "encargado", "admin"]}>
             <ActivityManagementPage />
           </PrivateRoute>
         ),

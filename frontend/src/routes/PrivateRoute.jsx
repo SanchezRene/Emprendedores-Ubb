@@ -1,21 +1,17 @@
-// src/routes/PrivateRoute.jsx
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-
-const PrivateRoute = ({ allowedRoles }) => {
-  const { user } = useAuth();
+const PrivateRoute = ({ children, allowedRoles }) => {
+  const user = JSON.parse(localStorage.getItem('user'));
 
   if (!user) {
     return <Navigate to="/auth" />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" />;
-  }
+  const userRoles = user.roles.map(role => role.name);
+  const hasAccess = allowedRoles.some(role => userRoles.includes(role));
 
-  return <Outlet />;
+  return hasAccess ? children : <Navigate to="/" />;
 };
 
 export default PrivateRoute;

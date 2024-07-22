@@ -11,15 +11,15 @@ function Root() {
   return (
     <ChakraProvider>
       <AuthProvider>
-        <Box>
+        <Flex direction="column" height="100vh">
           <Header />
-          <Flex>
+          <Flex flex="1" overflow="hidden">
             <Sidebar />
-            <Box flex="1" p="4">
+            <Box flex="1" p="4" overflow="auto">
               <Outlet />
             </Box>
           </Flex>
-        </Box>
+        </Flex>
         <Toaster position="top-right" />
       </AuthProvider>
     </ChakraProvider>

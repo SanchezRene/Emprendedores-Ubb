@@ -2,19 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Box,
-  Button,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  VStack,
-  HStack,
-  Spinner,
-  useToast,
-} from "@chakra-ui/react";
+  Box,Button,Table,Thead,Tbody,Tr,Th,Td,VStack,HStack,Spinner,
+  useToast,} from "@chakra-ui/react";
 import {
   getInscripciones,
   updateInscripcion,

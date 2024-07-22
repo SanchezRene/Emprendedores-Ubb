@@ -156,8 +156,8 @@ async function isAdminOrManagementOrBusinessOwner(req, res, next) {
   try {
     const user = await User.findOne({ email: req.email });
     const roles = await Role.find({ _id: { $in: user.roles } });
-    for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "admin" || roles[i].name === "encargado") {
+    for (const element of roles) {
+      if (element.name === "admin" || element.name === "encargado") {
         next();
         return;
       }
