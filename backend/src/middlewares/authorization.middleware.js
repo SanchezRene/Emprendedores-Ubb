@@ -26,7 +26,7 @@ async function isAdmin(req, res, next) {
       req,
       res,
       401,
-      "Se requiere un rol de administrador para realizar esta acción",
+      "Se requiere un rol de administrador para realizar esta acción"
     );
   } catch (error) {
     handleError(error, "authorization.middleware -> isAdmin");
@@ -67,7 +67,7 @@ async function isOwnerOrAdmin(req, res, next) {
       req,
       res,
       401,
-      "El usuario NO es el propietario de los datos o no tiene rol de administrador",
+      "El usuario NO es el propietario de los datos o no tiene rol de administrador"
     );
   } catch (error) {
     handleError(error, "authorization.middleware -> isOwnerOrAdmin");
@@ -93,7 +93,7 @@ async function isOwnerOrAdminParams(req, res, next) {
       req,
       res,
       401,
-      "El usuario NO es el propietario de los datos o no tiene rol de administrador",
+      "El usuario NO es el propietario de los datos o no tiene rol de administrador"
     );
   } catch (error) {
     handleError(error, "authorization.middleware -> isOwnerOrAdmin");
@@ -122,7 +122,7 @@ async function isBusinessOwnerOrAdmin(req, res, next) {
       req,
       res,
       401,
-      "El usuario NO es el propietario de los datos o no tiene rol de administrador",
+      "El usuario NO es el propietario de los datos o no tiene rol de administrador"
     );
   } catch (error) {
     handleError(error, "authorization.middleware -> isBusinessOwnerOrAdmin");
@@ -145,7 +145,7 @@ async function isAdminOrManagement(req, res, next) {
       req,
       res,
       401,
-      "Se requiere un rol de administrador o de gestión para realizar esta acción",
+      "Se requiere un rol de administrador o de gestión para realizar esta acción"
     );
   } catch (error) {
     handleError(error, "authorization.middleware -> isAdminOrManagement");
@@ -167,6 +167,8 @@ async function isAdminOrManagementOrBusinessOwner(req, res, next) {
 
     console.log("emprendedor._id: ", emprendedor._id.toString());
     console.log("req.params.id: ", req.params.id);
+    console.log("emprendedor._id: ", emprendedor._id.toString());
+    console.log("req.params.id: ", req.params.id);
     if (req.params.id === emprendedor._id.toString()) {
       next();
       return;
@@ -176,7 +178,7 @@ async function isAdminOrManagementOrBusinessOwner(req, res, next) {
       req,
       res,
       401,
-      "El usuario NO es el propietario de los datos o no tiene rol de administrador o de gestión",
+      "El usuario NO es el propietario de los datos o no tiene rol de administrador o de gestión"
     );
   } catch (error) {
     handleError(

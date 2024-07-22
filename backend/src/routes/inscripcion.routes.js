@@ -12,7 +12,7 @@ router.use(authenticationMw);
 
 // Define las rutas para las inscripciones
 router.get("/summary", inscripcionController.getInscripcionesSummary);
-
+router.get("/:id", inscripcionController.getInscripcionById);
 router.post("/email", inscripcionController.getInscripcionByEmail);
 router.post(
   "/",

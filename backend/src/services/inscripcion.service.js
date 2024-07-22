@@ -3,6 +3,7 @@
 const Emprendedor = require("../models/emprendedor.model");
 const Inscripcion = require("../models/inscripcion.model");
 const User = require("../models/user.model");
+const Role = require("../models/role.model");
 const { handleError } = require("../utils/errorHandler");
 const moment = require("moment");
 
@@ -90,7 +91,6 @@ async function getInscripcionesByEmprendedorId(emprendedorId) {
 
 async function getInscripcionByEmail(email) {
   try {
-
     const user = await User.findOne({ email: email });
     if (!user) return [null, "Usuario no encontrado"];
     const inscripciones = await Inscripcion.find({ userId: user._id });
@@ -154,19 +154,37 @@ async function createInscripcion(inscripcion) {
 
 async function updateInscripcion(id, inscripcion) {
   try {
-    const { userId, estado } = inscripcion;
+    const { estado } = inscripcion;
 
     //Verificar que la inscripción exista y actualizarla
-    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(
-      id,
-      {
-        userId,
-        estado,
-      },
-      { new: true },
-    );
-
+    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(id, {
+      estado,
+    });
     if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
+
+    if (inscripcion.estado === "aprobada") {
+      // Añadir rol de emprendedor
+      const emprendedorFound = await Emprendedor.findById(
+        updatedInscripcion.emprendedorId,
+      );
+      const userFound = await User.findById(emprendedorFound.userId);
+      if (!userFound || !emprendedorFound)
+        return [null, "Usuario o emprendedir no encontrado"];
+
+      const emprendedorRole = await Role.findOne({ name: "emprendedor" });
+      if (!emprendedorRole) return [null, "Rol de emprendedor no encontrado"];
+
+      // Verificar que el usuario no tenga el rol de emprendedor
+      if (!userFound.roles.includes(emprendedorRole._id)) {
+        userFound.roles.push(emprendedorRole._id);
+        await userFound.save();
+      }
+    }
+
+    if (estado === "rechazada") {
+      //eliminar inscripcion
+      await Inscripcion.findByIdAndDelete(id);
+    }
 
     return [updatedInscripcion, null];
   } catch (error) {
@@ -187,6 +205,7 @@ async function deleteInscripcion(id) {
 
 module.exports = {
   getInscripciones,
+  getInscripcionById,
   getInscripcionByEmail,
   getInscripcionesSummary,
   createInscripcion,

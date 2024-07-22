@@ -4,63 +4,58 @@ import AccordionItemComponent from "./Accordion";
 
 const accordionData = [
   {
-    title: "Gestión de emprendedores",
-    icon: "⚙️",
+    title: "Actividades",
+    icon: "FaListAlt",
     links: [
-      { label: "Aprobación de registro", path: "/aprobacion-registro" },
-      {
-        label: "Listado de emprendedores inscritos",
-        path: "/emprendedores-inscritos",
-      },
+      { label: "Lista de Actividades", path: "/actividades", icon: "FaListAlt" },
+      { label: "Inscripción Manual", path: "/inscripcion-manual", icon: "FaPlus" },
+    ],
+  },
+  {
+    title: "Gestión de emprendedores",
+    icon: "FaCog",
+    links: [
+      { label: "Aprobar o rechazar Inscripción", path: "/aprobar-rechazar-inscripcion" },
+      { label: "Listado de emprendedores inscritos", path: "/emprendedores-inscritos" },
     ],
   },
   {
     title: "Registro emprendedores",
-    icon: "📝",
+    icon: "FaFileAlt",
     links: [
       { label: "Formulario de inscripción", path: "/formulario-inscripcion" },
       { label: "Estado de inscripción", path: "/estado-inscripcion" },
     ],
   },
   {
-    title: 'Actividades',
-    icon: '📅',
+    title: "Carreras",
+    icon: "FaBook",
     links: [
-      { label: 'Otra opción 1', path: '/otra-opcion-1' },
-      { label: 'Otra opción 2', path: '/otra-opcion-2' },
+      { label: "Lista de Carreras", path: "/carreras" },
     ],
   },
   {
-    title: 'Gestión usuarios',
-    icon: '🛠️', 
+    title: "Gestión usuarios",
+    icon: "FaUsersCog",
     links: [
-      { label: 'Gestión Usuarios', path: '/gestion-usuarios' },
+      { label: "Gestión Usuarios", path: "/gestion-usuarios" },
     ],
   },
-  /**Otos acordeones pueden ser agregados de la siguiente forma:
-   * {
-    title: 'Otro acordeón',
-    icon: '📂', //<- cambiar icono
-    links: [
-      { label: 'Otra opción 1', path: '/otra-opcion-1' },
-      { label: 'Otra opción 2', path: '/otra-opcion-2' },
-    ],
-  },*/
 ];
 
 const AccordionList = () => {
-    return (
-      <Accordion allowToggle width="100%">
-        {accordionData.map((item, index) => (
-          <React.Fragment key={index}>
-            <Box mb={4} mt={index === 0 ? 0 : 4}>
-              <AccordionItemComponent title={item.title} icon={item.icon} links={item.links} />
-            </Box>
-            {index < accordionData.length - 1 && <Divider borderColor="whiteAlpha.400" />}
-          </React.Fragment>
-        ))}
-      </Accordion>
-    );
-  };
+  return (
+    <Accordion allowToggle width="100%">
+      {accordionData.map((item, index) => (
+        <React.Fragment key={index}>
+          <Box mb={4} mt={index === 0 ? 0 : 4}>
+            <AccordionItemComponent title={item.title} icon={item.icon} links={item.links} />
+          </Box>
+          {index < accordionData.length - 1 && <Divider borderColor="whiteAlpha.400" />}
+        </React.Fragment>
+      ))}
+    </Accordion>
+  );
+};
 
 export default AccordionList;

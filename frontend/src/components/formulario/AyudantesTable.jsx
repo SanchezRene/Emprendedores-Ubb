@@ -3,7 +3,7 @@
 import React from 'react';
 import { Table, Tbody, Tr, Td, Thead, Th, Button } from '@chakra-ui/react';
 
-function AyudantesTable({ ayudantes }) {
+function AyudantesTable({ ayudantes, onEdit, onDelete }) {
   return (
     <Table variant="simple">
       <Thead>
@@ -18,6 +18,23 @@ function AyudantesTable({ ayudantes }) {
           <Tr key={index}>
             <Td>{ayudante.nombre}</Td>
             <Td>{ayudante.rut}</Td>
+            <Td>
+              <Button
+                size="sm"
+                colorScheme="yellow"
+                onClick={() => onEdit(ayudante)}
+                mr={2}
+              >
+                Editar
+              </Button>
+              <Button
+                size="sm"
+                colorScheme="red"
+                onClick={() => onDelete(ayudante)}
+              >
+                Eliminar
+              </Button>
+            </Td>
           </Tr>
         ))}
       </Tbody>

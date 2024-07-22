@@ -58,4 +58,5 @@ const Actividad = mongoose.model("Actividad", actividadSchema);
 
 module.exports = Actividad;
 
+
 //

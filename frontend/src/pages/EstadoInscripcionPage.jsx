@@ -15,7 +15,7 @@ const EstadoInscripcionPage = () => {
     const fetchInscripciones = async () => {
       try {
         const email = user.email;
-        console.log("email: ", email);
+
         const data = await getInscripcionByEmail(email);
         setInscripciones(data);
       } catch (err) {

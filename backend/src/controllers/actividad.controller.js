@@ -37,6 +37,16 @@ async function getActividadById(req, res) {
 async function createActividad(req, res) {
   try {
     const { body } = req;
+    const fechaInicio = new Date(body.fechaInicio);
+    const fechaFin = new Date(body.fechaFin);
+    
+    // Asegurarse de que horaInicio y horaFin se pasen correctamente al guardar
+    const horaInicio = body.horaInicio ? new Date(`${body.fechaInicio}T${body.horaInicio}:00Z`) : null;
+    const horaFin = body.horaFin ? new Date(`${body.fechaFin}T${body.horaFin}:00Z`) : null;
+
+    body.horaInicio = horaInicio;
+    body.horaFin = horaFin;
+
     const [actividad, error] = await ActividadService.createActividad(body);
     if (error) {
       return respondError(req, res, 400, error);

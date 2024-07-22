@@ -84,17 +84,23 @@ async function createInscripcion(req, res) {
 async function updateInscripcion(req, res) {
   try {
     const { body, params } = req;
-    const { error: bodyError } =
-      InscripcionSchema.inscripcionBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const { error: paramsError } =
-      InscripcionSchema.inscripcionIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const [inscripcion, errorInscripcion] =
       await InscripcionService.updateInscripcion(params.id, body);
     if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
+
+
+    if (inscripcion.estado === "aprobada") {
+      // Añadir rol de emprendedor
+      const userFound = await User.findById(updatedInscripcion.userId);
+      if (!userFound) return [null, "Usuario no encontrado"];
+
+      const emprendedorRole = await Role.findOne({ name: 'emprendedor' });
+      if (!emprendedorRole) return [null, "Rol de emprendedor no encontrado"];
+
+      userFound.roles.push(emprendedorRole._id);
+      await userFound.save();
+    }
 
     respondSuccess(req, res, 200, inscripcion);
   } catch (error) {
@@ -129,7 +135,7 @@ async function deleteInscripcion(req, res) {
 
 module.exports = {
   getInscripcionesSummary,
-
+  getInscripcionById,
   getInscripcionByEmail,
   createInscripcion,
   updateInscripcion,

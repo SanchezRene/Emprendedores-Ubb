@@ -1,16 +1,8 @@
+// src/components/formulario/ProductoModal.jsx
+
 import React, { useState, useEffect } from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
+  Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton,Button,FormControl,FormLabel,Input,
   useToast,
 } from "@chakra-ui/react";
 

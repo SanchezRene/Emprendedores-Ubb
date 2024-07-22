@@ -10,11 +10,11 @@ export const login = async ({ email, password }) => {
     });
     const { status, data } = response;
     if (status === 200) {
-      const { email, roles } = await jwtDecode(data.data.accessToken);
-      localStorage.setItem("user", JSON.stringify({ email, roles }));
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${data.data.accessToken}`;
+      const { email, roles } = jwtDecode(data.data.accessToken);
+      const user = { email, roles };
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", data.data.accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.data.accessToken}`;
     }
   } catch (error) {
     console.log(error);
@@ -23,6 +23,7 @@ export const login = async ({ email, password }) => {
 
 export const logout = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("token");
   delete axios.defaults.headers.common["Authorization"];
   cookies.remove("jwt");
 };

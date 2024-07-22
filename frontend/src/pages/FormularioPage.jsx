@@ -4,14 +4,14 @@ import { getCarreras } from "../services/carrera.service";
 import { createEmprendedor } from "../services/emprendedor.service";
 import { createProducto } from "../services/productos.service";
 import { createAyudante } from "../services/ayudantes.service";
-import { createInscripcion } from "../services/inscripcion.service"; 
+import { createInscripcion } from "../services/inscripcion.service";
 import ProductoModal from "../components/formulario/ProductoModal";
 import AyudanteModal from "../components/formulario/AyudanteModal";
 import Formulario from "../components/formulario/Formulario";
 import ProductosTable from "../components/formulario/ProductosTable";
 import AyudantesTable from "../components/formulario/AyudantesTable";
 import DeleteProductoModal from "../components/formulario/DeleteProductoModal";
-import { useAuth } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
 
 function FormularioPage() {
   const { user } = useAuth();
@@ -28,6 +28,7 @@ function FormularioPage() {
   const [isProductoModalOpen, setProductoModalOpen] = useState(false);
   const [isAyudanteModalOpen, setAyudanteModalOpen] = useState(false);
   const [selectedProducto, setSelectedProducto] = useState(null);
+  const [selectedAyudante, setSelectedAyudante] = useState(null);
   const [errors, setErrors] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const toast = useToast();
@@ -67,9 +68,18 @@ function FormularioPage() {
     setProductoModalOpen(true);
   };
 
-  const handleSaveProducto = async (formData) => {
+  const handleSaveProducto = async (producto) => {
     try {
-      setProductos([...productos, formData]);
+      if (selectedProducto) {
+        // Editar producto existente
+        const updatedProductos = productos.map((p) =>
+          p === selectedProducto ? producto : p
+        );
+        setProductos(updatedProductos);
+      } else {
+        // Añadir nuevo producto
+        setProductos([...productos, producto]);
+      }
       toast({
         title: "Producto guardado",
         status: "success",
@@ -77,6 +87,7 @@ function FormularioPage() {
         isClosable: true,
       });
       setProductoModalOpen(false);
+      setSelectedProducto(null);
     } catch (error) {
       toast({
         title: "Error al guardar el producto",
@@ -104,7 +115,7 @@ function FormularioPage() {
     setSelectedProducto(null);
     toast({
       title: "Producto eliminado",
-      status: "error",
+      status: "success",
       duration: 2000,
       isClosable: true,
     });
@@ -120,8 +131,34 @@ function FormularioPage() {
   };
 
   const handleSaveAyudante = (ayudante) => {
-    setAyudantes([...ayudantes, ayudante]);
+    if (selectedAyudante) {
+      // Editar ayudante existente
+      const updatedAyudantes = ayudantes.map((a) =>
+        a === selectedAyudante ? ayudante : a
+      );
+      setAyudantes(updatedAyudantes);
+    } else {
+      // Añadir nuevo ayudante
+      setAyudantes([...ayudantes, ayudante]);
+    }
     setAyudanteModalOpen(false);
+    setSelectedAyudante(null);
+  };
+
+  const handleEditAyudante = (ayudante) => {
+    setSelectedAyudante(ayudante);
+    setAyudanteModalOpen(true);
+  };
+
+  const handleDeleteAyudante = (ayudante) => {
+    const updatedAyudantes = ayudantes.filter((a) => a !== ayudante);
+    setAyudantes(updatedAyudantes);
+    toast({
+      title: "Ayudante eliminado",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
   };
 
   const handleSubmit = async () => {
@@ -210,9 +247,16 @@ function FormularioPage() {
           onDelete={handleDeleteProducto}
         />
         <Divider my={10} borderColor="gray.400" />
+        
         <Button onClick={handleAddAyudante}>Añadir Ayudante</Button>
-        <AyudantesTable ayudantes={ayudantes} />
+        <AyudantesTable
+          ayudantes={ayudantes}
+          onEdit={handleEditAyudante}
+          onDelete={handleDeleteAyudante}
+        />
+
         <Divider my={10} borderColor="gray.400" />
+
         <Button colorScheme="blue" onClick={handleSubmit}>
           Enviar Formulario
         </Button>

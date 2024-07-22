@@ -2,16 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { getEmprendedores } from '../services/emprendedor.service';
 import {
-  Box,
-  Table,
-  Tbody,
-  Tr,
-  Td,
-  Thead,
-  Th,
-  Button,
-  HStack,
-  useDisclosure,
+  Box,Table,Tbody,Tr,Td,Thead,Th,Button,HStack,useDisclosure,
 } from "@chakra-ui/react";
 import VerProductosModal from '../components/emprendedores/VerProductosModal';
 import VerAyudantesModal from '../components/emprendedores/VerAyudantesModal';
@@ -19,8 +10,16 @@ import VerAyudantesModal from '../components/emprendedores/VerAyudantesModal';
 const EmprendedoresPage = () => {
   const [emprendedores, setEmprendedores] = useState([]);
   const [selectedEmprendedor, setSelectedEmprendedor] = useState(null);
-  const { isOpen: isProductosOpen, onOpen: onProductosOpen, onClose: onProductosClose } = useDisclosure();
-  const { isOpen: isAyudantesOpen, onOpen: onAyudantesOpen, onClose: onAyudantesClose } = useDisclosure();
+  const {
+    isOpen: isProductosOpen,
+    onOpen: onProductosOpen,
+    onClose: onProductosClose,
+  } = useDisclosure();
+  const {
+    isOpen: isAyudantesOpen,
+    onOpen: onAyudantesOpen,
+    onClose: onAyudantesClose,
+  } = useDisclosure();
 
   useEffect(() => {
     const fetchEmprendedores = async () => {
