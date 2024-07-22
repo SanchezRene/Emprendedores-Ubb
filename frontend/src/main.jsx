@@ -11,6 +11,7 @@ import Carrera from "./pages/CarreraPage.jsx";
 import FormularioPage from "./pages/FormularioPage.jsx";
 import UserPage from "./pages/UserPage.jsx";
 import EmprendedoresPage from "./pages/EmprendedoresPage.jsx";
+import EstadoInscripcionPage from "./pages/EstadoInscripcionPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/formulario-inscripcion",
         element: <FormularioPage />,
+      },
+      {
+        path: "/estado-inscripcion",
+        element: <EstadoInscripcionPage/>
       },
       {
         path: "/gestion-usuarios",

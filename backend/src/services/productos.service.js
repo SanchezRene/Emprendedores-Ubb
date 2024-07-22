@@ -82,7 +82,7 @@ async function createProducto(producto, fotografia) {
         "El emprendedor ya tiene 100 productos, no se puede crear más",
       ];
 
-    const url = `/public/${fotografia}`;
+    const url = `public/${fotografia}`;
 
     const newProducto = new Productos({
       nombre: nombre,
@@ -123,7 +123,7 @@ async function updateProducto(id, producto, fotografia) {
 
     //reemplazar fotografia del servidor
     const filename = productoFound.fotografia.split("/").pop();
-    const pathFile = path.join(__dirname, `../../public/uploads/${filename}`);
+    const pathFile = path.join(__dirname, `../public/${filename}`);
     fs.unlink(pathFile, (err) => {
       if (err) {
         console.error("Error al actualizar el archivo:", err);
@@ -132,7 +132,7 @@ async function updateProducto(id, producto, fotografia) {
       }
     });
 
-    const url = `http:/${HOST}:${PORT}/api/productos/uploads/${fotografia}`;
+    const url = `public/${fotografia}`;
 
     const updatedProducto = await Productos.findByIdAndUpdate(
       id,
@@ -171,7 +171,7 @@ async function deleteProducto(id) {
 
     //borrar fotografia del servidor
     const filename = deletedProducto.fotografia.split("/").pop();
-    const pathFile = path.join(__dirname, `../../public/uploads/${filename}`);
+    const pathFile = path.join(__dirname, `../public/${filename}`);
     fs.unlink(pathFile, (err) => {
       if (err) {
         console.error("Error al eliminar el archivo:", err);

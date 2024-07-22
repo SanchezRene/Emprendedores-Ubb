@@ -77,8 +77,6 @@ async function getUserByEmail(req, res) {
 
     const [user, errorUser] = await UserService.getUserByEmail(params.email);
 
-    console.log("user.controller: ", user);
-
     if (errorUser) return respondError(req, res, 404, errorUser);
 
     respondSuccess(req, res, 200, user);
@@ -87,7 +85,6 @@ async function getUserByEmail(req, res) {
     respondError(req, res, 500, "No se pudo obtener el usuario");
   }
 }
-
 
 /**
  * Actualiza un usuario por su id

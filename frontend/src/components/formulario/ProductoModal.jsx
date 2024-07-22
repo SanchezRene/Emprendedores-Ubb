@@ -1,27 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, useToast } from '@chakra-ui/react';
+import React, { useState, useEffect } from "react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
 
 const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
   const [formValues, setFormValues] = useState({
-    nombre: '',
-    tipo: '',
-    descripcion: '',
-    stock: '',
-    fotografia: ''
+    nombre: "",
+    categoria: "",
+    descripcion: "",
+    stock: "",
+    fotografia: "",
   });
   const [file, setFile] = useState(null);
-  const toast = useToast();
 
   useEffect(() => {
     if (producto) {
       setFormValues(producto);
     } else {
       setFormValues({
-        nombre: '',
-        tipo: '',
-        descripcion: '',
-        stock: '',
-        fotografia: ''
+        nombre: "",
+        categoria: "",
+        descripcion: "",
+        stock: "",
+        fotografia: "",
       });
     }
   }, [producto]);
@@ -30,7 +42,7 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -38,25 +50,22 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
     setFile(e.target.files[0]);
     setFormValues({
       ...formValues,
-      fotografia: URL.createObjectURL(e.target.files[0])
+      fotografia: URL.createObjectURL(e.target.files[0]),
     });
   };
 
   const handleSave = () => {
-    onSave(formValues);
-    toast({
-      title: "Producto guardado",
-      status: "success",
-      duration: 2000,
-      isClosable: true,
-    });
+    onSave({ ...formValues, file });
+    onClose();
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{producto ? 'Modificar Producto' : 'Añadir Producto'}</ModalHeader>
+        <ModalHeader>
+          {producto ? "Modificar Producto" : "Añadir Producto"}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl mb={4}>
@@ -71,8 +80,8 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
           <FormControl mb={4}>
             <FormLabel>Categoría</FormLabel>
             <Input
-              name="tipo"
-              value={formValues.tipo}
+              name="categoria"
+              value={formValues.categoria}
               onChange={handleChange}
               placeholder="Categoría del producto"
             />
@@ -98,20 +107,22 @@ const ProductoModal = ({ isOpen, onClose, onSave, producto }) => {
           <FormControl mb={4}>
             <FormLabel>Fotografía</FormLabel>
             {formValues.fotografia && (
-              <img src={formValues.fotografia} alt="Fotografía del producto" style={{ marginBottom: '10px' }} />
+              <img
+                src={formValues.fotografia}
+                alt="Fotografía del producto"
+                style={{ marginBottom: "10px" }}
+              />
             )}
-            <Input
-              type="file"
-              name="fotografia"
-              onChange={handleFileChange}
-            />
+            <Input type="file" name="fotografia" onChange={handleFileChange} />
           </FormControl>
         </ModalBody>
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={handleSave}>
-            {producto ? 'Guardar Cambios' : 'Guardar'}
+            {producto ? "Guardar Cambios" : "Guardar"}
           </Button>
-          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
+          <Button variant="ghost" onClick={onClose}>
+            Cancelar
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

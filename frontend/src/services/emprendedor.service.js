@@ -100,9 +100,8 @@ export const createEmprendedor = async (emprendedor) => {
 
     const response = await instance.post("/emprendedor/", emprendedorData);
 
-    const { status, data } = response;
-    if (status === 200 || status === 201) {
-      return data.data;
+    if (response.status === 200 || response.status === 201) {
+      return response; // enviar status y data para manejar el resto del formulario
     }
   } catch (error) {
     console.error("Error creando el emprendedor:", error.response?.data);

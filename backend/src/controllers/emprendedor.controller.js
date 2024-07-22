@@ -61,7 +61,7 @@ async function getProductosByEmprendedor(req, res) {
   }
 }
 
-async function getAyudantesByEmprendedor(req, res){
+async function getAyudantesByEmprendedor(req, res) {
   try {
     const { params } = req;
     const { error: paramsError } =
@@ -140,6 +140,24 @@ async function deleteEmprendedor(req, res) {
   }
 }
 
+async function deleteFullEmprendedorById(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } =
+      EmprendedorSchema.emprendedorIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const [emprendedor, errorEmprendedor] =
+      await EmprendedorService.deleteFullEmprendedorById(params.id);
+    if (errorEmprendedor) return respondError(req, res, 404, errorEmprendedor);
+
+    respondSuccess(req, res, 200, emprendedor);
+  } catch (error) {
+    handleError(error, "emprendedor.controller -> deleteFullEmprendedorById");
+    respondError(req, res, 500, error.message);
+  }
+}
+
 module.exports = {
   getEmprendedores,
   getEmprendedorById,
@@ -148,4 +166,5 @@ module.exports = {
   createEmprendedor,
   updateEmprendedor,
   deleteEmprendedor,
+  deleteFullEmprendedorById,
 };

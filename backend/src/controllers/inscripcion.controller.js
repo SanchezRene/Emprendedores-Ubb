@@ -41,6 +41,24 @@ async function getInscripcionById(req, res) {
   }
 }
 
+async function getInscripcionByEmail(req, res) {
+  try {
+    const email = req.body.email;
+    
+    const [inscripciones, errorInscripciones] =
+      await InscripcionService.getInscripcionByEmail(email);
+      
+    if (errorInscripciones) {
+      return respondError(req, res, 404, errorInscripciones);
+    }
+
+    respondSuccess(req, res, 200, inscripciones);
+  } catch (error) {
+    handleError(error, "inscripcion.controller -> getInscripcionByEmail");
+    respondError(req, res, 500, error.message);
+  }
+}
+
 async function createInscripcion(req, res) {
   try {
     const { body } = req;
@@ -111,7 +129,8 @@ async function deleteInscripcion(req, res) {
 
 module.exports = {
   getInscripcionesSummary,
-  getInscripcionById,
+
+  getInscripcionByEmail,
   createInscripcion,
   updateInscripcion,
   deleteInscripcion,

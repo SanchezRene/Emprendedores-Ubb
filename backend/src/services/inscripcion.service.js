@@ -21,8 +21,9 @@ async function getInscripciones() {
 async function getInscripcionesSummary() {
   try {
     const inscripciones = await Inscripcion.find();
-    if (inscripciones == 0)
+    if (inscripciones.length === 0) {
       return [null, "La colección de inscripciones está vacía"];
+    }
 
     const Data = await Promise.all(
       inscripciones.map(async (inscripcion) => {
@@ -52,6 +53,7 @@ async function getInscripcionesSummary() {
     return [ArregloInscripciones, null];
   } catch (error) {
     handleError(error, "inscripcion.service -> getInscripciones");
+    return [null, error.message];
   }
 }
 
@@ -86,9 +88,12 @@ async function getInscripcionesByEmprendedorId(emprendedorId) {
   }
 }
 
-async function getInscripcionesByUserId(userId) {
+async function getInscripcionByEmail(email) {
   try {
-    const inscripciones = await Inscripcion.find({ userId: userId });
+
+    const user = await User.findOne({ email: email });
+    if (!user) return [null, "Usuario no encontrado"];
+    const inscripciones = await Inscripcion.find({ userId: user._id });
     if (inscripciones.length === 0) {
       return [
         null,
@@ -103,10 +108,10 @@ async function getInscripcionesByUserId(userId) {
 
 async function createInscripcion(inscripcion) {
   try {
-    const { userId, emprendedorId, estado } = inscripcion;
+    const { email, emprendedorId, estado } = inscripcion;
 
     //Verificar que el usuario exista
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: email });
     if (!user) return [null, "El usuario no existe"];
 
     //Verificar que el emprendedor exista
@@ -115,7 +120,7 @@ async function createInscripcion(inscripcion) {
 
     // verificar que no exista una inscripción para el mismo emprendedor y usuario
     const inscripciones = await Inscripcion.find({
-      userId: userId,
+      userId: user._id,
       emprendedorId: emprendedorId,
     });
     if (inscripciones.length > 0) {
@@ -129,7 +134,7 @@ async function createInscripcion(inscripcion) {
 
     // Crear una nueva inscripción
     const newInscripcion = new Inscripcion({
-      userId: userId,
+      userId: user._id,
       emprendedorId: emprendedorId,
       estado: estado,
     });
@@ -182,9 +187,7 @@ async function deleteInscripcion(id) {
 
 module.exports = {
   getInscripciones,
-  getInscripcionById,
-  getInscripcionesByEmprendedorId,
-  getInscripcionesByUserId,
+  getInscripcionByEmail,
   getInscripcionesSummary,
   createInscripcion,
   updateInscripcion,

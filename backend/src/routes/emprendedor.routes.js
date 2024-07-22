@@ -40,7 +40,7 @@ router.put(
 router.delete(
   "/:id",
   authorizationMw.isOwnerOrAdmin,
-  emprendedorController.deleteEmprendedor,
+  emprendedorController.deleteFullEmprendedorById,
 );
 
 // Exporta el enrutador

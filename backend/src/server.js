@@ -11,11 +11,12 @@ const cookieParser = require("cookie-parser");
 /** El enrutador principal */
 const indexRoutes = require("./routes/index.routes.js");
 // Importa el archivo 'configDB.js' para crear la conexión a la base de datos
-
 const { setupDB } = require("./config/configDB.js");
 // Importa el handler de errores
 const { handleFatalError, handleError } = require("./utils/errorHandler.js");
 const { createRoles, createUsers, newRoles } = require("./config/initialSetup");
+
+const path = require('path'); // Importa el módulo 'path' para manejar rutas
 
 /**
  * Inicia el servidor web
@@ -35,6 +36,10 @@ async function setupServer() {
     server.use(cookieParser());
     // Agregamos morgan para ver las peticiones que se hacen al servidor
     server.use(morgan("dev"));
+
+    // Servir archivos estáticos desde la carpeta "public"
+    server.use('/public', express.static(path.join(__dirname, '../public')));
+
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
 
@@ -71,4 +76,3 @@ async function setupAPI() {
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((err) => handleFatalError(err, "/server.js -> setupAPI"));
-//

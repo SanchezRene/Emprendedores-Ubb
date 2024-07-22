@@ -17,7 +17,8 @@ import {
 } from "@chakra-ui/react";
 import { getProductoById } from '../../services/productos.service';
 
-const placeholderImage = '../../../public/imagen-no-disponible.png';  
+const placeholderImage = '/imagen-no-disponible.png';  
+const backendUrl = import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:5000/';
 
 const VerProductosModal = ({ isOpen, onClose, emprendedor }) => {
   const [productos, setProductos] = useState([]);
@@ -54,7 +55,7 @@ const VerProductosModal = ({ isOpen, onClose, emprendedor }) => {
                 <ListItem key={producto._id}>
                   <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p="5">
                     <Image 
-                      src={producto.fotografia} 
+                      src={`${backendUrl}${producto.fotografia}`}  // Construir la URL completa
                       alt={producto.nombre} 
                       boxSize="100px" 
                       mb="3" 

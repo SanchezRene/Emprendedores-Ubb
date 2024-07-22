@@ -35,10 +35,22 @@ export const getProductoById = async (id) => {
   }
 };
 
-// Crear un nuevo producto
 export const createProducto = async (producto) => {
+  const formData = new FormData();
+  formData.append('nombre', producto.nombre);
+  formData.append('categoria', producto.categoria);
+  formData.append('descripcion', producto.descripcion);
+  formData.append('stock', producto.stock);
+  formData.append('fotografia', producto.file);
+  formData.append('emprendedorId', producto.emprendedorId); 
+
   try {
-    const response = await instance.post("/productos", producto);
+    const response = await instance.post("/productos/", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    console.log("response producto.service: ", response);
     const { status, data } = response;
     if (status === 200 || status === 201) {
       return data.data;
@@ -48,7 +60,6 @@ export const createProducto = async (producto) => {
     return error.response;
   }
 };
-
 // Actualizar un producto
 export const updateProducto = async (id, producto) => {
   try {

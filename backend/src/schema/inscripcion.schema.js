@@ -2,16 +2,12 @@
 const Joi = require("joi");
 
 const inscripcionBodySchema = Joi.object({
-  userId: Joi.string()
-    .required()
-    .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
-    .messages({
-      "string.empty": "El userId no puede estar vacío.",
-      "any.required": "El userId es obligatorio.",
-      "string.base": "userId debe ser de tipo string.",
-      "string.pattern.base":
-        "El userId proporcionado no es un ObjectId válido.",
-    }),
+  email: Joi.string().email().required().messages({
+    "string.empty": "El email no puede estar vacío.",
+    "any.required": "El email es obligatorio.",
+    "string.base": "El email debe ser de tipo string.",
+    "string.email": "El email proporcionado no es válido.",
+  }),
   emprendedorId: Joi.string()
     .required()
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)

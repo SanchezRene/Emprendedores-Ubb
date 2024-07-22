@@ -42,7 +42,6 @@ export const getUserByEmail = async (email) => {
     const response = await instance.get(`/users/email/${email}`);
     const { status, data } = response;
     if (status === 200 || status === 201) {
-      console.log("data.data:",data.data);
       return data.data;
     } else {
       console.error(`Error fetching user with email ${email}:`, response);
