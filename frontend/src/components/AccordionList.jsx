@@ -18,7 +18,7 @@ const accordionData = [
     icon: "FaCog",
     links: [
       { label: "Aprobar o rechazar Inscripción", path: "/aprobar-rechazar-inscripcion", roles: ["encargado", "admin"] },
-      { label: "Listado de emprendedores inscritos", path: "/emprendedores-inscritos", roles: ["encargado"] },
+      { label: "Listado de emprendedores inscritos", path: "/emprendedores-inscritos", roles: ["encargado", "admin"] },
     ],
   },
   {
@@ -26,7 +26,7 @@ const accordionData = [
     icon: "FaFileAlt",
     links: [
       { label: "Formulario de inscripción", path: "/formulario-inscripcion", roles: ["user", "emprendedor", "admin"] },
-      { label: "Estado de inscripción", path: "/estado-inscripcion", roles: ["user", "emprendedor"] },
+      { label: "Estado de inscripción", path: "/estado-inscripcion", roles: ["user", "emprendedor", "admin"] },
     ],
   },
   {
