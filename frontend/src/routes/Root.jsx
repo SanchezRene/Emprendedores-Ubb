@@ -1,5 +1,5 @@
 // src/routes/Root.jsx
-
+import React from 'react';
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "../context/AuthContext";
 import { ChakraProvider, Box, Flex } from "@chakra-ui/react";

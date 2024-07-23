@@ -1,0 +1,32 @@
+Servidor corriendo pm2
+
+http://146.83.198.35:1215/
+
+
+vite.config.js:
+`
+// 1215 -> 443 (https)
+export default {
+  server: {
+    host: true, // Permite conexiones externas
+    port: 443, // Puerto para acceder remotamente
+  },
+};
+
+
+ecosystem.config.cjs:
+module.exports = {
+  apps: [
+    {
+      name: "frontend",
+      script: "npm",
+      args: "run dev",
+      watch: true, // Si quieres que pm2 observe cambios en los archivos y reinicie autom  >      env: {
+        NODE_ENV: "development",
+      }
+    }
+  ]
+};
+
+
+

@@ -1,5 +1,5 @@
 // src/pages/App.jsx
-
+import React from 'react';
 import { Box, Text, VStack } from "@chakra-ui/react";
 
 function App() {
