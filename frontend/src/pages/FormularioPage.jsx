@@ -172,7 +172,22 @@ function FormularioPage() {
       return;
     }
 
+    // Verificar que haya al menos un producto
+    if (productos.length === 0) {
+      toast({
+        title: "Debes añadir al menos un producto antes de enviar el formulario.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     try {
+
+      console.log("user", user);
+
+
       // Crear emprendedor
       const response = await createEmprendedor(formData);
       const { status, data } = response;

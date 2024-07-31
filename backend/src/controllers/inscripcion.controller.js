@@ -7,6 +7,22 @@ const InscripcionSchema = require("../schema/inscripcion.schema");
 const ProductosService = require("../services/productos.service");
 const { handleError } = require("../utils/errorHandler");
 
+async function getInscripciones(req, res) {
+  try {
+    const [inscripciones, errorInscripciones] =
+      await InscripcionService.getInscripciones();
+    if (errorInscripciones)
+      return respondError(req, res, 404, errorInscripciones);
+
+    inscripciones.length === 0
+      ? respondSuccess(req, res, 204)
+      : respondSuccess(req, res, 200, inscripciones);
+  } catch (error) {
+    handleError(error, "inscripcion.controller -> getInscripciones");
+    respondError(req, res, 500, error.message);
+  }
+}
+
 async function getInscripcionesSummary(req, res) {
   try {
     const [inscripciones, errorInscripciones] =
@@ -44,10 +60,10 @@ async function getInscripcionById(req, res) {
 async function getInscripcionByEmail(req, res) {
   try {
     const email = req.body.email;
-    
+
     const [inscripciones, errorInscripciones] =
       await InscripcionService.getInscripcionByEmail(email);
-      
+
     if (errorInscripciones) {
       return respondError(req, res, 404, errorInscripciones);
     }
@@ -89,19 +105,6 @@ async function updateInscripcion(req, res) {
       await InscripcionService.updateInscripcion(params.id, body);
     if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
 
-
-    if (inscripcion.estado === "aprobada") {
-      // Añadir rol de emprendedor
-      const userFound = await User.findById(updatedInscripcion.userId);
-      if (!userFound) return [null, "Usuario no encontrado"];
-
-      const emprendedorRole = await Role.findOne({ name: 'emprendedor' });
-      if (!emprendedorRole) return [null, "Rol de emprendedor no encontrado"];
-
-      userFound.roles.push(emprendedorRole._id);
-      await userFound.save();
-    }
-
     respondSuccess(req, res, 200, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> updateInscripcion");
@@ -135,6 +138,7 @@ async function deleteInscripcion(req, res) {
 
 module.exports = {
   getInscripcionesSummary,
+  getInscripciones,
   getInscripcionById,
   getInscripcionByEmail,
   createInscripcion,

@@ -5,7 +5,7 @@ import {
   Box,Button,Table,Thead,Tbody,Tr,Th,Td,VStack,HStack,Spinner,
   useToast,} from "@chakra-ui/react";
 import {
-  getInscripciones,
+  getInscripcionesSummary,
   updateInscripcion,
 } from "../services/inscripcion.service";
 
@@ -17,7 +17,8 @@ const AprobarRechazarInscripcion = () => {
   useEffect(() => {
     const fetchInscripciones = async () => {
       try {
-        const data = await getInscripciones();
+        const data = await getInscripcionesSummary();
+        console.log("data: ", data);
         setInscripciones(data[1]?.Data || []);
       } catch (error) {
         console.error("Error fetching inscripciones:", error);

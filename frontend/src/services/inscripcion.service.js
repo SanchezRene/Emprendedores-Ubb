@@ -2,8 +2,25 @@
 
 import instance from "./axios.service";
 
-// Obtener todas las inscripciones (resumen)
+// obtener todas las inscripciones
 export const getInscripciones = async () => {
+  try {
+    const response = await instance.get("/inscripcion");
+    const { status, data } = response;
+    if (status === 200 || status === 201) {
+      return data.data;
+    } else {
+      console.error("Error fetching inscripciones:", response);
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching inscripciones:", error);
+    return [];
+  }
+}
+
+// Obtener todas las inscripciones (resumen)
+export const getInscripcionesSummary = async () => {
   try {
     const response = await instance.get("/inscripcion/summary");
     const { status, data } = response;
@@ -85,6 +102,7 @@ export const deleteInscripcion = async (id) => {
 
 export default {
   getInscripciones,
+  getInscripcionesSummary,
   getInscripcionByEmail,
   createInscripcion,
   updateInscripcion,

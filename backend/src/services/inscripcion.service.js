@@ -42,6 +42,7 @@ async function getInscripcionesSummary() {
           inscripcionId: inscripcion._id,
           emprendedorId: inscripcion.emprendedorId,
           fechaInscripcion: fechaChilena,
+          
         };
       }),
     );
@@ -146,30 +147,29 @@ async function createInscripcion(inscripcion) {
   }
 }
 
-/*==================================================================== */
-/**(
- * OJO: se debe modificar esta funcion para que se pueda actualizar el estado de la inscripcion, verificando que el estado cumpla con los valores permitidos (pendiente, aprobado, rechazado) y que es realizada por un rol permitido (admin, encargado). También se debe verificar que un usuario no pueda actualizar la inscripción de otro usuario.
- * ) */
-/*==================================================================== */
 
 async function updateInscripcion(id, inscripcion) {
   try {
     const { estado } = inscripcion;
 
-    //Verificar que la inscripción exista y actualizarla
-    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(id, {
-      estado,
-    });
+    // Verificar que la inscripción exista
+    const existingInscripcion = await Inscripcion.findById(id);
+    if (!existingInscripcion) return [null, "Inscripción no encontrada"];
+
+    // Cambiar el estado y guardar la inscripción para activar el middleware
+    existingInscripcion.estado = estado;
+    const updatedInscripcion = await existingInscripcion.save();
+
     if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
 
-    if (inscripcion.estado === "aprobada") {
+    if (estado === "aprobada") {
       // Añadir rol de emprendedor
       const emprendedorFound = await Emprendedor.findById(
-        updatedInscripcion.emprendedorId,
+        updatedInscripcion.emprendedorId
       );
       const userFound = await User.findById(emprendedorFound.userId);
       if (!userFound || !emprendedorFound)
-        return [null, "Usuario o emprendedir no encontrado"];
+        return [null, "Usuario o emprendedor no encontrado"];
 
       const emprendedorRole = await Role.findOne({ name: "emprendedor" });
       if (!emprendedorRole) return [null, "Rol de emprendedor no encontrado"];
@@ -181,16 +181,12 @@ async function updateInscripcion(id, inscripcion) {
       }
     }
 
-    if (estado === "rechazada") {
-      //eliminar inscripcion
-      await Inscripcion.findByIdAndDelete(id);
-    }
-
     return [updatedInscripcion, null];
   } catch (error) {
     handleError(error, "inscripcion.service -> updateInscripcion");
   }
 }
+
 
 async function deleteInscripcion(id) {
   try {
