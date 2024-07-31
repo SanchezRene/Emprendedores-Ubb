@@ -16,12 +16,12 @@ router.get("/:id", inscripcionController.getInscripcionById);
 router.post("/email", inscripcionController.getInscripcionByEmail);
 router.post(
   "/",
-  authorizationMw.isOwnerOrAdmin,
+  authorizationMw.isAdminOrManagement,
   inscripcionController.createInscripcion,
 );
 router.put(
   "/:id",
-  authorizationMw.isOwnerOrAdmin,
+  authorizationMw.isAdminOrManagement,
   inscripcionController.updateInscripcion,
 );
 router.delete(
