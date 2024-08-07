@@ -4,10 +4,15 @@ const User = require("../models/user.model");
 const { enviarCorreo } = require("../utils/email");
 const { handleError } = require("../utils/errorHandler");
 
+const { parseISO } = require('date-fns');
+const { toDate, format, fromZonedTime, getTimezoneOffset } = require('date-fns-tz');
+
+
 async function getAllActividades() {
   try {
-    const actividades = await Actividad.find().populate('emprendedoresId');
-    if (actividades.length === 0) return [null, "No hay actividades registradas"];
+    const actividades = await Actividad.find().populate("emprendedoresId");
+    if (actividades.length === 0)
+      return [null, "No hay actividades registradas"];
     return [actividades, null];
   } catch (error) {
     handleError(error, "actividad.service -> getAllActividades");
@@ -17,7 +22,7 @@ async function getAllActividades() {
 
 async function getActividadById(id) {
   try {
-    const actividad = await Actividad.findById(id).populate('emprendedoresId');
+    const actividad = await Actividad.findById(id).populate("emprendedoresId");
     if (!actividad) return [null, "Actividad no encontrada"];
     return [actividad, null];
   } catch (error) {
@@ -28,9 +33,19 @@ async function getActividadById(id) {
 
 async function createActividad(actividadData) {
   try {
-    const actividad = new Actividad(actividadData);
-    await actividad.save();
-    return [actividad, null];
+    const { fechaInicio, fechaFin, horaInicio, horaFin, ...resto } = actividadData;
+    console.log("actividadData", actividadData);
+
+    const newActividad = new Actividad({
+      fechaInicio,
+      fechaFin,
+      horaInicio,
+      horaFin,
+      ...resto,
+    });
+    await newActividad.save();
+
+    return [newActividad, null];
   } catch (error) {
     handleError(error, "actividad.service -> createActividad");
     return [null, error.message];
@@ -42,8 +57,8 @@ async function updateActividadById(id, actividadData) {
     const updatedActividad = await Actividad.findByIdAndUpdate(
       id,
       actividadData,
-      { new: true }
-    ).populate('emprendedoresId');
+      { new: true },
+    ).populate("emprendedoresId");
     if (!updatedActividad) return [null, "Actividad no se actualizó"];
     return [updatedActividad, null];
   } catch (error) {
@@ -67,13 +82,14 @@ async function inscribirEmprendedor(actividadId, emprendedorId) {
   try {
     const actividad = await Actividad.findById(actividadId);
     if (!actividad) return [null, "Actividad no encontrada"];
-    
+
     if (!actividad.emprendedoresId.includes(emprendedorId)) {
       actividad.emprendedoresId.push(emprendedorId);
       await actividad.save();
 
       // Obtener el correo del usuario asociado al emprendedor
-      const emprendedor = await Emprendedor.findById(emprendedorId).populate('userId');
+      const emprendedor =
+        await Emprendedor.findById(emprendedorId).populate("userId");
       if (!emprendedor) {
         return [null, "Emprendedor no encontrado"];
       }
@@ -86,11 +102,13 @@ async function inscribirEmprendedor(actividadId, emprendedorId) {
       // Enviar correo electrónico
       const emailReport = {
         email: userEmail,
-        mensaje: `Usted está inscrito en la actividad: ${actividad.nombre}. Esto es un recordatorio para que asista el ${actividad.fechaInicio.toLocaleDateString()} a la hora ${actividad.horaInicio.toLocaleTimeString()}.`,
+        mensaje: `Usted está inscrito en la actividad: ${
+          actividad.nombre
+        }. Esto es un recordatorio para que asista el ${actividad.fechaInicio.toLocaleDateString()} a la hora ${actividad.horaInicio.toLocaleTimeString()}.`,
       };
       const emailResponse = await enviarCorreo(emailReport);
       if (emailResponse.error) {
-        console.error('Error al enviar correo:', emailResponse.error);
+        console.error("Error al enviar correo:", emailResponse.error);
       }
     } else {
       return [null, "El emprendedor ya está inscrito en esta actividad"];

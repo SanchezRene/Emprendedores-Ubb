@@ -51,6 +51,8 @@ const actividadSchema = new mongoose.Schema({
   capacidadAsistentes: {
     type: Number,
     required: true,
+    min: 0,
+    max: 100,
   },
 });
 

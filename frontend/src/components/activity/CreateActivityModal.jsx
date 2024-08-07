@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
+  Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Button, FormControl, FormLabel, Input, Select,
 } from '@chakra-ui/react';
+import TimePicker from 'react-time-picker';
+
+import '../../TimePickerStyles.css';
 import { createActividad } from '../../services/activity.service';
 
 const CreateActivityModal = ({ isOpen, onClose, onCreate }) => {
@@ -20,9 +12,9 @@ const CreateActivityModal = ({ isOpen, onClose, onCreate }) => {
   const [descripcion, setDescripcion] = useState('');
   const [categoria, setCategoria] = useState('Reunión');
   const [fechaInicio, setFechaInicio] = useState('');
-  const [horaInicio, setHoraInicio] = useState('');
+  const [horaInicio, setHoraInicio] = useState('10:00');
   const [fechaFin, setFechaFin] = useState('');
-  const [horaFin, setHoraFin] = useState('');
+  const [horaFin, setHoraFin] = useState('11:00');
   const [lugar, setLugar] = useState('');
   const [capacidadAsistentes, setCapacidadAsistentes] = useState('');
 
@@ -33,15 +25,35 @@ const CreateActivityModal = ({ isOpen, onClose, onCreate }) => {
       setDescripcion('');
       setCategoria('Reunión');
       setFechaInicio('');
-      setHoraInicio('');
+      setHoraInicio('10:00');
       setFechaFin('');
-      setHoraFin('');
+      setHoraFin('11:00');
       setLugar('');
       setCapacidadAsistentes('');
     }
   }, [isOpen]);
 
+  const isValidTimeRange = (startTime, endTime) => {
+    const startHour = parseInt(startTime.split(':')[0], 10);
+    const endHour = parseInt(endTime.split(':')[0], 10);
+
+    if (startHour < 8 || startHour > 20 || endHour < 8 || endHour > 20) {
+      return false;
+    }
+
+    if (fechaInicio === fechaFin && startHour >= endHour && startTime >= endTime) {
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSave = async () => {
+    if (!isValidTimeRange(horaInicio, horaFin)) {
+      alert('La actividad debe comenzar y terminar entre las 8 AM y las 8 PM y la hora de fin debe ser posterior a la hora de inicio si es el mismo día.');
+      return;
+    }
+
     const newActivity = {
       nombre,
       descripcion,
@@ -55,6 +67,7 @@ const CreateActivityModal = ({ isOpen, onClose, onCreate }) => {
     };
 
     try {
+      console.log('Creating activity:', newActivity);
       await createActividad(newActivity);
       onCreate();
       onClose();
@@ -93,7 +106,11 @@ const CreateActivityModal = ({ isOpen, onClose, onCreate }) => {
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Hora Inicio</FormLabel>
-            <Input type="time" value={horaInicio} onChange={(e) => setHoraInicio(e.target.value)} />
+            <TimePicker
+              onChange={setHoraInicio}
+              value={horaInicio}
+              disableClock={true}
+            />
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Fecha Fin</FormLabel>
@@ -101,7 +118,11 @@ const CreateActivityModal = ({ isOpen, onClose, onCreate }) => {
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Hora Fin</FormLabel>
-            <Input type="time" value={horaFin} onChange={(e) => setHoraFin(e.target.value)} />
+            <TimePicker
+              onChange={setHoraFin}
+              value={horaFin}
+              disableClock={true}
+            />
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Lugar</FormLabel>
